@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>회원가입</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    margin:0; 
+    padding:0; 
+    background:#f9f9f9;
+  }
+  header {
+    padding: 10px 20px;
+    background: #4caf50;
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  header nav a {
+    margin-left: 15px;
+    color: white;
+    text-decoration: none;
+  }
+  header nav a.active {
+    font-weight: bold;
+    text-decoration: underline;
+  }
+  #entryInfo {
+    width: 350px;
+    margin: 50px auto;
+    padding: 20px;
+    border: 1px solid #49951d;
+    background-color: hsl(120, 63%, 97%);
+    border-radius: 20px;
+    text-align: left;
+  }
+  #entryInfo div {
+    margin-bottom: 15px;
+    display: flex;
+    flex-direction: column;
+  }
+  label {
+    margin-bottom: 5px;
+    font-weight: bold;
+    color: #333;
+  }
+  input {
+    padding: 8px;
+    border: 1px solid #aaa;
+    border-radius: 6px;
+  }
+  input:focus {
+    outline: none;
+    border-color: #0077ff;
+    box-shadow: 0 0 4px #0077ff50;
+  }
+  button {
+    width: 100%;
+    padding: 10px;
+    border: none;
+    border-radius: 6px;
+    background-color: #4caf50;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+    margin-top: 5px;
+  }
+  button:hover {
+    background-color: #45a049;
+  }
+  #checkNicknameBtn, #checkPwBtn{
+    width: auto;
+    padding: 5px 10px;
+    margin-top: 5px;
+  }
+  .msg {
+    font-size: 13px;
+    margin-top: 3px;
+  }
+</style>
+</head>
+<body>
+<header>
+  <h1>Vegan delight</h1>
+  <nav id="mainNav">
+    <a href="index.html">Home</a>
+    <a href="courses.html">강의</a>
+    <a href="" class="active">FAQ</a>
+  </nav>
+</header>
+
+<main>
+  <form id="entryInfo">
+    <div>
+      <label for="entryName">성명</label>
+      <input type="text" id="entryName" placeholder="이름을 입력하세요" required>
+    </div>
+
+    <div>
+      <label for="userName">아이디</label>
+      <input type="text" id="userName" placeholder="아이디를 입력하세요" required>
+      <button type="button" id="checkNicknameBtn">중복 확인</button>
+      <p class="msg" id="nicknameMsg"></p>
+    </div>
+    <div>
+      <label for="userName">아이디</label>
+      <input type="text" id="userName" placeholder="아이디를 입력하세요." required>
+    </div>
+
+    <div>
+      <label for="entryPw">비밀번호</label>
+      <input type="password" id="entryPw" placeholder="비밀번호를 입력하세요." required>
+      <input type="password" id="entryPwConfirm" placeholder="한 번 더 입력하세요." required>
+      <button type="button" id="checkPwBtn">일치 여부 확인</button>
+      <p class="msg" id="pwMsg"></p>
+    </div>
+
+    <div>
+      <label for="newbthInfo">생년월일</label>
+      <input type="date" id="newbthInfo" required>
+    </div>
+
+    <div>
+      <label for="newphoneNum">휴대전화 번호</label>
+      <input type="tel" id="newphoneNum" placeholder="010-1234-5678" required>
+    </div>
+
+    <div>
+      <label for="newemailInfo">이메일 정보</label>
+      <input type="email" id="newemailInfo" placeholder="example@email.com" required>
+    </div>
+
+    <button type="submit">회원가입</button>
+  </form>
+</main>
+
+<script>
+  // 닉네임 중복 확인
+  document.getElementById("checkNicknameBtn").addEventListener("click", () => {
+    const nickname = document.getElementById("entryId").value.trim();
+    const msg = document.getElementById("nicknameMsg");
+    if(!nickname){
+      msg.textContent = "아이디를 입력하세요.";
+      msg.style.color = "red";
+      return;
+    }
+
+    // 실제 서버 API 대신 예제용
+    fetch(`/check-nickname?nickname=${encodeURIComponent(nickname)}`)
+      .then(res => res.json())
+      .then(data => {
+        if (data.exists) {
+          msg.textContent = "이미 사용 중인 아이디입니다.";
+          msg.style.color = "red";
+        } else {
+          msg.textContent = "사용 가능한 아이디입니다!";
+          msg.style.color = "green";
+        }
+      })
+      .catch(err => console.error(err));
+  });
+
+  // 비밀번호 일치 여부 확인
+  document.getElementById("checkPwBtn").addEventListener("click", () => {
+    const pw = document.getElementById("entryPw").value;
+    const pwConfirm = document.getElementById("entryPwConfirm").value;
+    const msg = document.getElementById("pwMsg");
+
+    if(pw && pwConfirm && pw === pwConfirm){
+      msg.textContent = "비밀번호가 일치합니다.";
+      msg.style.color = "green";
+    } else {
+      msg.textContent = "비밀번호가 일치하지 않습니다.";
+      msg.style.color = "red";
+    }
+  });
+</script>
+</body>
+</html>
