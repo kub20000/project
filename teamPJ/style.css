@@ -466,3 +466,155 @@ nav a:hover { text-decoration:underline; }
       .controls { grid-template-columns: 1fr 1fr; }
       .controls .cta { grid-column: span 2; }
     }
+
+
+    
+
+   /*나의 냉장고*/
+   body.fridge {
+  background: #f6f7f9;
+}
+
+header {
+  background: #4caf50;
+  color: white;
+  padding: 1rem 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+header h1 {
+  margin: 0;
+}
+
+#navMenu a {
+  margin-left: 1rem;
+  color: white;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+#navMenu a:hover {
+  text-decoration: underline;
+}
+
+/* ===== 냉장고 페이지 레이아웃 ===== */
+.fridge-container {
+  display: flex;
+  min-height: calc(100vh - 80px);
+}
+
+.ingredients-panel {
+  width: 380px;
+  background: white;
+  border-right: 1px solid #ddd;
+  padding: 1rem;
+}
+
+.ingredients-panel h3 {
+  margin-top: 0;
+}
+
+/* 검색창 */
+#ingredientSearch {
+  width: 100%;
+  padding: 0.5rem;
+  margin: 0.8rem 0 1rem;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 14px;
+}
+
+.ingredient-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.ingredient-list button {
+  padding: 0.4rem 0.8rem;
+  border: 1px solid #ddd;
+  background: #f9f9f9;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.ingredient-list button:hover {
+  background: #e8f5e9;
+}
+
+/* 태그 컨테이너 */
+.tag-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+/* 태그 스타일 */
+.tag {
+  background: #4caf50;
+  color: white;
+  padding: 0.3rem 0.8rem;
+  border-radius: 20px;
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.tag:hover {
+  background: #388e3c;
+}
+
+.tag .remove {
+  font-weight: bold;
+  cursor: pointer;
+}
+
+/* 오른쪽 레시피 패널 */
+.recipe-panel {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 2rem;
+}
+
+.recipe-placeholder {
+  text-align: center;
+  max-width: 500px;
+}
+
+#selectedIngredients {
+  margin: 1rem 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  justify-content: center;
+}
+
+#selectedIngredients span {
+  background: #c8e6c9;
+  padding: 0.3rem 0.7rem;
+  border-radius: 15px;
+  font-size: 0.9rem;
+}
+
+#getRecipeBtn {
+  padding: 0.6rem 1.2rem;
+  border: none;
+  background: #4caf50;
+  color: white;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 1rem;
+}
+
+#getRecipeBtn:hover {
+  background: #388e3c;
+}
