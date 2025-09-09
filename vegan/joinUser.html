@@ -1,182 +1,306 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>회원가입</title>
-<style>
-  body {
-    font-family: Arial, sans-serif;
-    margin:0; 
-    padding:0; 
-    background:#f9f9f9;
-  }
-  header {
-    padding: 10px 20px;
-    background: #4caf50;
-    color: white;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-  header nav a {
-    margin-left: 15px;
-    color: white;
-    text-decoration: none;
-  }
-  header nav a.active {
-    font-weight: bold;
-    text-decoration: underline;
-  }
-  #entryInfo {
-    width: 350px;
-    margin: 50px auto;
-    padding: 20px;
-    border: 1px solid #49951d;
-    background-color: hsl(120, 63%, 97%);
-    border-radius: 20px;
-    text-align: left;
-  }
-  #entryInfo div {
-    margin-bottom: 15px;
-    display: flex;
-    flex-direction: column;
-  }
-  label {
-    margin-bottom: 5px;
-    font-weight: bold;
-    color: #333;
-  }
-  input {
-    padding: 8px;
-    border: 1px solid #aaa;
-    border-radius: 6px;
-  }
-  input:focus {
-    outline: none;
-    border-color: #0077ff;
-    box-shadow: 0 0 4px #0077ff50;
-  }
-  button {
-    width: 100%;
-    padding: 10px;
-    border: none;
-    border-radius: 6px;
-    background-color: #4caf50;
-    color: white;
-    font-size: 16px;
-    cursor: pointer;
-    margin-top: 5px;
-  }
-  button:hover {
-    background-color: #45a049;
-  }
-  #checkNicknameBtn, #checkPwBtn{
-    width: auto;
-    padding: 5px 10px;
-    margin-top: 5px;
-  }
-  .msg {
-    font-size: 13px;
-    margin-top: 3px;
-  }
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>회원가입</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #f9f9f9;
+    }
+
+    header {
+      padding: 10px 20px;
+      background: #4caf50;
+      color: white;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    header nav a {
+      margin-left: 15px;
+      color: white;
+      text-decoration: none;
+    }
+
+    header nav a.active {
+      font-weight: bold;
+      text-decoration: underline;
+    }
+
+    #entryInfo {
+      width: 350px;
+      margin: 50px auto;
+      padding: 20px;
+      border: 1px solid #49951d;
+      background-color: hsl(120, 63%, 97%);
+      border-radius: 20px;
+      text-align: left;
+    }
+
+    #entryInfo div {
+      margin-bottom: 15px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    label {
+      margin-bottom: 5px;
+      font-weight: bold;
+      color: #333;
+    }
+
+    input {
+      padding: 8px;
+      border: 1px solid #aaa;
+      border-radius: 6px;
+    }
+
+    input:focus {
+      outline: none;
+      border-color: #0077ff;
+      box-shadow: 0 0 4px #0077ff50;
+    }
+
+    button {
+      width: 100%;
+      padding: 10px;
+      border: none;
+      border-radius: 6px;
+      background-color: #4caf50;
+      color: white;
+      font-size: 16px;
+      cursor: pointer;
+      margin-top: 5px;
+    }
+
+    button:hover {
+      background-color: #45a049;
+    }
+
+    #checkNicknameBtn,
+    #checkPwBtn {
+      width: auto;
+      padding: 5px 10px;
+      margin-top: 5px;
+    }
+
+    .msg {
+      font-size: 13px;
+      margin-top: 3px;
+    }
+
+    /* 완료 메시지 스타일 */
+    #successMsg {
+      display: none;
+      text-align: center;
+      margin-top: 80px;
+    }
+
+    #successMsg h2 {
+      color: green;
+      font-size: 24px;
+      margin-bottom: 10px;
+    }
+
+    #successMsg button {
+      width: 20%;
+      margin-top: 20px;
+      padding: 10px 20px;
+      border: block;
+      border-radius: 6px;
+      background-color: #4caf50;
+      color: white;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    #successMsg button:hover {
+      background-color: #45a049;
+    }
+  </style>
 </head>
+
 <body>
-<header>
-  <h1>Vegan delight</h1>
-  <nav id="mainNav">
-    <a href="index.html">Home</a>
-    <a href="courses.html">강의</a>
-    <a href="" class="active">FAQ</a>
-  </nav>
-</header>
+  <header>
+    <h1>Vegan delight</h1>
+    <nav id="mainNav">
+      <a href="index.html">Home</a>
+      <a href="courses.html">강의</a>
+      <a href="" class="active">FAQ</a>
+    </nav>
+  </header>
 
-<main>
-  <form id="entryInfo">
-    <div>
-      <label for="entryName">성명</label>
-      <input type="text" id="entryName" placeholder="이름을 입력하세요" required>
+  <main>
+    <!-- 회원가입 폼 -->
+    <form id="entryInfo">
+      <div>
+        <label for="entryName">성명</label>
+        <input type="text" id="entryName" placeholder="이름을 입력하세요." required>
+      </div>
+
+      <div>
+        <label for="userName">아이디</label>
+        <input type="text" id="userName" placeholder="아이디를 입력하세요." required>
+        <button type="button" id="checkNicknameBtn">중복 확인</button>
+        <p class="msg" id="nicknameMsg"></p>
+      </div>
+
+      <div>
+        <label for="nickName">닉네임</label>
+        <input type="text" id="nickName" placeholder="사용하실 닉네임을 입력하세요." required>
+      </div>
+
+      <div>
+        <label for="entryPw">비밀번호</label>
+        <input type="password" id="entryPw" placeholder="비밀번호를 입력하세요." required>
+        <input type="password" id="entryPwConfirm" placeholder="한 번 더 입력하세요." required>
+        <button type="button" id="checkPwBtn">일치 여부 확인</button>
+        <p class="msg" id="pwMsg"></p>
+      </div>
+
+      <div>
+        <label for="newbthInfo">생년월일</label>
+        <input type="date" id="newbthInfo" required>
+      </div>
+
+      <div>
+        <label for="newphoneNum">휴대전화 번호</label>
+        <input type="tel" id="newphoneNum" placeholder="휴대전화 번호를 입력하세요." required>
+        <p class="msg" id="phoneMsg"></p>
+      </div>
+
+      <div>
+        <label for="newemailInfo">이메일 정보</label>
+        <input type="email" id="newemailInfo" placeholder="example@email.com" required>
+        <p class="msg" id="emailMsg"></p>
+      </div>
+      <button type="submit">회원가입</button>
+    </form>
+
+    <div id="successMsg">
+      <h2>회원가입이 완료되었습니다!</h2>
+      <p>Vegan delight에 가입해주셔서 감사합니다 🎉</p>
+      <button onclick="location.href='login.html'">로그인 페이지로 이동</button>
     </div>
 
-    <div>
-      <label for="userName">아이디</label>
-      <input type="text" id="userName" placeholder="아이디를 입력하세요" required>
-      <button type="button" id="checkNicknameBtn">중복 확인</button>
-      <p class="msg" id="nicknameMsg"></p>
-    </div>
-    <div>
-      <label for="userName">아이디</label>
-      <input type="text" id="userName" placeholder="아이디를 입력하세요." required>
-    </div>
-
-    <div>
-      <label for="entryPw">비밀번호</label>
-      <input type="password" id="entryPw" placeholder="비밀번호를 입력하세요." required>
-      <input type="password" id="entryPwConfirm" placeholder="한 번 더 입력하세요." required>
-      <button type="button" id="checkPwBtn">일치 여부 확인</button>
-      <p class="msg" id="pwMsg"></p>
-    </div>
-
-    <div>
-      <label for="newbthInfo">생년월일</label>
-      <input type="date" id="newbthInfo" required>
-    </div>
-
-    <div>
-      <label for="newphoneNum">휴대전화 번호</label>
-      <input type="tel" id="newphoneNum" placeholder="010-1234-5678" required>
-    </div>
-
-    <div>
-      <label for="newemailInfo">이메일 정보</label>
-      <input type="email" id="newemailInfo" placeholder="example@email.com" required>
-    </div>
-
-    <button type="submit">회원가입</button>
-  </form>
-</main>
-
-<script>
-  // 닉네임 중복 확인
-  document.getElementById("checkNicknameBtn").addEventListener("click", () => {
-    const nickname = document.getElementById("entryId").value.trim();
-    const msg = document.getElementById("nicknameMsg");
-    if(!nickname){
-      msg.textContent = "아이디를 입력하세요.";
-      msg.style.color = "red";
-      return;
-    }
-
-    // 실제 서버 API 대신 예제용
-    fetch(`/check-nickname?nickname=${encodeURIComponent(nickname)}`)
-      .then(res => res.json())
-      .then(data => {
-        if (data.exists) {
-          msg.textContent = "이미 사용 중인 아이디입니다.";
+    <script>
+      // 닉네임 중복 확인
+      document.getElementById("checkNicknameBtn").addEventListener("click", () => {
+        const nickname = document.getElementById("userName").value.trim();
+        const msg = document.getElementById("nicknameMsg");
+        if (!nickname) {
+          msg.textContent = "아이디를 입력하세요.";
           msg.style.color = "red";
-        } else {
-          msg.textContent = "사용 가능한 아이디입니다!";
-          msg.style.color = "green";
+          return;
         }
-      })
-      .catch(err => console.error(err));
-  });
+        // 예제용 (실제 서버 연결 대신)
+        fetch(`/check-nickname?nickname=${encodeURIComponent(nickname)}`)
+          .then(res => res.json())
+          .then(data => {
+            if (data.exists) {
+              msg.textContent = "이미 사용 중인 아이디입니다.";
+              msg.style.color = "red";
+            } else {
+              msg.textContent = "사용 가능한 아이디입니다!";
+              msg.style.color = "green";
+            }
+          })
+          .catch(err => console.error(err));
+      });
 
-  // 비밀번호 일치 여부 확인
-  document.getElementById("checkPwBtn").addEventListener("click", () => {
-    const pw = document.getElementById("entryPw").value;
-    const pwConfirm = document.getElementById("entryPwConfirm").value;
-    const msg = document.getElementById("pwMsg");
+      // 비밀번호 일치 여부 확인
+      document.getElementById("checkPwBtn").addEventListener("click", () => {
+        const pw = document.getElementById("entryPw").value;
+        const pwConfirm = document.getElementById("entryPwConfirm").value;
+        const msg = document.getElementById("pwMsg");
 
-    if(pw && pwConfirm && pw === pwConfirm){
-      msg.textContent = "비밀번호가 일치합니다.";
-      msg.style.color = "green";
+        if (pw && pwConfirm && pw === pwConfirm) {
+          msg.textContent = "비밀번호가 일치합니다.";
+          msg.style.color = "green";
+        } else {
+          msg.textContent = "비밀번호가 일치하지 않습니다.";
+          msg.style.color = "red";
+        }
+      });
+
+      // 최종 회원가입 제출
+     document.getElementById("entryInfo").addEventListener("submit", (e) => {
+  e.preventDefault();
+
+  const name = document.getElementById("entryName").value.trim();
+  const userId = document.getElementById("userName").value.trim();
+  const nickname = document.getElementById("nickName").value.trim();
+  const pw = document.getElementById("entryPw").value;
+  const pwConfirm = document.getElementById("entryPwConfirm").value;
+  const birth = document.getElementById("newbthInfo").value;
+  const phone = document.getElementById("newphoneNum").value.trim();
+  const email = document.getElementById("newemailInfo").value.trim();
+
+  // 메시지 요소
+  const pwMsg = document.getElementById("pwMsg");
+  const phoneMsg = document.getElementById("phoneMsg");
+  const emailMsg = document.getElementById("emailMsg");
+
+  // 초기화
+  pwMsg.textContent = "";
+  phoneMsg.textContent = "";
+  emailMsg.textContent = "";
+
+  let valid = true;
+
+  // 비밀번호 확인
+  if (pw !== pwConfirm) {
+    pwMsg.textContent = "비밀번호가 일치하지 않습니다.";
+    pwMsg.style.color = "red";
+    valid = false;
+  } else if (pw && pwConfirm) {
+    // 비밀번호 강도 검사 (8자 이상, 영문+숫자 포함)
+    const pwRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
+    if (!pwRegex.test(pw)) {
+      pwMsg.textContent = "비밀번호는 8자 이상이며, 영문과 숫자를 포함해야 합니다.";
+      pwMsg.style.color = "red";
+      valid = false;
     } else {
-      msg.textContent = "비밀번호가 일치하지 않습니다.";
-      msg.style.color = "red";
+      pwMsg.textContent = "사용 가능한 비밀번호입니다.";
+      pwMsg.style.color = "green";
     }
-  });
-</script>
+  }
+
+  // 이메일 형식 검사
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!emailRegex.test(email)) {
+    emailMsg.textContent = "올바른 이메일 형식을 입력하세요.";
+    emailMsg.style.color = "red";
+    valid = false;
+  } else {
+    emailMsg.textContent = "사용 가능한 이메일입니다.";
+    emailMsg.style.color = "green";
+  }
+
+  // 전화번호 검사 (숫자만, 10~11자리)
+  const phoneRegex = /^\d{10,11}$/;
+  if (!phoneRegex.test(phone)) {
+    phoneMsg.textContent = "휴대전화 번호는 10~11자리 숫자만 입력하세요.";
+    phoneMsg.style.color = "red";
+    valid = false;
+  } else {
+    phoneMsg.textContent = "사용 가능한 전화번호입니다.";
+    phoneMsg.style.color = "green";
+  }
+
+  // 모든 조건 만족 시 완료 화면 표시
+  if (valid && name && userId && nickname && birth) {
+    document.getElementById("entryInfo").style.display = "none";
+    document.getElementById("successMsg").style.display = "block";
+  }
+});
+    </script>
 </body>
+
 </html>
