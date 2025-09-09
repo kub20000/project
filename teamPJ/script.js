@@ -124,17 +124,27 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     // 검색 기능
-    document.getElementById("searchInput").addEventListener("input", function () {
-      const query = this.value.replace(/\s+/g, "").toLowerCase(); // 띄어쓰기 제거 후 검색
-      const filteredRows = rows.filter(row => {
-        const title = row.querySelector("td:nth-child(2)").innerText.replace(/\s+/g, "").toLowerCase();
-        return title.includes(query);
-      });
+document.getElementById("searchInput").addEventListener("input", function () {
+  const query = this.value.replace(/\s+/g, "").toLowerCase(); // 띄어쓰기 제거 후 검색
 
-      tbody.innerHTML = "";
-      filteredRows.forEach(r => tbody.appendChild(r));
-      updatePagination(1);
-    });
+  if (query === "") {
+    // 검색창이 비어 있으면 원래 페이지네이션 복귀
+    displayPage(1);
+    return;
+  }
+
+  // 검색어가 있을 때만 필터링
+  const filteredRows = rows.filter(row => {
+    const title = row.querySelector("td:nth-child(2)").innerText.replace(/\s+/g, "").toLowerCase();
+    return title.includes(query);
+  });
+
+  tbody.innerHTML = "";
+  filteredRows.forEach(r => tbody.appendChild(r));
+
+  // 검색 결과에는 페이지네이션 숨김 
+  pagination.innerHTML = "";
+});
 
     // 초기 표시
     displayPage(1);
