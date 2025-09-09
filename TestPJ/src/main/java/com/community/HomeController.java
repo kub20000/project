@@ -7,9 +7,19 @@ import org.springframework.web.bind.annotation.GetMapping;
 public class HomeController {
 
     // /요청을 처리한다.  /=root
-    @GetMapping("/")
-    public String home(){
+    @GetMapping("/post/main")
+    public String postMain(){
         return "redirect:/post/list";
     }
 
+    @GetMapping("/")
+    public String home(){
+        return "home";
+    }
+
+    @GetMapping("/course/main")
+    public String course() {return "/course/courses";}
+
+    @GetMapping("/myFridge/main")
+    public String myFridge() {return "/myFridge/myFridge";}
 }

@@ -22,7 +22,7 @@ public class PostController {
     public String postList(Model model) {
         System.out.println("postList");
         model.addAttribute("posts", postService.findAll());
-        return "main";
+        return "/post/main";
     }
 
     // 게시글 추가(페이지 연결)
