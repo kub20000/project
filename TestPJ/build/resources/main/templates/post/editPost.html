@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>게시글 수정</title>
+  <style>
+    body {
+      font-family: 'Malgun Gothic', '맑은 고딕', sans-serif;
+    }
+    textarea {
+      width: 90%;
+      height: 600px;
+      resize: vertical;
+      font-family: inherit;
+    }
+  </style>
+</head>
+<body>
+<h1>게시글 수정</h1>
+
+<form th:action="@{/post/edit}" th:object="${post}" method="post">
+  <label>게시글 ID: <input type="text" th:field="*{id}" readonly /></label><hr/>
+
+  <label>제목: <input type="text" th:field="*{title}" /></label><br/>
+  <label>
+    내용: <textarea type="text" th:field="*{content}"></textarea>
+  </label><br/>
+  <button type="submit">수정</button>
+</form>
+
+<form th:action="@{/post/detail/{id}(id=${post.id})}">
+    <input type="hidden" name="id" th:value="${post.id}">
+    <button type="submit">취소</button>
+</form>
+
+
+</body>
+</html>
