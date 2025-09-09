@@ -457,22 +457,13 @@ nav a:hover { text-decoration:underline; }
   color: var(--primary);
 }
 
-    /* Responsive controls stack */
-    @media (max-width: 980px) {
-      .controls { grid-template-columns: 1fr 1fr 1fr; }
-      .controls .cta { grid-column: span 3; height: 44px; }
-    }
-    @media (max-width: 640px) {
-      .controls { grid-template-columns: 1fr 1fr; }
-      .controls .cta { grid-column: span 2; }
-    }
 
 
     
 
    /*나의 냉장고*/
    body.fridge {
-  background: #f6f7f9;
+  background: #f9f9f9;
 }
 
 header {
@@ -618,3 +609,112 @@ header h1 {
 #getRecipeBtn:hover {
   background: #388e3c;
 }
+
+
+
+/*게시판 공지사항*/
+    
+    
+    /* 카테고리 탭 */
+    .board-tabs {
+      display: flex;
+      justify-content: center;
+      margin: 20px auto;
+      max-width: 600px;
+      gap: 10px;
+    }
+    .board-tabs a {
+      flex: 1;
+      text-align: center;
+      padding: 10px 0;
+      background: #a9d18e;
+      color: white;
+      font-size: 1rem;
+      font-weight: bold;
+      text-decoration: none;
+      border-radius: 8px;
+      transition: 0.3s;
+    }
+    .board-tabs a.active {
+      background: #49951d;
+    }
+
+    /* 검색 + 제목 */
+    .board-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      width: 90%;
+      margin: auto;
+      margin-top: 20px;
+    }
+    .board-header p {
+      font-size: 24px;
+      font-weight: bold;
+    }
+    .search-box {
+      display: flex;
+      align-items: center;
+    }
+    .search-box input {
+      padding: 8px;
+      width: 300px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+
+    /* 게시판 테이블 */
+    table {
+      width: 90%;
+      margin: auto;
+      border-collapse: collapse;
+      background: white;
+    }
+    th, td {
+      padding: 12px;
+      border-bottom: 1px solid #ddd;
+      text-align: center;
+    }
+    th {
+      font-weight: bold;
+      border-bottom: 2px solid black;
+    }
+    tr:hover {
+      background: #f1f1f1;
+    }
+
+    /* 제목 링크 스타일 */
+    .title-link {
+      text-decoration: none;
+      color: black;
+      cursor: pointer;
+    }
+    .title-link:hover {
+      color: #2b6f2b;
+    }
+
+    /* new 표시 */
+    .new-label {
+      background: #6fa84f;
+      color: white;
+      font-size: 0.8rem;
+      padding: 3px 6px;
+      border-radius: 4px;
+      margin-left: 5px;
+    }
+
+    /* 페이지네이션 */
+    .pagination {
+      text-align: center;
+      margin: 20px 0;
+    }
+    .pagination a {
+      margin: 0 5px;
+      text-decoration: none;
+      color: black;
+      cursor: pointer;
+    }
+    .pagination a.active {
+      font-weight: bold;
+      color: #49951d;
+    }
