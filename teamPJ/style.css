@@ -778,8 +778,8 @@ tr:hover {
   font-size: 15px;
 }
 
-/* ===== 버튼 공통 스타일 ===== */
-button {
+/* ===== 버튼 스타일 ===== */
+#openWriteModal,#addCommentBtn,#addPostBtn,.closeModal {
   background: #4caf50;
   color: white;
   border: none;
@@ -788,11 +788,6 @@ button {
   cursor: pointer;
   font-weight: 600;
   transition: all 0.2s ease;
-}
-button:hover {
-  background: #45a049;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(0,0,0,0.15);
 }
 
 /* ===== 글쓰기 모달 ===== */
