@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vegan LMS - freeboard</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <h1>Vegan delight</h1>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="courses.html">Courses</a>
+      <a href="myfridge.html">나의 냉장고</a>
+      <a href="login.html">Login</a>
+      <a href="notice.html">게시판</a>
+      <a href="mypage.html">my page</a>
+    </nav>
+  </header>
+
+  <!-- 카테고리 탭 -->
+  <div class="board-tabs">
+    <a href="notice.html" >공지 사항</a>
+    <a href="freeBoard.html" class="active">자유 게시판</a>
+    <a href="faq.html">FAQ</a>
+  </div>
+
+  <!-- 제목 + 검색창 -->
+  <div class="board-header">
+    <p>자유 게시판</p>
+    <div class="search-box">
+      <input type="text" id="searchInput" placeholder="검색어를 입력해 주세요">
+    </div>
+  </div>
+
+  <!-- 게시판 -->
+  <table id="boardTable">
+    <thead>
+      <tr>
+        <th>번호</th>
+        <th>제목</th>
+        <th>작성자</th>
+        <th>등록일</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- 예시 데이터 -->
+      <tr>
+        <td>7</td>
+        <td><span class="title-link" onclick="viewPost()">업데이트 알림</span></td>
+        <td>a</td>
+        <td>2025.09.3</td>
+      </tr>
+      <tr>
+        <td>6</td>
+        <td><span class="title-link" onclick="viewPost()"> 제목</span></td>
+        <td>a</td>
+        <td>2025.08.25</td>
+      </tr>
+      <tr>
+        <td>5</td>
+        <td><span class="title-link" onclick="viewPost()">임시 테스트</span></td>
+        <td>a</td>
+        <td>2025.08.20</td>
+      </tr>
+      <tr>
+        <td>4</td>
+        <td><span class="title-link" onclick="viewPost()">예시</span></td>
+        <td>a</td>
+        <td>2025.08.10</td>
+      </tr>
+      <tr>
+        <td>3</td>
+        <td><span class="title-link" onclick="viewPost()">이전 글</span></td>
+        <td>a</td>
+        <td>2025.08.05</td>
+      </tr>
+      <tr>
+        <td>2</td>
+        <td><span class="title-link" onclick="viewPost()">테스트</span></td>
+        <td>a</td>
+        <td>2025.08.01</td>
+      </tr>
+      <tr>
+        <td>1</td>
+        <td><span class="title-link" onclick="viewPost()">첫 글</span></td>
+        <td>a</td>
+        <td>2025.07.25</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- 페이지네이션 -->
+  <div class="pagination" id="pagination"></div>
+  
+</body>
+  <script src="script.js"></script>
+</html>

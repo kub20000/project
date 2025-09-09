@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Vegan LMS - Home</title>
+  <title>Vegan LMS - notice</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -22,20 +22,21 @@
   <!-- 카테고리 탭 -->
   <div class="board-tabs">
     <a href="notice.html" class="active">공지사항</a>
-    <a href="board.html">자유 게시판</a>
+    <a href="freeBoard.html">자유 게시판</a>
     <a href="faq.html">FAQ</a>
   </div>
 
-  <!-- 제목 + 검색창 -->
+  <!-- 제목 + 검색창 + 글쓰기 버튼 -->
   <div class="board-header">
     <p>공지사항</p>
     <div class="search-box">
       <input type="text" id="searchInput" placeholder="검색어를 입력해 주세요">
+      <button id="openWriteModal">글쓰기</button>
     </div>
   </div>
 
   <!-- 게시판 -->
-  <table id="noticeTable">
+  <table id="boardTable">
     <thead>
       <tr>
         <th>번호</th>
@@ -45,73 +46,52 @@
       </tr>
     </thead>
     <tbody>
-      <!-- 예시 데이터 -->
-      <tr>
-        <td>10</td>
-        <td><span class="title-link" onclick="viewPost()">최신 공지사항</span></td>
-        <td>관리자</td>
-        <td>2025.09.09</td>
-      </tr>
-      <tr>
-        <td>9</td>
-        <td><span class="title-link" onclick="viewPost()">공지사항 예시</span></td>
-        <td>a</td>
-        <td>2025.09.05</td>
-      </tr>
-      <tr>
-        <td>8</td>
-        <td><span class="title-link" onclick="viewPost()">테스트 제목</span></td>
-        <td>a</td>
-        <td>2025.09.01</td>
-      </tr>
-      <tr>
-        <td>7</td>
-        <td><span class="title-link" onclick="viewPost()">업데이트 알림</span></td>
-        <td>a</td>
-        <td>2025.08.30</td>
-      </tr>
-      <tr>
-        <td>6</td>
-        <td><span class="title-link" onclick="viewPost()">공지사항 제목</span></td>
-        <td>a</td>
-        <td>2025.08.25</td>
-      </tr>
-      <tr>
-        <td>5</td>
-        <td><span class="title-link" onclick="viewPost()">임시 테스트</span></td>
-        <td>a</td>
-        <td>2025.08.20</td>
-      </tr>
-      <tr>
-        <td>4</td>
-        <td><span class="title-link" onclick="viewPost()">공지 예시</span></td>
-        <td>a</td>
-        <td>2025.08.10</td>
-      </tr>
-      <tr>
-        <td>3</td>
-        <td><span class="title-link" onclick="viewPost()">이전 글</span></td>
-        <td>a</td>
-        <td>2025.08.05</td>
-      </tr>
-      <tr>
-        <td>2</td>
-        <td><span class="title-link" onclick="viewPost()">공지사항 테스트</span></td>
-        <td>a</td>
-        <td>2025.08.01</td>
-      </tr>
-      <tr>
-        <td>1</td>
-        <td><span class="title-link" onclick="viewPost()">첫 글</span></td>
-        <td>a</td>
-        <td>2025.07.25</td>
-      </tr>
+      <!-- JS에서 채움 -->
     </tbody>
   </table>
 
+  <!-- 게시글 보기 모달 -->
+  <div id="postModal" class="modal">
+    <div class="modal-card">
+      <div class="modal-head">
+        <h2 id="modalTitle">게시글 제목</h2>
+        <button class="closeModal" data-target="postModal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <p><strong>작성자:</strong> <span id="modalAuthor"></span></p>
+        <p><strong>작성일:</strong> <span id="modalCreatedAt"></span></p>
+        <hr>
+        <div id="modalContent"></div>
+        <hr>
+        <h3>댓글</h3>
+        <div id="modalComments"></div>
+        <div class="comment-box">
+          <input type="text" id="commentInput" placeholder="댓글을 입력하세요">
+          <button id="addCommentBtn">댓글 등록</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 글쓰기 모달 -->
+  <div id="writeModal" class="modal">
+    <div class="modal-card">
+      <div class="modal-head">
+        <h2>새 글 작성</h2>
+        <button class="closeModal" data-target="writeModal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <input type="text" id="newPostTitle" placeholder="제목">
+        <textarea id="newPostContent" placeholder="내용"></textarea>
+        <input type="text" id="newPostAuthor" placeholder="작성자">
+        <button id="addPostBtn">작성</button>
+      </div>
+    </div>
+  </div>
+
   <!-- 페이지네이션 -->
   <div class="pagination" id="pagination"></div>
-  
-</body>
+
   <script src="script.js"></script>
+</body>
 </html>
