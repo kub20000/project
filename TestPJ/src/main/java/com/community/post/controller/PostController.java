@@ -1,20 +1,26 @@
 package com.community.post.controller;
 
+import com.community.post.comment.Comment;
+import com.community.post.comment.CommentService;
 import com.community.post.entity.Post;
 import com.community.post.service.PostService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Controller
 public class PostController {
 
     private final PostService postService;
+    private final CommentService commentService;
 
-    public PostController(PostService postService) {
+    public PostController(PostService postService, CommentService commentService) {
         this.postService = postService;
+        this.commentService = commentService;
     }
 
     // 메인에 게시글 리스트 출력
@@ -42,6 +48,8 @@ public class PostController {
     // 게시글 보기 (제목(title) 클릭해서 연결되는 페이지) -> 9.9 <br> 태그 문제 해결
     @GetMapping("/post/detail/{id}")
     public String postDetailForm(@PathVariable int id, Model model){
+
+        //1. 게시글 데이터 가져오기
         Post post = (Post) postService.findById(id).orElseThrow(
                 ()->new IllegalArgumentException("Invaild id"));
         String content = Optional.ofNullable(post.getContent()).orElse("");
@@ -60,6 +68,20 @@ public class PostController {
         // 3. Optional 객체에서 값 가져와서 모델에 추가
         nextId.ifPresent(next -> model.addAttribute("nextId", next));
         prevId.ifPresent(prev -> model.addAttribute("prevId", prev));
+
+        //4. 댓글
+        List<Comment> comments = commentService.findById(id);
+        // 한줄 내려쓰기 판단
+        List<Comment> processedComments = comments.stream()
+                .map(comment -> {
+                    String commentContent = comment.getComments_content();
+                    String processedContent = commentContent.replace("\n", "<br>");
+                    comment.setComments_content(processedContent);
+                    return comment;
+                })
+                .collect(Collectors.toList());
+        model.addAttribute("comments", processedComments);
+
 
         return "post/detailPost";
     }

@@ -92,12 +92,14 @@ public class PostRepo {
         );
     }
 
+    // 다음글 가기 (id가 높은 것 중 가장 낮은 id)
     public Optional<Integer> findNextId(int postId) {
         String sql = "SELECT MIN(id) FROM posts WHERE id > ?";
         Integer nextId = jdbc.queryForObject(sql, Integer.class, postId);
         return Optional.ofNullable(nextId);
     }
 
+    // 이전글 가기 (id가 낮은 것 중 가장 높은 id)
     public Optional<Integer> findPrevId(int postId) {
         String sql = "SELECT MAX(id) FROM posts WHERE id < ?";
         Integer prevId = jdbc.queryForObject(sql, Integer.class, postId);

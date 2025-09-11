@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns="">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>게시글</title>
@@ -29,14 +29,38 @@
 
   </div>
 
+  <h2>댓글</h2>
+  <hr>
+  <div th:if="${not #lists.isEmpty(comments)}">
+<!-- ajax 활용해서 댓글창 구현 (프론트엔드)  -->
+    <div th:each="comment : ${comments}" class="comment-item">
+      <strong>작성자 :</strong>
+      <span th:text="${comment.comments_name}"></span>
+      <br>
+      <br>
+      <span th:utext="${comment.comments_content}"></span>
+      <br>
+      <br>
+      <small th:text="${#temporals.format(comment.created_at, 'yyyy-MM-dd HH:mm')}"></small>
+
+      <form th:action="@{/comment/delete}" method="post">
+        <input type="hidden" name="id" th:value="${comment.id}">
+        <input type="hidden" name="posts_id" th:value="${comment.posts_id}">
+        <button type="submit">댓글 삭제</button>
+      </form>
+    </div>
+  </div>
+
+  <hr>
+
   <form th:action="@{/post/edit/{id}(id=${post.id})}">
     <input type="hidden" name="id" th:value="${post.id}">
-    <button type="submit">수정</button>
+    <button type="submit">게시글 수정</button>
   </form>
 
   <form th:action="@{/post/delete}" method="post">
     <input type="hidden" name="id" th:value="${post.id}">
-    <button type="submit">삭제</button>
+    <button type="submit">게시글 삭제</button>
   </form>
 
   <div>
