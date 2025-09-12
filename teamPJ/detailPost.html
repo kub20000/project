@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>게시글 상세보기 - Vegan delight</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <h1>Vegan delight</h1>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="courses.html">Courses</a>
+      <a href="myfridge.html">나의 냉장고</a>
+      <a href="login.html">Login</a>
+      <a href="notice.html">게시판</a>
+      <a href="mypage.html">my page</a>
+    </nav>
+  </header>
+
+  <main class="post-detail-container">
+    <div class="post-card">
+      <h2 id="postTitle">게시글 제목</h2>
+      <div class="post-meta">
+        <span id="postAuthor">작성자</span> | 
+        <span id="postDate">작성일</span>
+      </div>
+      <hr>
+      <div class="comments-section">
+        <h3>댓글</h3>
+        <div id="commentsContainer">
+          <p>댓글이 없습니다.</p>
+        </div>
+        <div class="comment-box">
+          <input type="text" id="commentInput" placeholder="댓글을 입력하세요">
+          <button id="addCommentBtn">댓글 등록</button>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    // 더미 데이터 예시 (실제 페이지에서는 query param으로 게시물 id 받아오기)
+    const post = {
+      postId: 10,
+      postTitle: "제목",
+      postContent: "내용",
+      author: "관리자",
+      createdAt: "2025-09-09"
+    };
+
+    const comments = [];
+
+    // 게시글 내용 렌더링
+    document.getElementById("postTitle").textContent = post.postTitle;
+    document.getElementById("postAuthor").textContent = post.author;
+    document.getElementById("postDate").textContent = post.createdAt;
+    document.getElementById("postContent").textContent = post.postContent;
+
+    // 댓글 렌더링 함수
+    function renderComments() {
+      const container = document.getElementById("commentsContainer");
+      container.innerHTML = "";
+      if (comments.length === 0) {
+        container.innerHTML = "<p>댓글이 없습니다.</p>";
+        return;
+      }
+      comments.forEach(c => {
+        const div = document.createElement("div");
+        div.classList.add("comment-item");
+        div.innerHTML = `<span class="comment-writer">${c.writer}</span> 
+                         <span class="comment-time">(${c.createAt})</span>
+                         <p>${c.content}</p>`;
+        container.appendChild(div);
+      });
+    }
+
+    // 댓글 등록
+    document.getElementById("addCommentBtn").addEventListener("click", () => {
+      const input = document.getElementById("commentInput");
+      const text = input.value.trim();
+      if (!text) return;
+      comments.push({
+        writer: "익명",
+        content: text,
+        createAt: new Date().toISOString().split("T")[0]
+      });
+      input.value = "";
+      renderComments();
+    });
+
+    // 초기 렌더링
+    renderComments();
+  </script>
+</body>
+</html>

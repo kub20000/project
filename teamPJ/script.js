@@ -1,3 +1,4 @@
+
 document.addEventListener("DOMContentLoaded", () => {
   // hero 코드 (null 체크)
   const hero = document.querySelector(".hero");
@@ -77,6 +78,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const tbody = table.querySelector("tbody");
   const pagination = document.getElementById("pagination");
   const rowsPerPage = 7;
+
   let posts = [
     { postId: 10, author: "관리자", postTitle: "최신 공지사항", content: "최신 공지사항 내용입니다.", createdAt: "2025-09-09" },
     { postId: 9, author: "a", postTitle: "공지사항 예시", content: "공지사항 예시 내용입니다.", createdAt: "2025-09-05" },
@@ -90,15 +92,12 @@ document.addEventListener("DOMContentLoaded", () => {
     { postId: 1, author: "a", postTitle: "첫 글", content: "첫 글 내용입니다.", createdAt: "2025-07-25" }
   ];
 
-  let comments = [];
-  let filteredPosts = [...posts]; // 검색 결과 저장
+  let filteredPosts = [...posts];
   let currentPage = 1;
 
-  // 게시판 출력 (NEW 라벨 포함)
   function generateRows(list) {
     tbody.innerHTML = "";
     const today = new Date();
-
     list.forEach(post => {
       const tr = document.createElement("tr");
       const createdDate = new Date(post.createdAt);
@@ -124,7 +123,6 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  // 페이지네이션
   function displayPage(page) {
     currentPage = page;
     const start = (page - 1) * rowsPerPage;
@@ -144,90 +142,12 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  // 모달 열기/닫기
-  function openModal(id) {
-    document.getElementById(id).classList.add("open");
-  }
-  function closeModal(id) {
-    document.getElementById(id).classList.remove("open");
-  }
-
-  // 게시글 클릭 시 모달 열기
+  // 게시글 클릭 시 detailPost.html 이동
   tbody.addEventListener("click", e => {
     if (e.target.classList.contains("title-link")) {
       const postId = Number(e.target.dataset.id);
-      const post = posts.find(p => p.postId === postId);
-      if (!post) return;
-
-      document.getElementById("modalTitle").textContent = post.postTitle;
-      document.getElementById("modalAuthor").textContent = post.author;
-      document.getElementById("modalCreatedAt").textContent = post.createdAt;
-      document.getElementById("modalContent").textContent = post.content;
-
-      renderComments(postId);
-      openModal("postModal");
-
-      document.getElementById("addCommentBtn").onclick = () => {
-        const input = document.getElementById("commentInput");
-        const text = input.value.trim();
-        if (!text) return;
-
-        comments.push({
-          comId: comments.length + 1,
-          postId,
-          writer: "익명",
-          comContent: text,
-          createAt: new Date().toISOString().split("T")[0]
-        });
-
-        input.value = "";
-        renderComments(postId);
-      };
+      window.location.href = `detailPost.html?postId=${postId}`;
     }
-  });
-
-  // 댓글 렌더링
-  function renderComments(postId) {
-    const container = document.getElementById("modalComments");
-    container.innerHTML = "";
-    const postComments = comments.filter(c => c.postId === postId);
-
-    if (postComments.length === 0) {
-      container.innerHTML = "<p>댓글이 없습니다.</p>";
-    } else {
-      postComments.forEach(c => {
-        const div = document.createElement("div");
-        div.classList.add("comment");
-        div.innerHTML = `<p><strong>${c.writer}</strong> (${c.createAt})<br>${c.comContent}</p>`;
-        container.appendChild(div);
-      });
-    }
-  }
-
-  // 글쓰기 모달
-  document.getElementById("openWriteModal").addEventListener("click", () => openModal("writeModal"));
-  document.querySelectorAll(".closeModal").forEach(btn => {
-    btn.addEventListener("click", () => closeModal(btn.dataset.target));
-  });
-
-  // 글 등록
-  document.getElementById("addPostBtn").addEventListener("click", () => {
-    const title = document.getElementById("newPostTitle").value.trim();
-    const content = document.getElementById("newPostContent").value.trim();
-    const author = document.getElementById("newPostAuthor").value.trim();
-    if (!title || !content || !author) return alert("모든 항목을 입력해주세요!");
-
-    const createdAt = new Date().toISOString().split("T")[0];
-    const newPost = { postId: posts.length + 1, author, postTitle: title, content, createdAt };
-    posts.unshift(newPost);
-    filteredPosts = [...posts]; // 검색 초기화
-    displayPage(1);
-
-    document.getElementById("newPostTitle").value = "";
-    document.getElementById("newPostContent").value = "";
-    document.getElementById("newPostAuthor").value = "";
-
-    closeModal("writeModal");
   });
 
   // 검색
@@ -237,6 +157,5 @@ document.addEventListener("DOMContentLoaded", () => {
     displayPage(1);
   });
 
-  // 초기 실행
   displayPage(1);
 });

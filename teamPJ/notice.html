@@ -50,45 +50,6 @@
     </tbody>
   </table>
 
-  <!-- 게시글 보기 모달 -->
-  <div id="postModal" class="modal">
-    <div class="modal-card">
-      <div class="modal-head">
-        <h2 id="modalTitle">게시글 제목</h2>
-        <button class="closeModal" data-target="postModal">&times;</button>
-      </div>
-      <div class="modal-body">
-        <p><strong>작성자:</strong> <span id="modalAuthor"></span></p>
-        <p><strong>작성일:</strong> <span id="modalCreatedAt"></span></p>
-        <hr>
-        <div id="modalContent"></div>
-        <hr>
-        <h3>댓글</h3>
-        <div id="modalComments"></div>
-        <div class="comment-box">
-          <input type="text" id="commentInput" placeholder="댓글을 입력하세요">
-          <button id="addCommentBtn">댓글 등록</button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- 글쓰기 모달 -->
-  <div id="writeModal" class="modal">
-    <div class="modal-card">
-      <div class="modal-head">
-        <h2>새 글 작성</h2>
-        <button class="closeModal" data-target="writeModal">&times;</button>
-      </div>
-      <div class="modal-body">
-        <input type="text" id="newPostTitle" placeholder="제목">
-        <textarea id="newPostContent" placeholder="내용"></textarea>
-        <input type="text" id="newPostAuthor" placeholder="작성자">
-        <button id="addPostBtn">작성</button>
-      </div>
-    </div>
-  </div>
-
   <!-- 페이지네이션 -->
   <div class="pagination" id="pagination"></div>
 
