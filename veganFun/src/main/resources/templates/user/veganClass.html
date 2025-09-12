@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Vegan Learning</title>
+  <style>
+    :root {
+      --bg: #f6f7f9;
+      --card: #ffffff;
+      --text: #1f2937;
+      --muted: #6b7280;
+      --primary: #16a34a; /* green-600 */
+      --primary-600: #15803d; /* green-700 */
+      --ring: rgba(22,163,74,0.35);
+      --danger: #ef4444;
+      --warning: #f59e0b;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0; font-family: Inter, "Noto Sans KR", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      background: var(--bg); color: var(--text);
+    }
+    /* Topbar */
+    .topbar { position: sticky; top: 0; z-index: 50; backdrop-filter: blur(8px); background: rgba(246,247,249,0.8); border-bottom: 1px solid #e5e7eb; }
+    .topbar-inner { max-width: 1100px; margin: 0 auto; display: flex; align-items: center; gap: 16px; padding: 12px 16px; }
+    .brand { display:flex; align-items:center; gap:10px; font-weight: 800; font-size: 18px; }
+    .brand .logo { width: 30px; height: 30px; display:grid; place-items:center; border-radius: 9px; background: linear-gradient(135deg, #22c55e, #16a34a); color: white; font-weight: 900; }
+    nav { margin-left: auto; display:flex; gap: 10px; flex-wrap: wrap; }
+    nav a { text-decoration: none; color: var(--muted); padding: 8px 10px; border-radius: 10px; }
+    nav a.active, nav a:hover { background: #eaf7ef; color: var(--primary-600); }
+
+    /* Hero */
+    .hero { max-width: 1100px; margin: 18px auto 0; padding: 0 16px 8px; }
+    .hero h1 { margin: 10px 0 6px; font-size: clamp(22px, 3.4vw, 32px); letter-spacing: -0.02em; }
+    .hero p { margin: 0; color: var(--muted); }
+
+    /* Controls */
+    .controls { max-width: 1100px; margin: 16px auto; padding: 12px 16px; display: grid; grid-template-columns: 1fr repeat(3, minmax(160px, 220px)) 120px; gap: 10px; }
+    .control { background: var(--card); border: 1px solid #e5e7eb; border-radius: 12px; display:flex; align-items:center; gap: 8px; padding: 10px 12px; }
+    .control input, .control select { border: none; outline: none; width: 100%; font-size: 14px; background: transparent; color: var(--text); }
+    .cta { border-radius: 12px; border: none; background: var(--primary); color: white; font-weight: 700; cursor: pointer; }
+    .cta:hover { background: var(--primary-600); }
+
+    /* Chips */
+    .chips { max-width:1100px; margin: 0 auto; padding: 0 16px 8px; display:flex; gap:8px; flex-wrap:wrap; }
+    .chip { background:#eaf7ef; color: var(--primary-600); padding:6px 10px; border-radius:999px; font-size:12px; }
+
+    /* Grid */
+    .grid { max-width: 1100px; margin: 8px auto 40px; padding: 0 16px; display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 16px; }
+
+    .card { background: var(--card); border: 1px solid #e5e7eb; border-radius: 16px; overflow: hidden; display:flex; flex-direction:column; box-shadow: 0 6px 18px rgba(0,0,0,0.04); }
+    .thumb { aspect-ratio: 16/9; background: linear-gradient(135deg, #eaf7ef, #f1f5f9); display:flex; align-items:center; justify-content:center; color: var(--primary-600); font-weight: 700; font-size: 18px; }
+    .card-body { padding: 14px; display:flex; flex-direction:column; gap: 8px; }
+    .title { font-weight: 700; line-height: 1.3; }
+    .meta { display:flex; gap:8px; flex-wrap:wrap; }
+    .badge { font-size: 12px; color: #065f46; background: #d1fae5; padding: 4px 8px; border-radius: 999px; border:1px solid #a7f3d0; }
+    .badge.gray { color:#374151; background:#f3f4f6; border-color:#e5e7eb; }
+    .badge.warn { color:#7c2d12; background:#ffedd5; border-color:#fed7aa; }
+    .progress-wrap { height: 8px; background:#f3f4f6; border-radius: 999px; overflow:hidden; }
+    .progress { height: 100%; background: linear-gradient(90deg, #86efac, #16a34a); width: 0%; transition: width .25s ease; }
+    .actions { display:flex; gap:8px; margin-top: 4px; }
+    .btn { flex:1; border:1px solid #e5e7eb; background:#fff; border-radius:12px; padding:10px 12px; cursor:pointer; font-weight:600; }
+    .btn.primary { background: var(--primary); color:#fff; border-color: transparent; }
+    .btn.primary:hover { background: var(--primary-600); }
+
+    /* Footer */
+    footer { max-width:1100px; margin: 24px auto 60px; padding: 0 16px; color: var(--muted); }
+
+    /* Modal */
+    .modal { position: fixed; inset: 0; display: none; place-items: center; background: rgba(15,23,42,0.5); z-index: 100; }
+    .modal.open { display: grid; }
+    .modal-card { width: min(920px, 92vw); background: #fff; border-radius: 16px; overflow: hidden; box-shadow: 0 24px 64px rgba(0,0,0,0.25); }
+    .modal-head { display:flex; align-items:center; justify-content:space-between; padding: 12px 16px; border-bottom:1px solid #e5e7eb; }
+    .modal-title { font-weight: 800; }
+    .modal-body { padding: 16px; }
+    .video { background: #0f172a; aspect-ratio: 16/9; border-radius: 12px; display:grid; place-items:center; color:#fff; font-weight:800; letter-spacing:2px; }
+
+    /* Drawer (Exam schedule) */
+    .drawer { position: fixed; right: 0; top: 0; bottom: 0; width: min(440px, 92vw); background:#fff; border-left: 1px solid #e5e7eb; transform: translateX(100%); transition: transform .25s ease; z-index: 90; box-shadow: -12px 0 40px rgba(0,0,0,0.08); }
+    .drawer.open { transform: translateX(0); }
+    .drawer-head { padding: 14px 16px; border-bottom: 1px solid #e5e7eb; display:flex; align-items:center; justify-content:space-between; }
+    .drawer-body { padding: 16px; display:grid; gap: 12px; }
+    .field { display:grid; gap:6px; }
+    .field label { font-size: 13px; color: var(--muted); }
+    .field input, .field select, .field textarea { padding: 10px 12px; border:1px solid #e5e7eb; border-radius: 12px; outline: none; }
+    .help { font-size: 12px; color: var(--muted); }
+
+    /* Responsive controls stack */
+    @media (max-width: 980px) {
+      .controls { grid-template-columns: 1fr 1fr 1fr; }
+      .controls .cta { grid-column: span 3; height: 44px; }
+    }
+    @media (max-width: 640px) {
+      .controls { grid-template-columns: 1fr 1fr; }
+      .controls .cta { grid-column: span 2; }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <div class="brand"><div class="logo">V</div> Vegan Learning</div>
+      <nav>
+        <a href="#" class="active" data-tab="dashboard">Dashboard</a>
+        <a href="#" data-tab="courses">Courses</a>
+        <a href="#" data-tab="recipes">Recipes</a>
+        <a href="#" data-tab="plan">My Plan</a>
+      </nav>
+    </div>
+  </header>
+
+  <section class="hero">
+    <h1>Vegan Lifestyle</h1>
+  </section>
+
+  <!-- Search / Sort / Filter -->
+  <section class="controls">
+    <div class="control" title="강좌/강사 검색">
+      <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24"><path d="M21 21l-4.35-4.35m1.35-5.15a7 7 0 11-14 0 7 7 0 0114 0z" stroke="#6b7280" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <input id="q" placeholder="검색: 강좌명 · 강사명" />
+    </div>
+    <div class="control">
+      <select id="level">
+        <option value="all">레벨 (전체)</option>
+        <option>Beginner</option>
+        <option>Intermediate</option>
+        <option>Advanced</option>
+      </select>
+    </div>
+    <div class="control">
+      <select id="category">
+        <option value="all">분야 (전체)</option>
+        <option value="lifestyle">Vegan Lifestyle (메인)</option>
+        <option value="recipe">요리 레시피 (서브)</option>
+        <option value="skills">조리 스킬</option>
+      </select>
+    </div>
+    <div class="control">
+      <select id="sort">
+        <option value="none">정렬 없음</option>
+        <option value="rating">평점 높은 순</option>
+        <option value="duration">기간 짧은 순</option>
+        <option value="lessons">강의수 많은 순</option>
+      </select>
+    </div>
+    <button class="cta" id="reset">초기화</button>
+  </section>
+
+  <div class="chips" id="chips"></div>
+
+  <main class="grid" id="grid"></main>
+
+  <footer>
+    <small>※ 데모용 프론트엔드입니다. 재생/시험/일정보기는 클라이언트 사이드 시뮬레이션으로 동작합니다.</small>
+  </footer>
+
+  <!-- Video Modal -->
+  <div class="modal" id="videoModal" aria-hidden="true">
+    <div class="modal-card">
+      <div class="modal-head">
+        <div class="modal-title" id="videoTitle">강의 재생</div>
+        <button class="btn" id="closeVideo">닫기</button>
+      </div>
+      <div class="modal-body">
+        <div class="video" id="videoBox">VIDEO PLAYER</div>
+        <div style="margin-top:12px; display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
+          <button class="btn primary" id="markComplete">이 강의 완료 처리</button>
+          <span class="help">완료 시 진도가 증가합니다.</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Exam Drawer -->
+  <aside class="drawer" id="examDrawer" aria-hidden="true">
+    <div class="drawer-head">
+      <strong>시험 일정 예약</strong>
+      <button class="btn" id="closeDrawer">닫기</button>
+    </div>
+    <div class="drawer-body">
+      <div class="field">
+        <label>과정</label>
+        <input id="examCourse" readonly />
+      </div>
+      <div class="field">
+        <label>응시 날짜</label>
+        <input type="date" id="examDate" />
+        <small class="help">오늘로부터 7일 이후 권장 (복습 기간)</small>
+      </div>
+      <div class="field">
+        <label>응시 방식</label>
+        <select id="examMode">
+          <option value="online">온라인 감독 (웹캠)</option>
+          <option value="center">시험센터</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>메모</label>
+        <textarea id="examNote" rows="3" placeholder="준비물 / 유의사항"></textarea>
+      </div>
+      <button class="btn primary" id="saveExam">일정 저장</button>
+      <div id="examSummary" class="help"></div>
+    </div>
+  </aside>
+
+<script>
+  // --- Demo dataset ---
+  const courses = [
+    { id: 'L1', title: 'Vegan Lifestyle 101: 기본 개념', category: 'lifestyle', level: 'Beginner', durationWeeks: 3, lessons: 16, instructor: 'Dr. Han', rating: 4.9, progress: 35, examAfterDays: 21 },
+    { id: 'L2', title: '영양 기초와 식단 구성', category: 'lifestyle', level: 'Beginner', durationWeeks: 4, lessons: 20, instructor: 'Dietitian Kim', rating: 4.8, progress: 10, examAfterDays: 28 },
+    { id: 'S1', title: '조리 스킬: 칼질/팬 컨트롤', category: 'skills', level: 'Intermediate', durationWeeks: 2, lessons: 12, instructor: 'Chef Park', rating: 4.7, progress: 0, examAfterDays: 14 },
+    { id: 'R1', title: '레시피: 고단백 샐러드 & 볼', category: 'recipe', level: 'Beginner', durationWeeks: 2, lessons: 10, instructor: 'Coach Lee', rating: 4.6, progress: 60, examAfterDays: 7 },
+    { id: 'R2', title: '레시피: 베이킹(글루텐프리)', category: 'recipe', level: 'Intermediate', durationWeeks: 5, lessons: 24, instructor: 'Chef Choi', rating: 4.9, progress: 15, examAfterDays: 35 },
+    { id: 'L3', title: '외식/사회생활 대처법', category: 'lifestyle', level: 'Intermediate', durationWeeks: 3, lessons: 14, instructor: 'Counselor Jang', rating: 4.7, progress: 0, examAfterDays: 21 },
+    { id: 'S2', title: '식재료 보관·라벨 읽기', category: 'skills', level: 'Beginner', durationWeeks: 1, lessons: 6, instructor: 'Dr. Han', rating: 4.5, progress: 80, examAfterDays: 7 },
+  ];
+
+  // UI refs
+  const grid = document.getElementById('grid');
+  const q = document.getElementById('q');
+  const level = document.getElementById('level');
+  const category = document.getElementById('category');
+  const sort = document.getElementById('sort');
+  const resetBtn = document.getElementById('reset');
+  const chips = document.getElementById('chips');
+
+  const videoModal = document.getElementById('videoModal');
+  const videoTitle = document.getElementById('videoTitle');
+  const closeVideo = document.getElementById('closeVideo');
+  const markCompleteBtn = document.getElementById('markComplete');
+
+  const drawer = document.getElementById('examDrawer');
+  const closeDrawer = document.getElementById('closeDrawer');
+  const examCourse = document.getElementById('examCourse');
+  const examDate = document.getElementById('examDate');
+  const examMode = document.getElementById('examMode');
+  const examNote = document.getElementById('examNote');
+  const saveExam = document.getElementById('saveExam');
+  const examSummary = document.getElementById('examSummary');
+
+  let currentCourse = null; // for modal/drawer context
+  let state = { q: '', level: 'all', category: 'all', sort: 'none' };
+
+  function daysBadge(days) {
+    const color = days <= 7 ? 'warn' : 'gray';
+    return `<span class="badge ${color}" title="권장 복습 후 응시">D-${days}</span>`;
+  }
+
+  function renderChips() {
+    const items = [];
+    if (state.q) items.push(`검색: "${state.q}"`);
+    if (state.level !== 'all') items.push(`레벨: ${state.level}`);
+    if (state.category !== 'all') items.push(`분야: ${{
+      lifestyle: 'Lifestyle', recipe: 'Recipe', skills: 'Skills'
+    }[state.category]}`);
+    if (state.sort !== 'none') items.push(`정렬: ${state.sort}`);
+    chips.innerHTML = items.map(t => `<span class="chip">${t}</span>`).join('');
+  }
+
+  function render() {
+    // filter
+    let data = courses.filter(c => {
+      const k = (c.title + ' ' + c.instructor).toLowerCase();
+      const okQ = !state.q || k.includes(state.q.toLowerCase());
+      const okL = state.level === 'all' || c.level === state.level;
+      const okC = state.category === 'all' || c.category === state.category;
+      return okQ && okL && okC;
+    });
+
+    // sort
+    if (state.sort === 'rating') data.sort((a,b) => b.rating - a.rating);
+    if (state.sort === 'duration') data.sort((a,b) => a.durationWeeks - b.durationWeeks);
+    if (state.sort === 'lessons') data.sort((a,b) => b.lessons - a.lessons);
+
+    // draw
+    grid.innerHTML = data.map(c => `
+      <article class="card">
+        <div class="thumb">${c.category.toUpperCase()}</div>
+        <div class="card-body">
+          <div class="title">${c.title}</div>
+          <div class="meta">
+            <span class="badge">${c.level}</span>
+            <span class="badge gray">${c.durationWeeks}주 · ${c.lessons}강</span>
+            <span class="badge gray">강사 ${c.instructor}</span>
+            <span class="badge">★ ${c.rating.toFixed(1)}</span>
+            ${daysBadge(c.examAfterDays)}
+          </div>
+          <div class="progress-wrap" title="진도 ${c.progress}%">
+            <div class="progress" style="width:${c.progress}%"></div>
+          </div>
+          <div class="actions">
+            <button class="btn primary" data-play="${c.id}">강의 재생</button>
+            <button class="btn" data-exam="${c.id}">시험 예약</button>
+          </div>
+        </div>
+      </article>
+    `).join('');
+
+    renderChips();
+  }
+
+  function openVideo(course) {
+    currentCourse = course;
+    videoTitle.textContent = `강의 재생 · ${course.title}`;
+    videoModal.classList.add('open');
+  }
+  function closeVideoModal(){ videoModal.classList.remove('open'); }
+
+  function openDrawer(course){
+    currentCourse = course;
+    examCourse.value = `${course.title} (${course.level})`;
+    // default date = today + course.examAfterDays
+    const t = new Date();
+    t.setDate(t.getDate() + course.examAfterDays);
+    examDate.valueAsDate = t;
+    examMode.value = 'online';
+    examNote.value = '';
+    examSummary.textContent = '';
+    drawer.classList.add('open');
+  }
+  function closeExamDrawer(){ drawer.classList.remove('open'); }
+
+  // Event wiring
+  q.addEventListener('input', e => { state.q = e.target.value.trim(); render(); });
+  level.addEventListener('change', e => { state.level = e.target.value; render(); });
+  category.addEventListener('change', e => { state.category = e.target.value; render(); });
+  sort.addEventListener('change', e => { state.sort = e.target.value; render(); });
+  resetBtn.addEventListener('click', () => { state = { q: '', level: 'all', category: 'all', sort: 'none' }; q.value=''; level.value='all'; category.value='all'; sort.value='none'; render(); });
+
+  grid.addEventListener('click', (e) => {
+    const playId = e.target.getAttribute('data-play');
+    const examId = e.target.getAttribute('data-exam');
+    if (playId){
+      const course = courses.find(c=>c.id===playId);
+      openVideo(course);
+    }
+    if (examId){
+      const course = courses.find(c=>c.id===examId);
+      openDrawer(course);
+    }
+  });
+
+  closeVideo.addEventListener('click', closeVideoModal);
+  videoModal.addEventListener('click', (e)=>{ if(e.target===videoModal) closeVideoModal(); });
+
+  closeDrawer.addEventListener('click', closeExamDrawer);
+  document.addEventListener('keydown', (e)=>{ if(e.key==='Escape'){ closeVideoModal(); closeExamDrawer(); }});
+
+  markCompleteBtn.addEventListener('click', () => {
+    if (!currentCourse) return;
+    currentCourse.progress = Math.min(100, currentCourse.progress + 10);
+    render();
+    alert('강의 1개 완료 처리되었습니다. (진도 +10%)');
+  });
+
+  saveExam.addEventListener('click', () => {
+    if (!currentCourse) return;
+    const d = examDate.valueAsDate; if(!d){ alert('응시 날짜를 선택하세요'); return; }
+    const daysLeft = Math.ceil((d - new Date()) / (1000*60*60*24));
+    examSummary.innerHTML = `📅 <b>${d.toLocaleDateString()}</b> · 방식: <b>${examMode.value}</b><br>남은 일수: <b>D-${daysLeft}</b>`;
+    // update badge in card to new D-day
+    currentCourse.examAfterDays = Math.max(0, daysLeft);
+    render();
+    alert('시험 일정이 저장되었습니다.');
+  });
+
+  // initial paint
+  render();
+</script>
+</body>
+</html>

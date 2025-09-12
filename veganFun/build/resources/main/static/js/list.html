@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>회원목록</title>
+</head>
+<body>
+<nav>
+    <a th:href="@{/user/add}">회원가입</a> |
+    <a th:href="@{/user/delete/form}">회원탈퇴</a> |
+    <a th:href="@{/lectures}">강의</a> |
+    <a th:href="@{/lectures}">최근 본 강의</a> |
+    <a th:href="@{/static}">홈</a> |
+    <a th:href="@{/mypage}">마이페이지</a> |
+    <a th:href="@{/user/login}">로그인</a>
+</nav>
+
+<table border="1">
+    <thead>
+    <tr>
+        <th>아이디</th>
+        <th>성명</th>
+        <th>닉네임</th>
+        <th>이메일</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="user : ${users}">
+        <td th:text="${user.id}"></td>
+        <td>
+            <a th:href="@{/user/detail/{id}(id=${user.id})}" th:text="${user.username}"></a>
+        </td>
+        <td th:text="${user.nickname}"></td>
+        <td th:text="${user.email}"></td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>

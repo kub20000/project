@@ -1,0 +1,23 @@
+package com.simple.vegan.entity;
+
+import lombok.*;
+
+import com.simple.vegan.entity.Role;
+import java.time.LocalDate;
+
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+public class User {
+    private int id;
+    private String username;
+    private String password;
+    private String nickname;
+    private LocalDate birthdate;
+    private String email;
+    private String phone;
+    private Role role;
+
+}
+
