@@ -30,9 +30,9 @@
   <div class="control">
     <select id="category">
       <option value="전체">분야 (전체)</option>
-      <option value="비건 라이프 스타일">비건 라이프 스타일</option>
-      <option value="요리 레시피">요리 레시피</option>
-      <option value="조리 스킬">조리 스킬</option>
+      <option value="LIFE">비건 라이프 스타일</option>
+      <option value="RECIPE">요리 레시피</option>
+      <option value="SKILL">조리 스킬</option>
     </select>
   </div>
   <button class="cta" id="reset">초기화</button>
@@ -74,16 +74,6 @@
 </div>
 
 <script>
-  // --- Demo dataset ---
-  const courses = [
-    { id: 'L1', title: '비건 라이프 스타일 101: 기본 개념', category: '비건 라이프 스타일', progress: 0 },
-    { id: 'L2', title: '영양 기초와 식단 구성', category: '비건 라이프 스타일', progress: 0 },
-    { id: 'S1', title: '조리 스킬: 칼질/팬 컨트롤', category: '조리 스킬', progress: 0 },
-    { id: 'R1', title: '레시피: 고단백 샐러드 & 볼', category: '요리 레시피', progress: 0 },
-    { id: 'R2', title: '레시피: 베이킹(글루텐프리)', category: '요리 레시피', progress: 0 },
-    { id: 'L3', title: '비건 외식 문화', category: '비건 라이프 스타일', progress: 0 },
-    { id: 'S2', title: '식재료 보관·라벨 읽기', category: '조리 스킬', progress: 0 },
-  ];
 
   // UI refs
   const grid = document.getElementById('grid');
@@ -111,44 +101,88 @@
     chips.innerHTML = items.map(t => `<span class="chip">${t}</span>`).join('');
   }
 
-  function render() {
-    let data = courses.filter(c => {
-      const k = (c.title).toLowerCase();
+  function render(data = []) {
+    // 필터링/검색 로직은 기존과 동일
+    const filteredData = data.filter(c => {
+      const k = (c.courses_name).toLowerCase();
       const okQ = !state.q || k.includes(state.q.toLowerCase());
-      const okC = state.category === '전체' || c.category === state.category;
+      const okC = state.category === '전체' || c.courses_category === state.category;
       return okQ && okC;
     });
 
-    grid.innerHTML = data.map(c => `
-      <article class="card">
-        <div class="thumb">
-          <span class="badge gray">${c.category}</span>
-        </div>
-        <div class="card-body">
-          <div class="title">${c.title}</div>
-          <div class="meta">
-            <span class="badge">${c.category}</span>
-            <span class="badge gray">진도: ${c.progress || 0}%</span>
-          </div>
-          <div class="actions">
-            <button class="btn primary" data-play="${c.id}">강의 재생</button>
-            <button class="btn" data-quiz="${c.id}">퀴즈 풀기</button>
-            <button class="like-btn" data-like="${c.id}">♡</button>
-          </div>
-        </div>
-      </article>
+    grid.innerHTML = filteredData.map(course=> `
+        <article class="card">
+            <div class="thumb">
+                <span class="badge gray">${course.courses_category}</span>
+            </div>
+            <div class="card-body">
+                <div class="title">${course.courses_name}</div>
+                <div class="meta">
+                    <span class="badge">${course.courses_category}</span>
+                    <span class="badge gray">진도: ${course.duration_sec  || 0}%</span>
+                </div>
+                <div class="actions">
+                    <button class="btn primary" data-play="${course.id}">강의 재생</button>
+                    <button class="btn" data-quiz="${course.id}">퀴즈 풀기</button>
+                    <span class="badge gray">${course.like_count}</span>
+                    <button class="like-btn" data-like="${course.id}">♡</button>
+                </div>
+            </div>
+        </article>
     `).join('');
 
     renderChips();
   }
 
+  // 초기 로딩 시 백엔드 API 호출
+  fetch('/api/courses')
+          .then(response => response.json())
+          .then(coursesFromApi => {
+            // 백엔드에서 가져온 데이터로 화면을 렌더링
+            render(coursesFromApi);
+
+            // 검색/필터링 이벤트 리스너를 API 데이터에 연결
+            q.addEventListener('input', e => { state.q = e.target.value.trim(); render(coursesFromApi); });
+            category.addEventListener('change', e => { state.category = e.target.value; render(coursesFromApi); });
+            resetBtn.addEventListener('click', () => {
+              state = { q: '', category: '전체' };
+              q.value = '';
+              category.value = '전체';
+              render(coursesFromApi);
+            });
+
+            // 나머지 이벤트 리스너들은 기존과 동일하게 유지
+          })
+          .catch(error => {
+            console.error('Error fetching courses:', error);
+            alert('강의 목록을 불러오는 데 실패했습니다.');
+          });
+
   // --- Video ---
   function openVideo(course) {
     currentCourse = course;
-    videoTitle.textContent = `${course.title}`;
+    videoTitle.textContent = `${course.courses_name}`;
     videoModal.classList.add('open');
+
+    const videoPlayer = `<iframe width="100%" height="315" src="${course.video_url}" frameborder="0" allowfullscreen></iframe>`;
+    document.getElementById('videoBox').innerHTML = videoPlayer;
   }
   function closeVideoModal(){ videoModal.classList.remove('open'); }
+
+  // --- data ---
+  grid.addEventListener('click', (e) => {
+    const playId = e.target.getAttribute('data-play');
+    if (playId) {
+      // 백엔드 API 호출
+      fetch(`/api/courses/${playId}`)
+              .then(response => response.json())
+              .then(course => {
+                // 받은 데이터로 동영상 모달 열기
+                openVideo(course);
+              })
+              .catch(error => console.error('Error fetching course:', error));
+    }
+  });
 
   // --- Quiz ---
   function openQuiz(course) {
@@ -172,19 +206,6 @@
     render();
   });
 
-  grid.addEventListener('click', (e) => {
-    const playId = e.target.getAttribute('data-play');
-    const quizId = e.target.getAttribute('data-quiz');
-    if (playId){
-      const course = courses.find(c=>c.id===playId);
-      openVideo(course);
-    }
-    if (quizId){
-      const course = courses.find(c=>c.id===quizId);
-      openQuiz(course);
-    }
-  });
-
   closeVideo.addEventListener('click', closeVideoModal);
   videoModal.addEventListener('click', (e)=>{ if(e.target===videoModal) closeVideoModal(); });
 
@@ -203,22 +224,32 @@
   });
 
   // 추천 상태 저장 (간단 예제용, 실제론 서버 DB 필요)
-  const likes = {}; // { "L1": true, "R2": false }
+  // const likes = {}; // { "L1": true, "R2": false }
 
-  grid.addEventListener('click', (e) => {
+  grid.addEventListener('click', async (e) => {
     const likeId = e.target.getAttribute('data-like');
-    if(likeId){
-      // 토글
-      if(!likes[likeId]) {
-        likes[likeId] = true;
-        e.target.classList.add('liked');
+    if (likeId) {
+      try {
+        const response = await fetch(`/api/courses/${likeId}/like`, {
+          method: 'POST',
+          // Content-Type 헤더를 제거
+        });
+
+        if (!response.ok) {
+          throw new Error('좋아요 업데이트 실패');
+        }
+
+        const updatedCourse = await response.json();
+
+        // UI 갱신 로직
+        const likeCountElement = e.target.previousElementSibling;
+        likeCountElement.textContent = updatedCourse.like_count;
+        e.target.classList.toggle('liked');
         e.target.textContent = '♥';
 
-      } else {
-        likes[likeId] = false;
-        e.target.classList.remove('liked');
-        e.target.textContent = '♡';
-
+      } catch (error) {
+        console.error('좋아요 업데이트 오류:', error);
+        alert('좋아요를 누르는 중 오류가 발생했습니다.');
       }
     }
   });

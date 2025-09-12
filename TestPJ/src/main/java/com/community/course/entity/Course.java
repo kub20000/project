@@ -10,10 +10,17 @@ import lombok.ToString;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Course {
+
+    public enum CourseCategory {
+        LIFE, SKILL, RECIPE
+    }
+
     private int id;
-    private int course_id;
-    private String title;
+    private String courses_name;
+    private CourseCategory courses_category;
+    private String description;
     private String video_url;
     private int duration_sec;
-    private int sort_order;
+    private int like_count;
+    private int total_sec;
 }
