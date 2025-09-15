@@ -5,66 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>내 정보 수정</title>
    <link rel="stylesheet" href="style.css">
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin:0; 
-      padding:0; 
-      background:#f9f9f9;
-    }
-
-    #fixInfo {
-      width: 400px;
-      margin: 50px auto;
-      padding: 20px;
-      border: 1px solid #49951d;
-      background-color: hsl(120, 63%, 97%);
-      border-radius: 20px;
-      text-align: left;
-    }
-
-    #fixInfo div {
-      margin-bottom: 15px;
-      display: flex;
-      flex-direction: column; /* label과 input을 위아래 정렬 */
-    }
-
-    label {
-      margin-bottom: 5px;
-      font-weight: bold;
-      color: #333;
-    }
-
-    input {
-      width: 90%;
-      padding: 8px;
-      border: 1px solid #aaa;
-      border-radius: 6px;
-    }
-
-    input:focus { 
-      outline: none;
-      border-color: #0077ff;
-      box-shadow: 0 0 4px #0077ff50;
-    }
-
-    button {
-      width: 100%;
-      padding: 8px;
-      border: none;
-      border-radius: 6px;
-      background-color: #4caf50;
-      color: white;
-      font-size: 16px;
-      cursor: pointer;
-    }
-
-    button:hover {
-      background-color: #45a049;
-    }
-  </style>
 </head>
-<body>
+<body class="myInfo">
   <header>
     <h1>Vegan delight</h1>
     <!-- 메인 내비게이션 -->
@@ -89,27 +31,27 @@
     <form id="fixInfo">
     <div>
       <label for="fixName">성명</label>
-      <input type="text" id="fixName" placeholder="이름을 입력하세요" required>
+      <input class="myInfo" type="text" id="fixName" placeholder="이름을 입력하세요" required>
     </div>
     <div>
       <label for="nickName">닉네임</label>
-      <input type="text" id="nickName" placeholder="닉네임을 입력하세요" required>
+      <input class="myInfo" type="text" id="nickName" placeholder="닉네임을 입력하세요" required>
     </div>
     <div>
       <label for="newPassward">비밀번호</label>
-      <a href="changePw.html"><button type="submit" style="width: 80%; margin-left: 40px;">변경</button></a>
+      <a href="changePw.html"><button type="submit">변경</button></a>
     </div>
     <div>
       <label for="bthInfo">생년월일</label>
-      <input type="date" id="bthInfo" required>
+      <input class="myInfo" type="date" id="bthInfo" required>
     </div>
     <div>
       <label for="phoneNum">휴대전화 번호</label>
-      <input type="tel" id="phoneNum" placeholder="010-1234-5678" required>
+      <input class="myInfo" type="tel" id="phoneNum" placeholder="010-1234-5678" required>
     </div>
     <div>
       <label for="emailInfo">이메일 정보</label>
-      <input type="email" id="emailInfo" placeholder="example@email.com" required>
+      <input class="myInfo" type="email" id="emailInfo" placeholder="example@email.com" required>
     </div>
     <button type="submit">정보 수정</button>
   </form>

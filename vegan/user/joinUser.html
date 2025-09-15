@@ -5,128 +5,9 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>회원가입</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 0;
-      padding: 0;
-      background: #f9f9f9;
-    }
-
-    header {
-      padding: 10px 20px;
-      background: #4caf50;
-      color: white;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    header nav a {
-      margin-left: 15px;
-      color: white;
-      text-decoration: none;
-    }
-
-    header nav a.active {
-      font-weight: bold;
-      text-decoration: underline;
-    }
-
-    #entryInfo {
-      width: 350px;
-      margin: 50px auto;
-      padding: 20px;
-      border: 1px solid #49951d;
-      background-color: hsl(120, 63%, 97%);
-      border-radius: 20px;
-      text-align: left;
-    }
-
-    #entryInfo div {
-      margin-bottom: 15px;
-      display: flex;
-      flex-direction: column;
-    }
-
-    label {
-      margin-bottom: 5px;
-      font-weight: bold;
-      color: #333;
-    }
-
-    input {
-      padding: 8px;
-      border: 1px solid #aaa;
-      border-radius: 6px;
-    }
-
-    input:focus {
-      outline: none;
-      border-color: #0077ff;
-      box-shadow: 0 0 4px #0077ff50;
-    }
-
-    button {
-      width: 100%;
-      padding: 10px;
-      border: none;
-      border-radius: 6px;
-      background-color: #4caf50;
-      color: white;
-      font-size: 16px;
-      cursor: pointer;
-      margin-top: 5px;
-    }
-
-    button:hover {
-      background-color: #45a049;
-    }
-
-    #checkNicknameBtn,
-    #checkPwBtn {
-      width: auto;
-      padding: 5px 10px;
-      margin-top: 5px;
-    }
-
-    .msg {
-      font-size: 13px;
-      margin-top: 3px;
-    }
-
-    /* 완료 메시지 스타일 */
-    #successMsg {
-      display: none;
-      text-align: center;
-      margin-top: 80px;
-    }
-
-    #successMsg h2 {
-      color: green;
-      font-size: 24px;
-      margin-bottom: 10px;
-    }
-
-    #successMsg button {
-      width: 20%;
-      margin-top: 20px;
-      padding: 10px 20px;
-      border: block;
-      border-radius: 6px;
-      background-color: #4caf50;
-      color: white;
-      font-size: 16px;
-      cursor: pointer;
-    }
-
-    #successMsg button:hover {
-      background-color: #45a049;
-    }
-  </style>
+  <link rel="stylesheet" href="style.css">
 </head>
-
-<body>
+<body class="joinUser">
   <header>
     <h1>Vegan delight</h1>
     <nav id="mainNav">
@@ -143,52 +24,47 @@
     <form id="entryInfo">
       <div>
         <label for="entryName">성명</label>
-        <input type="text" id="entryName" placeholder="이름을 입력하세요." required>
+        <input class="joinUser" type="text" id="entryName" placeholder="이름을 입력하세요." required>
       </div>
-
       <div>
         <label for="userName">아이디</label>
-        <input type="text" id="userName" placeholder="아이디를 입력하세요." required>
-        <button type="button" id="checkNicknameBtn">중복 확인</button>
+        <input class="joinUser" type="text" id="userName" placeholder="아이디를 입력하세요." required>
+        <button class="joinUser" type="button" id="checkNicknameBtn">중복 확인</button>
         <p class="msg" id="nicknameMsg"></p>
       </div>
-
       <div>
         <label for="nickName">닉네임</label>
-        <input type="text" id="nickName" placeholder="사용하실 닉네임을 입력하세요." required>
+        <input class="joinUser" type="text" id="nickName" placeholder="사용하실 닉네임을 입력하세요." required>
       </div>
-
       <div>
         <label for="entryPw">비밀번호</label>
-        <input type="password" id="entryPw" placeholder="비밀번호를 입력하세요." required>
+        <input class="joinUser" type="password" id="entryPw" placeholder="비밀번호를 입력하세요." required>
         <input type="password" id="entryPwConfirm" placeholder="한 번 더 입력하세요." required>
-        <button type="button" id="checkPwBtn">일치 여부 확인</button>
+        <button class="joinUser" type="button" id="checkPwBtn">일치 여부 확인</button>
         <p class="msg" id="pwMsg"></p>
       </div>
-
       <div>
         <label for="newbthInfo">생년월일</label>
-        <input type="date" id="newbthInfo" required>
+        <input class="joinUser" type="date" id="newbthInfo" required>
       </div>
-
       <div>
         <label for="newphoneNum">휴대전화 번호</label>
-        <input type="tel" id="newphoneNum" placeholder="휴대전화 번호를 입력하세요." required>
+        <input class="joinUser" type="tel" id="newphoneNum" placeholder="휴대전화 번호를 입력하세요." required>
         <p class="msg" id="phoneMsg"></p>
       </div>
 
       <div>
         <label for="newemailInfo">이메일 정보</label>
-        <input type="email" id="newemailInfo" placeholder="example@email.com" required>
+        <input class="joinUser" type="email" id="newemailInfo" placeholder="example@email.com" required>
         <p class="msg" id="emailMsg"></p>
       </div>
-      <button type="submit">회원가입</button>
+      <button class="joinUser" type="submit">회원가입</button>
     </form>
 
     <div id="successMsg">
       <h2>회원가입이 완료되었습니다!</h2>
       <p>Vegan delight에 가입해주셔서 감사합니다 🎉</p>
-      <button onclick="location.href='login.html'">로그인 페이지로 이동</button>
+      <button class="joinUser" onclick="location.href='login.html'">로그인 페이지로 이동</button>
     </div>
 
     <script>

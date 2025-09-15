@@ -1,13 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>로그인 페이지</title>
   <link rel="stylesheet" href="style.css">
-  <style>
-    main { display: block; background:#effcf1; color:white; padding:0.7rem 1.5rem; border-radius:6px; text-decoration:none; }
-  </style>
 </head>
 <body>
   <header>
@@ -21,47 +19,49 @@
       <a href="mypage.html" class="active"><img src="/vegan/123.png" alt="마이페이지" width="36"></a>
     </nav>
   </header>
-  <main class="form-container"style="text-align: center;">
-    <h2 style="align-self: flex-start; color: black; text-align: start;">로그인<img src="./img/새싹.png" alt="새싹" width="20px"></h2>
-<form id="loginForm">
-  <input type="text" name="username" style="width: 300px;" placeholder="아이디를 입력하세요." required>
-  <input type="password" name="password" style="width: 300px;" placeholder="비밀번호를 입력하세요." required><br>
-    <a href="joinUser.html">회원가입</a>
-  <button type="submit" style="width: 250px;">Login</button>
-</form> 
+  <main class="form-container" style="text-align: center;">
+    <h2 style="align-self: flex-start; color: black; text-align: start;">로그인<img src="./img/새싹.png" alt="새싹"
+        width="20px"></h2>
+    <form id="loginForm">
+      <input type="text" name="username" style="width: 300px;" placeholder="아이디를 입력하세요." required>
+      <input type="password" name="password" style="width: 300px;" placeholder="비밀번호를 입력하세요." required><br>
+      <a href="joinUser.html">회원가입</a>
+      <button type="submit" style="width: 250px;">Login</button>
+    </form>
 
-<script>
-const form = document.getElementById('loginForm');
+    <script>
+      const form = document.getElementById('loginForm');
 
-form.addEventListener('submit', async (e) => {
-  e.preventDefault(); // 페이지 리로드 방지
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault(); // 페이지 리로드 방지
 
-  const formData = new FormData(form);
-  const data = {
-    username: formData.get('username'),
-    password: formData.get('password')
-  };
+        const formData = new FormData(form);
+        const data = {
+          username: formData.get('username'),
+          password: formData.get('password')
+        };
 
-  try {
-    const response = await fetch('/api/login', { // 서버 로그인 API
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(data)
-    });
+        try {
+          const response = await fetch('/api/login', { // 서버 로그인 API
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data)
+          });
 
-    const result = await response.json();
+          const result = await response.json();
 
-    if(result.success) {
-      alert('로그인 성공!');
-      window.location.href = 'index.html'; // 메인 페이지로 이동
-    } else {
-      alert('아이디 또는 비밀번호가 올바르지 않습니다.');
-    }
+          if (result.success) {
+            alert('로그인 성공!');
+            window.location.href = 'index.html'; // 메인 페이지로 이동
+          } else {
+            alert('아이디 또는 비밀번호가 올바르지 않습니다.');
+          }
 
-  } catch(err) {
-    console.error(err);
-    alert('서버 오류가 발생했습니다.');
-  }
-});
-</script>
+        } catch (err) {
+          console.error(err);
+          alert('서버 오류가 발생했습니다.');
+        }
+      });
+    </script>
+
 </html>
