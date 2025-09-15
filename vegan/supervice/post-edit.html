@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>공지사항 수정</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        header {
+            background: #4caf50;
+            color: white;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        header h1 {
+            margin: 0;
+        }
+
+        nav a,
+        #navMenu a {
+            color: white;
+            margin-left: 1rem;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        nav a:hover,
+        #navMenu a:hover {
+            text-decoration: underline;
+        }
+
+        textarea {
+            width: 300px;
+            /* 가로 고정 */
+            height: 150px;
+            /* 세로 고정 */
+            resize: none;
+            /* 크기 조절 비활성화 */
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            /* 모서리 둥글게 */
+            padding: 0.8rem;
+            /* 안쪽 여백 */
+            font-size: 14px;
+            /* 글자 크기 */
+            line-height: 1.4;
+            /* 줄 간격 */
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <h1>Vegan Delight - 관리자 mode<img src="/vegan/supervice/img/회원관리.png" alt="마이페이지" width="36"></h1>
+        <nav id="navMenu">
+            <a href="indexmg.html">Home</a>
+            <a href="mgcourses.html">강의</a>
+            <a href="post.html">게시판</a>
+            <a href="usermng.html">회원관리</a>
+        </nav>
+    </header>
+    <main class="form-container" style="text-align: center;">
+        <h2>공지사항 수정</h2>
+        <form id="editForm">
+            제목 <input type="text" id="title" style="width:300px;" required><br><br>
+            <label for="content" style="vertical-align: top;">내용</label>
+            <textarea id="content" rows="8" required></textarea>
+            <button type="submit">저장</button>
+            <button type="button" onclick="history.back()">취소</button>
+        </form>
+    </main>
+    <script>
+        const params = new URLSearchParams(window.location.search);
+        const id = Number(params.get("id"));
+        let posts = JSON.parse(localStorage.getItem("posts")) || [];
+        const post = posts.find(p => p.id === id);
+
+        if (post) {
+            document.getElementById("title").value = post.title;
+            document.getElementById("content").value = post.content;
+        }
+
+        document.getElementById("editForm").addEventListener("submit", function (e) {
+            e.preventDefault();
+            post.title = document.getElementById("title").value;
+            post.content = document.getElementById("content").value;
+            localStorage.setItem("posts", JSON.stringify(posts));
+            alert("수정이 완료되었습니다.");
+            window.location.href = `post-view.html?id=${id}`;
+        });
+    </script>
+</body>
+
+</html>

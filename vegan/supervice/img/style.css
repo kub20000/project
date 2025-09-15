@@ -17,12 +17,14 @@ header {
 }
 header h1 {
   margin: 0;
-  font-size: 1.5rem;
   font-weight: bold;
 }
-nav a, #navMenu a {
+nav {
+  display: flex;
+  gap: 1rem;
+}
+nav a {
   color: white;
-  margin-left: 1rem;
   text-decoration: none;
   font-weight: 500;
 }
@@ -681,18 +683,38 @@ nav a, #navMenu a {
       margin-left: 5px;
     }
 
-    /* 페이지네이션 */
-    .pagination {
-      text-align: center;
-      margin: 20px 0;
-    }
-    .pagination a {
-      margin: 0 5px;
-      text-decoration: none;
-      color: black;
-      cursor: pointer;
-    }
-    .pagination a.active {
-      font-weight: bold;
-      color: #49951d;
-    }
+   .pagination {
+    text-align: center;
+    margin: 20px 0;
+}
+
+.pagination button {
+    margin: 0 3px;
+    padding: 6px 12px;
+    border: 1px solid #ccc;
+    background: white;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 14px;
+    transition: 0.2s;
+}
+
+.pagination button:hover:not(:disabled) {
+    background: #a9d18e;
+    color: white;
+    border-color: #a9d18e;
+}
+
+.pagination button.active {
+    background: #49951d;
+    color: white;
+    border-color: #49951d;
+    font-weight: bold;
+}
+
+.pagination button:disabled {
+    background: #f1f1f1;
+    color: #888;
+    border-color: #ddd;
+    cursor: default;
+}

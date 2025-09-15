@@ -131,8 +131,10 @@
     <h1>Vegan delight</h1>
     <nav id="mainNav">
       <a href="index.html">Home</a>
-      <a href="courses.html">강의</a>
-      <a href="" class="active">FAQ</a>
+      <a href="courses.html">Courses</a>
+      <a href="login.html" id="loginBtn">Login</a>
+      <a href="notice.html">게시판</a>
+      <a href="mypage.html" class="active"><img src="/vegan/123.png" alt="마이페이지" width="36"></a>
     </nav>
   </header>
 
@@ -230,76 +232,76 @@
       });
 
       // 최종 회원가입 제출
-     document.getElementById("entryInfo").addEventListener("submit", (e) => {
-  e.preventDefault();
+      document.getElementById("entryInfo").addEventListener("submit", (e) => {
+        e.preventDefault();
 
-  const name = document.getElementById("entryName").value.trim();
-  const userId = document.getElementById("userName").value.trim();
-  const nickname = document.getElementById("nickName").value.trim();
-  const pw = document.getElementById("entryPw").value;
-  const pwConfirm = document.getElementById("entryPwConfirm").value;
-  const birth = document.getElementById("newbthInfo").value;
-  const phone = document.getElementById("newphoneNum").value.trim();
-  const email = document.getElementById("newemailInfo").value.trim();
+        const name = document.getElementById("entryName").value.trim();
+        const userId = document.getElementById("userName").value.trim();
+        const nickname = document.getElementById("nickName").value.trim();
+        const pw = document.getElementById("entryPw").value;
+        const pwConfirm = document.getElementById("entryPwConfirm").value;
+        const birth = document.getElementById("newbthInfo").value;
+        const phone = document.getElementById("newphoneNum").value.trim();
+        const email = document.getElementById("newemailInfo").value.trim();
 
-  // 메시지 요소
-  const pwMsg = document.getElementById("pwMsg");
-  const phoneMsg = document.getElementById("phoneMsg");
-  const emailMsg = document.getElementById("emailMsg");
+        // 메시지 요소
+        const pwMsg = document.getElementById("pwMsg");
+        const phoneMsg = document.getElementById("phoneMsg");
+        const emailMsg = document.getElementById("emailMsg");
 
-  // 초기화
-  pwMsg.textContent = "";
-  phoneMsg.textContent = "";
-  emailMsg.textContent = "";
+        // 초기화
+        pwMsg.textContent = "";
+        phoneMsg.textContent = "";
+        emailMsg.textContent = "";
 
-  let valid = true;
+        let valid = true;
 
-  // 비밀번호 확인
-  if (pw !== pwConfirm) {
-    pwMsg.textContent = "비밀번호가 일치하지 않습니다.";
-    pwMsg.style.color = "red";
-    valid = false;
-  } else if (pw && pwConfirm) {
-    // 비밀번호 강도 검사 (8자 이상, 영문+숫자 포함)
-    const pwRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
-    if (!pwRegex.test(pw)) {
-      pwMsg.textContent = "비밀번호는 8자 이상이며, 영문과 숫자를 포함해야 합니다.";
-      pwMsg.style.color = "red";
-      valid = false;
-    } else {
-      pwMsg.textContent = "사용 가능한 비밀번호입니다.";
-      pwMsg.style.color = "green";
-    }
-  }
+        // 비밀번호 확인
+        if (pw !== pwConfirm) {
+          pwMsg.textContent = "비밀번호가 일치하지 않습니다.";
+          pwMsg.style.color = "red";
+          valid = false;
+        } else if (pw && pwConfirm) {
+          // 비밀번호 강도 검사 (8자 이상, 영문+숫자 포함)
+          const pwRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
+          if (!pwRegex.test(pw)) {
+            pwMsg.textContent = "비밀번호는 8자 이상이며, 영문과 숫자를 포함해야 합니다.";
+            pwMsg.style.color = "red";
+            valid = false;
+          } else {
+            pwMsg.textContent = "사용 가능한 비밀번호입니다.";
+            pwMsg.style.color = "green";
+          }
+        }
 
-  // 이메일 형식 검사
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  if (!emailRegex.test(email)) {
-    emailMsg.textContent = "올바른 이메일 형식을 입력하세요.";
-    emailMsg.style.color = "red";
-    valid = false;
-  } else {
-    emailMsg.textContent = "사용 가능한 이메일입니다.";
-    emailMsg.style.color = "green";
-  }
+        // 이메일 형식 검사
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(email)) {
+          emailMsg.textContent = "올바른 이메일 형식을 입력하세요.";
+          emailMsg.style.color = "red";
+          valid = false;
+        } else {
+          emailMsg.textContent = "사용 가능한 이메일입니다.";
+          emailMsg.style.color = "green";
+        }
 
-  // 전화번호 검사 (숫자만, 10~11자리)
-  const phoneRegex = /^\d{10,11}$/;
-  if (!phoneRegex.test(phone)) {
-    phoneMsg.textContent = "휴대전화 번호는 10~11자리 숫자만 입력하세요.";
-    phoneMsg.style.color = "red";
-    valid = false;
-  } else {
-    phoneMsg.textContent = "사용 가능한 전화번호입니다.";
-    phoneMsg.style.color = "green";
-  }
+        // 전화번호 검사 (숫자만, 10~11자리)
+        const phoneRegex = /^\d{10,11}$/;
+        if (!phoneRegex.test(phone)) {
+          phoneMsg.textContent = "휴대전화 번호는 10~11자리 숫자만 입력하세요.";
+          phoneMsg.style.color = "red";
+          valid = false;
+        } else {
+          phoneMsg.textContent = "사용 가능한 전화번호입니다.";
+          phoneMsg.style.color = "green";
+        }
 
-  // 모든 조건 만족 시 완료 화면 표시
-  if (valid && name && userId && nickname && birth) {
-    document.getElementById("entryInfo").style.display = "none";
-    document.getElementById("successMsg").style.display = "block";
-  }
-});
+        // 모든 조건 만족 시 완료 화면 표시
+        if (valid && name && userId && nickname && birth) {
+          document.getElementById("entryInfo").style.display = "none";
+          document.getElementById("successMsg").style.display = "block";
+        }
+      });
     </script>
 </body>
 

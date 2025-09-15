@@ -1,37 +1,129 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>비밀번호 변경</title>
   <link rel="stylesheet" href="style.css">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f9f9f9;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .form-container {
+      background: #fff;
+      width: 400px;
+      padding: 2rem;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    input {
+      width: 250px;
+      padding: 0.5rem;
+      font-size: 1rem;
+    }
+
+    button {
+      padding: 0.5rem 1rem;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+
+    .strength {
+      font-size: 0.9rem;
+      margin-top: -0.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .caps-warning {
+      color: red;
+      font-size: 0.8rem;
+      display: none;
+    }
+  </style>
 </head>
+
 <body>
   <main class="form-container">
-    <h2 style="align-self: flex-start; color: black;">비밀번호 변경</h2>
+    <h2 style="align-self: flex-start; color: black;">비밀번호 변경<img src="/pw.png" alt="마이페이지" width="30"></h2>
     <form id="changePwForm">
-      <input type="password" id="newPw" style="width: 300px;" placeholder="새로운 비밀번호를 입력하세요." required>
-      <input type="password" id="confirmPw" style="width: 300px;" placeholder="다시 한 번 입력하세요." required>
+      <input type="password" id="nowPw" placeholder="현재 비밀번호를 입력하세요." required>
+      <div style="position: relative;">
+        <input type="password" id="newPw" placeholder="새로운 비밀번호를 입력하세요." required>
+        <div id="capsLockWarning" class="caps-warning">Caps Lock이 켜져 있습니다!</div>
+        <div id="pwStrength" class="strength"></div>
+      </div>
+      <input type="password" id="confirmPw" placeholder="다시 한 번 입력하세요." required>
       <button type="submit">비밀번호 변경</button>
-    </form> 
+    </form>
   </main>
 
   <script>
     const form = document.getElementById("changePwForm");
+    const newPwInput = document.getElementById("newPw");
+    const confirmPwInput = document.getElementById("confirmPw");
+    const strengthDiv = document.getElementById("pwStrength");
+    const capsLockWarning = document.getElementById("capsLockWarning");
 
-    form.addEventListener("submit", function(event) {
-      event.preventDefault(); // 기본 폼 제출 막기
+    // Caps Lock 감지
+    newPwInput.addEventListener("keyup", (e) => {
+      capsLockWarning.style.display = e.getModifierState("CapsLock") ? "block" : "none";
+    });
 
-      const newPw = document.getElementById("newPw").value;
-      const confirmPw = document.getElementById("confirmPw").value;
+    // 비밀번호 안전도 검증
+    newPwInput.addEventListener("input", () => {
+      const pwd = newPwInput.value;
+      let strength = "약함";
+      let color = "red";
 
-      if (newPw === confirmPw) {
-        alert("비밀번호가 정상적으로 변경되었습니다.");
-        // 👉 실제 서버 연동이 필요하다면 여기에 fetch/AJAX 코드 추가
-      } else {
-        alert("비밀번호가 일치하지 않습니다. 다시 입력해주세요.");
+      const regexStrong = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/;
+      const regexMedium = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{6,}$/;
+
+      if (regexStrong.test(pwd)) {
+        strength = "강함";
+        color = "green";
+      } else if (regexMedium.test(pwd)) {
+        strength = "보통";
+        color = "orange";
       }
+
+      strengthDiv.textContent = `비밀번호 안전도: ${strength}`;
+      strengthDiv.style.color = color;
+    });
+
+    // 폼 제출
+    form.addEventListener("submit", function (event) {
+      event.preventDefault();
+
+      const newPw = newPwInput.value;
+      const confirmPw = confirmPwInput.value;
+
+      if (newPw !== confirmPw) {
+        alert("비밀번호가 일치하지 않습니다. 다시 입력해주세요.");
+        return;
+      }
+
+      // 추가 안전도 체크
+      const regexStrong = /^(?=.*[a-z])(?=.*\d)(?=.*[!@#$%^&*+\-=_]).{8,}$/;
+      if (!regexStrong.test(newPw)) {
+        alert("비밀번호는 최소 8자 이상, 소문자/숫자/특수문자를 포함해야 합니다.");
+        return;
+      }
+
+      alert("비밀번호가 정상적으로 변경되었습니다.");
+      // 👉 서버 연동이 필요하면 여기서 fetch/AJAX 추가
     });
   </script>
 </body>
+
 </html>

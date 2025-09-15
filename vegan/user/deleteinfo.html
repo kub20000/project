@@ -12,9 +12,8 @@
     padding: 0;
   }
   header {
-    background-color: #4caf50;
+    background: #4caf50;
     color: white;
-    padding: 10px 20px;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -89,10 +88,14 @@
 
 <header>
   <h1>Vegan delight</h1>
-  <nav>
-    <a href="index.html">Home</a>
-    <a href="mypage.html" class="active">마이페이지</a>
-  </nav>
+    <nav id="mainNav">
+      <a href="index.html">Home</a>
+      <a href="courses.html">Courses</a>
+      <a href="myFridge.html">나의 냉장고</a>
+      <a href="login.html" id="loginBtn">Login</a>
+      <a href="notice.html">게시판</a>
+      <a href="mypage.html" class="active"><img src="/vegan/123.png" alt="마이페이지" width="36"></a>
+    </nav>
 </header>
 
 <main>

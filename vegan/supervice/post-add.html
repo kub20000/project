@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>공지 작성</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f9f9f9;
+        }
+
+        .form-container {
+            max-width: 500px;
+            margin: 50px auto;
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        input,
+        textarea,
+        button {
+            width: 100%;
+            margin: 10px 0;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+        }
+
+        textarea {
+            height: 150px;
+            resize: none;
+            /* 크기 고정 */
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+    <h1>Vegan Delight - 관리자 mode<img src="/vegan/supervice/img/회원관리.png" alt="마이페이지" width="36"></h1>
+        <nav id="navMenu">
+            <a href="indexmg.html">Home</a>
+            <a href="mgcourses.html">강의</a>
+            <a href="post.html">게시판</a>
+            <a href="usermng.html">회원관리</a>
+        </nav>
+    </header>
+    <div class="form-container">
+        <h2>공지 작성</h2>
+        <form id="addForm">
+            <label for="title">제목</label>
+            <input type="text" id="title" required>
+
+            <label for="content">내용</label>
+            <textarea id="content" required></textarea>
+
+            <button type="submit">저장</button>
+            <button type="button" onclick="history.back()">취소</button>
+        </form>
+    </div>
+
+    <script>
+        document.getElementById("addForm").addEventListener("submit", function (e) {
+            e.preventDefault();
+
+            let posts = JSON.parse(localStorage.getItem("posts")) || [];
+            const newId = posts.length ? Math.max(...posts.map(p => p.id)) + 1 : 1;
+            const now = new Date();
+            const date = `${now.getFullYear()}.${String(now.getMonth() + 1).padStart(2, '0')}.${String(now.getDate()).padStart(2, '0')}`;
+
+            const newPost = {
+                id: newId,
+                title: document.getElementById("title").value,
+                content: document.getElementById("content").value,
+                author: "관리자",
+                date: date
+            };
+
+            posts.push(newPost);
+            localStorage.setItem("posts", JSON.stringify(posts));
+            alert("공지사항이 등록되었습니다.");
+            window.location.href = "post.html"; // 목록으로 이동
+        });
+    </script>
+</body>
+
+</html>

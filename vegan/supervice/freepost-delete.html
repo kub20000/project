@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>공지사항</title>
+    <link rel="stylesheet" href="img/style.css">
+</head>
+<style>
+    header{
+        padding: 0.8rem 2rem;
+    }
+    /* 기존 스타일 유지 */
+    .board-tabs {
+        display: flex;
+        justify-content: center;
+        margin: 20px auto;
+        max-width: 600px;
+        gap: 10px;
+    }
+
+    .board-tabs a {
+        flex: 1;
+        text-align: center;
+        padding: 10px 0;
+        background: #a9d18e;
+        color: white;
+        font-size: 1rem;
+        font-weight: bold;
+        text-decoration: none;
+        border-radius: 8px;
+        transition: 0.3s;
+    }
+
+    .board-tabs a.active {
+        background: #49951d;
+    }
+
+    .board-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        width: 90%;
+        margin: auto;
+        margin-top: 20px;
+    }
+
+    .board-header p {
+        font-size: 24px;
+        font-weight: bold;
+    }
+
+    .search-box {
+        display: flex;
+        align-items: center;
+    }
+
+    .search-box input {
+        padding: 8px;
+        width: 300px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+    }
+
+    table {
+        width: 90%;
+        margin: auto;
+        border-collapse: collapse;
+        background: white;
+    }
+
+    th,
+    td {
+        padding: 12px;
+        border-bottom: 1px solid #ddd;
+        text-align: center;
+    }
+
+    th {
+        font-weight: bold;
+        border-bottom: 2px solid black;
+    }
+
+    tr:hover {
+        background: #f1f1f1;
+    }
+
+    button {
+        width: 70px;
+        padding: 5px;
+    }
+
+    /* 페이지네이션 전용 스타일 */
+    .pagination {
+        text-align: center;
+        margin: 20px 0;
+    }
+
+    .page-btn {
+        margin: 0 3px;
+        padding: 6px 12px;
+        border: 1px solid #ccc;
+        background: white;
+        cursor: pointer;
+        border-radius: 5px;
+        font-size: 14px;
+        transition: 0.2s;
+    }
+
+    .page-btn:hover:not(:disabled) {
+        background: #a9d18e;
+        color: white;
+    }
+
+    .page-btn.active {
+        background: #49951d;
+        color: white;
+        border-color: #49951d;
+        font-weight: bold;
+    }
+
+    .prev-btn,
+    .next-btn {
+        font-weight: bold;
+        background: #f0f0f0;
+        border-color: #bbb;
+    }
+
+    .prev-btn:hover,
+    .next-btn:hover {
+        background: #a9d18e;
+        color: white;
+    }
+
+    .page-btn:disabled {
+        background: #f1f1f1;
+        color: #888;
+        border-color: #ddd;
+        cursor: default;
+    }
+
+    .ellipsis {
+        background: transparent;
+        border: none;
+        color: #666;
+        cursor: default;
+        font-weight: bold;
+    }
+    
+</style>
+
+<body>
+
+    <header>
+    <h1>Vegan Delight - 관리자 mode<img src="/vegan/supervice/img/회원관리.png" alt="마이페이지" width="36"></h1>
+        <nav id="navMenu">
+            <a href="indexmg.html">Home</a>
+            <a href="mgcourses.html">강의</a>
+            <a href="post.html">게시판</a>
+            <a href="usermng.html">회원관리</a>
+        </nav>
+    </header>
+
+    <div class="board-tabs">
+        <a href="post.html">공지사항</a>
+        <a href="freepost-delete.html" class="active">자유 게시판</a>
+        <a href="faq.html">FAQ</a>
+    </div>
+
+    <div class="board-header">
+        <p>자유게시판</p>
+        <div class="search-box">
+            <input type="text" id="searchInput" placeholder="검색어를 입력해 주세요">
+        </div>
+    </div>
+
+    <table id="noticeTable">
+        <thead>
+            <tr>
+                <th>번호</th>
+                <th>제목</th>
+                <th>작성자</th>
+                <th>등록일</th>
+                <th>관리</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- JS에서 렌더링 -->
+        </tbody>
+    </table>
+
+    <div class="pagination" id="pagination"></div>
+
+    <script src="script.js"></script>
+</body>
+<script>
+    let currentPage = 1;
+    const postsPerPage = 5;
+    let totalPages = 1;
+    let filteredPosts = [];
+
+    // 1. 게시글 목록 가져오기
+    async function fetchPosts(searchKeyword = "") {
+        try {
+            // 서버 API 호출 (백엔드 준비 필요)
+            const res = await fetch(`/api/posts?search=${encodeURIComponent(searchKeyword)}&page=${currentPage}&limit=${postsPerPage}`);
+            const data = await res.json(); // { posts: [...], totalPages: 10 }
+
+            filteredPosts = data.posts;
+            totalPages = data.totalPages;
+
+            renderPosts();
+            renderPagination();
+        } catch (err) {
+            console.error("게시글 불러오기 실패", err);
+        }
+    }
+
+    // 2. 게시글 렌더링
+    function renderPosts() {
+        const tbody = document.querySelector("#noticeTable tbody");
+        tbody.innerHTML = "";
+
+        filteredPosts.forEach(post => {
+            const row = tbody.insertRow();
+            row.innerHTML = `
+            <td>${post.id}</td>
+            <td><span class="title-link" onclick="viewPost(${post.id})">${post.title}</span></td>
+            <td>${post.author}</td>
+            <td>${post.date}</td>
+            <td>
+                <button onclick="editPost(${post.id})">수정</button>
+                <button onclick="deletePost(${post.id})">삭제</button>
+            </td>
+        `;
+        });
+    }
+
+    // 3. 페이지네이션 렌더링
+    function renderPagination() {
+        const pagination = document.getElementById("pagination");
+        pagination.innerHTML = "";
+
+        // 이전
+        const prev = document.createElement("button");
+        prev.textContent = "<";
+        prev.disabled = currentPage === 1;
+        prev.onclick = () => { currentPage--; fetchPosts(document.getElementById("searchInput").value); };
+        pagination.appendChild(prev);
+
+        // 페이지 번호
+        for (let i = 1; i <= totalPages; i++) {
+            const btn = document.createElement("button");
+            btn.textContent = i;
+            btn.classList.add("page-btn");
+            if (i === currentPage) btn.classList.add("active");
+            btn.onclick = () => { currentPage = i; fetchPosts(document.getElementById("searchInput").value); };
+            pagination.appendChild(btn);
+        }
+
+        // 다음
+        const next = document.createElement("button");
+        next.textContent = ">";
+        next.disabled = currentPage === totalPages;
+        next.onclick = () => { currentPage++; fetchPosts(document.getElementById("searchInput").value); };
+        pagination.appendChild(next);
+    }
+
+    // 4. 상세 / 수정 / 삭제
+    function viewPost(id) { window.location.href = `post-view.html?id=${id}`; }
+    function editPost(id) { window.location.href = `post-edit.html?id=${id}`; }
+
+    async function deletePost(id) {
+        if (!confirm("정말 삭제하시겠습니까?")) return;
+        try {
+            const res = await fetch(`/api/posts/${id}`, { method: "DELETE" });
+            if (res.ok) fetchPosts(document.getElementById("searchInput").value);
+        } catch (err) { console.error(err); }
+    }
+
+    // 5. 검색 이벤트
+    document.getElementById("searchInput").addEventListener("keyup", function () {
+        currentPage = 1;
+        fetchPosts(this.value);
+    });
+
+    // 초기 로딩
+    fetchPosts();
+</script>
+
+</html>
