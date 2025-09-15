@@ -997,22 +997,10 @@ main.addPost-detail-container {
   transition: 0.3s;       
 }
 
-.addPostBtn1 {
-  align-self: flex-end;
-  margin-top: 10px;
+.addPostBtns{
+  display: flex;
+  gap: 10px;        
+  justify-content: flex-end; 
+  margin-top: 16px;
 }
-
-.addPostBtn2{
-   
-}
-
-.addPostBtn1 button:hover, .addPostBtn2 button:hover {
-  background: #388e3c;
-}
-
-/* 버튼 사이 간격 */
-.addPostBtn1 {
-  margin-right: 10px;
-}
-
 

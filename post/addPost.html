@@ -41,24 +41,17 @@
           제목 : <input type="text" th:field="*{title}"/></p>
         <hr>
        
-        <p style="color:#4caf50; font-weight: 600; margin-right: 6px;"></p>
-          내용 : <textarea th:field="*{content}" rows="12"></textarea>
+        <p style="color:#4caf50; font-weight: 600; margin-right: 6px;">
+          내용 : <textarea th:field="*{content}" rows="12"></textarea></p>
           
-          <div class="addPostBtn1">
+          <div class="addPostBtns">
           <button type="submit" onclick="location.href='/'">등록</button>
+          <button type="submit" onclick="location.href='/post/list'">취소</button>
           </div>
     </form>
     
-     <div class="addPostBtn2">
-    <form th:action="@{/post/list}">
-        <button type="submit">취소</button>
-    </form>
-     </div>
-  </div>
-</div>
-  
 
-
+   </div>
 </main>
 </body>
 </html>
