@@ -224,32 +224,22 @@
   });
 
   // 추천 상태 저장 (간단 예제용, 실제론 서버 DB 필요)
-  // const likes = {}; // { "L1": true, "R2": false }
+  const likes = {}; // { "L1": true, "R2": false }
 
-  grid.addEventListener('click', async (e) => {
+  grid.addEventListener('click', (e) => {
     const likeId = e.target.getAttribute('data-like');
-    if (likeId) {
-      try {
-        const response = await fetch(`/api/courses/${likeId}/like`, {
-          method: 'POST',
-          // Content-Type 헤더를 제거
-        });
-
-        if (!response.ok) {
-          throw new Error('좋아요 업데이트 실패');
-        }
-
-        const updatedCourse = await response.json();
-
-        // UI 갱신 로직
-        const likeCountElement = e.target.previousElementSibling;
-        likeCountElement.textContent = updatedCourse.like_count;
-        e.target.classList.toggle('liked');
+    if(likeId){
+      // 토글
+      if(!likes[likeId]) {
+        likes[likeId] = true;
+        e.target.classList.add('liked');
         e.target.textContent = '♥';
 
-      } catch (error) {
-        console.error('좋아요 업데이트 오류:', error);
-        alert('좋아요를 누르는 중 오류가 발생했습니다.');
+      } else {
+        likes[likeId] = false;
+        e.target.classList.remove('liked');
+        e.target.textContent = '♡';
+
       }
     }
   });

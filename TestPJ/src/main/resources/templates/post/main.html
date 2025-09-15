@@ -20,9 +20,7 @@
 
 <!-- 카테고리 탭 -->
 <div class="board-tabs">
-    <a href="/post/main" class="active">공지사항</a>
-    <a href="board.html">자유 게시판</a>
-    <a href="faq.html">FAQ</a>
+    <a href="/post/main" class="active">게시판</a>
 </div>
 
 <!-- 제목 + 검색창 -->
@@ -56,12 +54,19 @@
         <td th:text="${#temporals.format(post.created_at, 'yyyy-MM-dd HH:mm')}"></td>
     </tr>
     </tbody>
+
 </table>
 
-<a href="/post/add">글쓰기</a>
+<div class="pagination" id="pagination">
+    <a th:if="${currentPage > 1}" th:href="@{/post/list(page=${currentPage - 1})}">이전</a>
 
-<!-- 페이지네이션 -->
-<div class="pagination" id="pagination"></div>
+    <th:block th:each="i : ${#numbers.sequence(1, totalPages)}">
+        <a th:href="@{/post/list(page=${i})}" th:text="${i}"
+           th:classappend="${i == currentPage} ? 'active' : ''"></a>
+    </th:block>
+
+    <a th:if="${currentPage < totalPages}" th:href="@{/post/list(page=${currentPage + 1})}">다음</a>
+</div>
 
 </body>
 <script src="/script.js"></script>

@@ -1,7 +1,9 @@
 package com.community.post.comment;
 
+import com.community.post.entity.Post;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -19,5 +21,13 @@ public class CommentService {
     public void deleteById(int id) {
         System.out.println("comment delete");
         commentRepo.deleteById(id);
+    }
+
+    public void add(Comment comment) {
+        System.out.println("comment add");
+        if (comment.getCreated_at() == null) {
+            comment.setCreated_at(LocalDateTime.now());
+        }
+        commentRepo.add(comment);
     }
 }

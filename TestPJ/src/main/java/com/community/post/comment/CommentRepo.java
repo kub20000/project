@@ -1,5 +1,6 @@
 package com.community.post.comment;
 
+import com.community.post.entity.Post;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -43,6 +44,27 @@ public class CommentRepo {
             System.out.println(rowAffected);
         } else {
             System.out.println("삭제할 댓글이 없습니다." + id);
+        }
+    }
+
+    public Comment add(Comment comment) {
+        System.out.println("==> comment added");
+        String sql = "INSERT INTO comments (id, posts_id, comments_name, comments_content, created_at) " +
+                " VALUES (?,?,?,?,?)";;
+        int result = jdbc.update(sql,
+                comment.getId(),
+                comment.getPosts_id(),
+                comment.getComments_name(),
+                comment.getComments_content(),
+                comment.getCreated_at()
+        );
+        if (result == 1) {
+            System.out.println(result);
+            System.out.println("댓글 등록 성공");
+            return comment;
+        } else {
+            System.out.println("댓글 등록 실패");
+            return null;
         }
     }
 }

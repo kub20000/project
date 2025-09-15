@@ -3,10 +3,12 @@ package com.community.post.controller;
 import com.community.post.comment.Comment;
 import com.community.post.comment.CommentService;
 import com.community.post.entity.Post;
+import com.community.post.repository.PostRepo;
 import com.community.post.service.PostService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 import java.util.Optional;
@@ -17,17 +19,37 @@ public class PostController {
 
     private final PostService postService;
     private final CommentService commentService;
+    private final PostRepo postRepo;
 
-    public PostController(PostService postService, CommentService commentService) {
+    public PostController(PostService postService, CommentService commentService, PostRepo postRepo) {
         this.postService = postService;
         this.commentService = commentService;
+        this.postRepo = postRepo;
     }
 
     // 메인에 게시글 리스트 출력
     @GetMapping("/post/list")
-    public String postList(Model model) {
+    public String postList(Model model, @RequestParam(defaultValue = "1") int page) {
         System.out.println("postList");
         model.addAttribute("posts", postService.findAll());
+
+        // JDBC에서 LIMIT, OFFSET을 위해 필요한 값 계산
+        int offset = (page - 1) * 10;
+
+        // 총 게시글 수를 조회
+        int totalPosts = postRepo.getTotalPostsCount();
+
+        // 전체 페이지 수 계산
+        int totalPages = (int) Math.ceil((double) totalPosts / 10);
+
+        // 현재 페이지의 게시글 목록을 조회
+        List<Post> posts = postRepo.getPostsWithPagination(10, offset);
+
+        // 모델에 데이터 추가
+        model.addAttribute("posts", posts);
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", totalPages);
+
         return "/post/main";
     }
 
@@ -82,6 +104,8 @@ public class PostController {
                 .collect(Collectors.toList());
         model.addAttribute("comments", processedComments);
 
+        // 댓글
+        model.addAttribute("comment", new Comment());
 
         return "post/detailPost";
     }
@@ -105,10 +129,12 @@ public class PostController {
 
     //게시글 수정(버튼 클릭하여 실제로 수정)
     @PostMapping("/post/edit")
-    public String userEdit(@ModelAttribute Post post){
+    public String userEdit(@ModelAttribute Post post, RedirectAttributes redirectAttributes){
         postService.update(post);
-        return "redirect:/post/list";
+        redirectAttributes.addAttribute("id", post.getId());
+        return "redirect:/post/detail/{id}";
     }
+
 
 
 }

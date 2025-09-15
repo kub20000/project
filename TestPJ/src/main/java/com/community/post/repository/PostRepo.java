@@ -105,5 +105,16 @@ public class PostRepo {
         Integer prevId = jdbc.queryForObject(sql, Integer.class, postId);
         return Optional.ofNullable(prevId);
     }
+
+    public List<Post> getPostsWithPagination(int limit, int offset) {
+        String sql = "SELECT id, author, title, content, created_at FROM posts ORDER BY created_at DESC LIMIT ? OFFSET ?";
+        return jdbc.query(sql, postRowMapper(), limit, offset);
+    }
+
+    public int getTotalPostsCount() {
+        String sql = "SELECT COUNT(*) FROM posts";
+        return jdbc.queryForObject(sql, Integer.class);
+    }
+
 }
 

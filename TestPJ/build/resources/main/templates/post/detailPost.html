@@ -2,70 +2,94 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>게시글</title>
+    <title>게시글 상세보기 - Vegan delight</title>
+    <link rel="stylesheet" href="/style.css">
 </head>
 <body>
 
-  <div>
+<header>
+    <h1>Vegan delight</h1>
+    <nav>
+        <a href="/">Home</a>
+        <a href="/course/main">Courses</a>
+        <a href="/myFridge/main">나의 냉장고</a>
+        <a href="login.html">Login</a>
+        <a href="/post/main">게시판</a>
+        <a href="mypage.html">my page</a>
+    </nav>
+</header>
 
-    <h1>게시판</h1>
-    <hr>
-    <h2 th:text="${post.title}">제목</h2>
-    <hr>
-    <div>
-      <strong>작성자 :</strong>
-      <span th:text="${post.author}"></span>
+<main class="post-detail-container">
+    <div class="post-card">
+
+        <h2 id="postTitle" th:text="${post.title}">게시글</h2>
+        <div class="post-meta">
+            <div class="post-info">
+                <span th:text="${post.author}">작성자</span> |
+                <span th:text="${#temporals.format(post.created_at, 'yyyy-MM-dd HH:mm')}">작성일</span>
+            </div>
+            <button type="button" onclick="location.href='/post/main'">게시물 목록</button>
+        </div>
+        <hr>
+
+        <div class="post-content">
+            <p th:utext="${contentWithBr}"></p>
+        </div>
+
+        <div class="post-actions">
+            <form th:action="@{/post/edit/{id}(id=${post.id})}">
+                <input type="hidden" name="id" th:value="${post.id}">
+                <button type="submit">수정</button>
+            </form>
+            <form th:action="@{/post/delete}" method="post">
+                <input type="hidden" name="id" th:value="${post.id}">
+                <button type="submit">삭제</button>
+            </form>
+        </div>
+
+        <div class="comments-section">
+            <h3>댓글</h3>
+            <div id="commentsContainer">
+                <div th:if="${not #lists.isEmpty(comments)}">
+                    <div th:each="comment : ${comments}" class="comment-item">
+                        <span class="comment-writer" th:text="${comment.comments_name}">작성자</span>
+                        <br>
+                        <br>
+                        <span th:utext="${comment.comments_content}"></span>
+                        <br>
+                        <br>
+                        <small th:text="${#temporals.format(comment.created_at, 'yyyy-MM-dd HH:mm')}"></small>
+
+                        <div class="commentsContainer" th:if="${#lists.isEmpty(comments)}">
+                            <p>댓글이 없습니다.</p>
+                        </div>
+
+                        <form th:action="@{/comment/delete}" method="post">
+                            <input type="hidden" name="id" th:value="${comment.id}">
+                            <input type="hidden" name="posts_id" th:value="${comment.posts_id}">
+                            <button type="submit">댓글 삭제</button>
+                        </form>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="comment-box">
+                <form th:action="@{/comment/add}" th:object="${comment}" method="post">
+                    <input type="text" th:field="*{comments_content}" placeholder="댓글을 입력하세요">
+                    <input type="hidden" name="postId" th:value="${post.id}">
+                    <button id="addCommentBtn">댓글 등록</button>
+                </form>
+            </div>
+        </div>
+
+        <div class="post-navigation">
+            <a th:if="${nextId}" th:href="@{/post/detail/{id}(id=${nextId})}">다음 글</a>
+            <a th:if="${prevId}" th:href="@{/post/detail/{id}(id=${prevId})}">이전 글</a>
+        </div>
+
     </div>
-    <div>
-      <strong>작성일 :</strong>
-      <span th:text="${#temporals.format(post.created_at, 'yyyy-MM-dd HH:mm')}"></span>
-    </div>
-    <hr>
-    <div>
-      <p th:utext="${contentWithBr}"></p>
-    </div>
+</main>
 
-    <button type="button" onclick="location.href='/post/main'">게시글 목록</button>
-
-  </div>
-
-  <h2>댓글</h2>
-  <hr>
-  <div th:if="${not #lists.isEmpty(comments)}">
-<!-- ajax 활용해서 댓글창 구현 (프론트엔드)  -->
-    <div th:each="comment : ${comments}" class="comment-item">
-      <strong>작성자 :</strong>
-      <span th:text="${comment.comments_name}"></span>
-      <br>
-      <br>
-      <span th:utext="${comment.comments_content}"></span>
-      <br>
-      <br>
-      <small th:text="${#temporals.format(comment.created_at, 'yyyy-MM-dd HH:mm')}"></small>
-
-      <form th:action="@{/comment/delete}" method="post">
-        <input type="hidden" name="id" th:value="${comment.id}">
-        <input type="hidden" name="posts_id" th:value="${comment.posts_id}">
-        <button type="submit">댓글 삭제</button>
-      </form>
-    </div>
-  </div>
-
-  <hr>
-
-  <form th:action="@{/post/edit/{id}(id=${post.id})}">
-    <input type="hidden" name="id" th:value="${post.id}">
-    <button type="submit">게시글 수정</button>
-  </form>
-
-  <form th:action="@{/post/delete}" method="post">
-    <input type="hidden" name="id" th:value="${post.id}">
-    <button type="submit">게시글 삭제</button>
-  </form>
-
-  <div>
-    <a th:if="${nextId}" th:href="@{/post/detail/{id}(id=${nextId})}">다음 글</a>
-    <a th:if="${prevId}" th:href="@{/post/detail/{id}(id=${prevId})}">이전 글</a>
-  </div>
 </body>
 </html>
