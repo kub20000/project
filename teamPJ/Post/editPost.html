@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>게시글 수정</title>
+     <link rel="stylesheet" href="stylePost.css">
+  <style>
+    /*body {
+      font-family: 'Malgun Gothic', '맑은 고딕', sans-serif;
+    }}*/
+    textarea {
+      width: 100%;
+      height: 400px;
+      resize: vertical;
+      font-family: inherit;
+      font-family: 'Malgun Gothic', '맑은 고딕', sans-serif;
+    }
+  </style>
+</head>
+<body>
+  
+  <header>
+    <h1>Vegan delight</h1>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="courses.html">Courses</a>
+      <a href="myfridge.html">나의 냉장고</a>
+      <a href="login.html">Login</a>
+      <a href="notice.html">게시판</a>
+      <a href="mypage.html">my page</a>
+    </nav>
+  </header>
+
+<main class="editPost-detail-container">
+<div class="editPost-card">
+<h2>게시글 수정</h2>
+<form th:action="@{/post/edit}" th:object="${post}" method="post">
+  <label style="color:#4caf50; font-weight: 600; margin-right: 6px;">
+    작성자: <input type="text" th:field="*{id}" readonly /></label><hr/>
+  <label style="color:#4caf50; font-weight: 600; margin-right: 6px;">
+    제목: <input type="text" th:field="*{title}" /></label><br/>
+  <hr>
+  <label style="color:#4caf50; font-weight: 600; margin-right: 6px;">
+    내용: <textarea type="text" th:field="*{content}"></textarea>
+  </label><br/>
+  
+  <div class="button-group">
+  <button type="submit">수정</button>
+</form>
+
+<form th:action="@{/post/detail/{id}(id=${post.id})}">
+    <input type="hidden" name="id" th:value="${post.id}">
+    <button type="submit">취소</button>
+</form>
+</div>
+ </div>
+
+</main>
+</body>
+</html>
