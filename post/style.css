@@ -702,6 +702,8 @@ tr:hover {
 }
 
 
+
+/*detailPost*/
 main.post-detail-container {
   max-width: 900px;
   margin: 2rem auto;
@@ -826,7 +828,7 @@ main.post-detail-container {
   border-radius: 8px;
 }
 .comment-item {
-  padding: 6px;
+   padding: 10px 0;
   border-bottom: 1px solid #eee;
   font-size: 14px;
 }
@@ -845,12 +847,11 @@ main.post-detail-container {
 }
 
 #commentsContainer {
-  max-height: 200px;
-  overflow-y: auto;
   border: 1px solid #ddd;
   padding: 1rem;
   border-radius: 8px;
   background: #f9f9f9;
+  margin-bottom: 1rem;
 }
 
 /* 댓글 입력창 */
@@ -910,6 +911,23 @@ main.post-detail-container {
   align-self: flex-end;
   padding: 12px 20px;
   font-size: 15px;
+}
+
+/* 댓글 삭제 버튼*/
+.comment-item form button {
+  background: none;
+  border: none;
+  color: #4caf50;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 0;
+  margin-top: 4px;
+  transition: color 0.2s;
+}
+.comment-item form button:hover {
+  color: #388e3c;
+  text-decoration: underline;
 }
 
 /* 다음글 이전글*/
