@@ -35,4 +35,8 @@ public class CommentService {
         System.out.println("comment update");
         commentRepo.update(comment);
     }
+
+    public void deleteByPostsId(int postsId) {
+        commentRepo.deleteByPostsId(postsId);
+    }
 }

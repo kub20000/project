@@ -5,6 +5,7 @@ import com.community.post.comment.Comment;
 import com.community.post.comment.CommentService;
 import com.community.post.entity.Post;
 import com.community.post.repository.PostRepo;
+import com.community.post.repository.PostRepository;
 import com.community.post.service.PostService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -27,31 +28,23 @@ public class PostController {
     private final PostService postService;
     private final CommentService commentService;
     private final PostRepo postRepo;
+    private final PostRepository postRepository;
 
     // 메인에 게시글 리스트 출력
     @GetMapping("/post/list")
-    public String postList(Model model, @RequestParam(defaultValue = "1") int page) {
-        System.out.println("postList");
-        model.addAttribute("posts", postService.findAll());
+    public String postList(
+            Model model,
+            @PageableDefault(size = 10, sort = "created_at", direction = Sort.Direction.DESC) Pageable pageable) {
 
-        // JDBC에서 LIMIT, OFFSET을 위해 필요한 값 계산
-        int offset = (page - 1) * 10;
+        // 1. 고정된 게시글 목록을 가져옵니다. (페이지네이션 미적용)
+        List<Post> fixedPosts = postRepository.findByFixedTrue();
+        model.addAttribute("fixedPosts", fixedPosts);
 
-        // 총 게시글 수를 조회
-        int totalPosts = postRepo.getTotalPostsCount();
+        // 2. 일반 게시글 목록을 가져옵니다. (페이지네이션 적용)
+        Page<Post> normalPostsPage = postRepository.findByFixedFalse(pageable);
+        model.addAttribute("normalPostsPage", normalPostsPage);
 
-        // 전체 페이지 수 계산
-        int totalPages = (int) Math.ceil((double) totalPosts / 10);
-
-        // 현재 페이지의 게시글 목록을 조회
-        List<Post> posts = postRepo.getPostsWithPagination(10, offset);
-
-        // 모델에 데이터 추가
-        model.addAttribute("posts", posts);
-        model.addAttribute("currentPage", page);
-        model.addAttribute("totalPages", totalPages);
-
-        return "/post/main";
+        return "post/main";
     }
 
     //검색

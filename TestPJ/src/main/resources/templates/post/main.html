@@ -46,15 +46,29 @@
 <table id="noticeTable">
     <thead>
     <tr>
-        <th>번호</th>
+        <th>분류</th>
         <th>제목</th>
         <th>작성자</th>
         <th>등록일</th>
     </tr>
     </thead>
     <tbody>
-    <tr th:each="post, stat : ${posts}">
-        <td th:text="${stat.index+1}"></td>
+    <tr th:each="post : ${fixedPosts}">
+        <td>
+            <span class="fixed" th:if="${post.category.name() == 'NOTICE'}">공지사항</span>
+            <span class="fixed" th:unless="${post.category.name() == 'NOTICE'}">자유</span>
+        </td>
+        <td>
+            <a th:href="@{/post/detail/{id}(id=${post.id})}" th:text="${post.title}"></a>
+        </td>
+        <td th:text="${post.author}"></td>
+        <td th:text="${#temporals.format(post.created_at, 'yyyy-MM-dd HH:mm')}"></td>
+    </tr>
+    <tr th:each="post : ${normalPostsPage.content}">
+        <td>
+            <span th:if="${post.category.name() == 'NOTICE'}">공지사항</span>
+            <span th:unless="${post.category.name() == 'NOTICE'}">자유</span>
+        </td>
         <td>
             <a th:href="@{/post/detail/{id}(id=${post.id})}" th:text="${post.title}"></a>
         </td>
@@ -62,18 +76,19 @@
         <td th:text="${#temporals.format(post.created_at, 'yyyy-MM-dd HH:mm')}"></td>
     </tr>
     </tbody>
-
 </table>
 
 <div class="pagination" id="pagination">
-    <a th:if="${currentPage > 1}" th:href="@{/post/list(page=${currentPage - 1})}">이전</a>
+    <a th:if="${normalPostsPage.hasPrevious()}"
+       th:href="@{/post/list(page=${normalPostsPage.number - 1})}">이전</a>
 
-    <th:block th:each="i : ${#numbers.sequence(1, totalPages)}">
-        <a th:href="@{/post/list(page=${i})}" th:text="${i}"
-           th:classappend="${i == currentPage} ? 'active' : ''"></a>
+    <th:block th:each="i : ${#numbers.sequence(0, normalPostsPage.totalPages - 1)}">
+        <a th:href="@{/post/list(page=${i})}" th:text="${i + 1}"
+           th:classappend="${i == normalPostsPage.number} ? 'active' : ''"></a>
     </th:block>
 
-    <a th:if="${currentPage < totalPages}" th:href="@{/post/list(page=${currentPage + 1})}">다음</a>
+    <a th:if="${normalPostsPage.hasNext()}"
+       th:href="@{/post/list(page=${normalPostsPage.number + 1})}">다음</a>
 </div>
 
 </body>

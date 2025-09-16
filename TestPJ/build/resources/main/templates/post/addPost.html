@@ -34,10 +34,20 @@
         <h2>게시글 등록</h2>
 
         <form th:action="@{/post/add}" th:object="${post}" method="post">
+
+            <select th:field="*{fixed}">
+                <option value="0">일반 게시글</option>
+                <option value="1">고정 게시글</option>
+            </select>
+
+            <select th:field="*{category}">
+                <option value="FREEBOARD">자유</option>
+                <option value="NOTICE">공지사항</option>
+            </select>
+
             <p style="color:#4caf50; font-weight: 600; margin-right: 6px;">
                 제목 : <input type="text" th:field="*{title}"/></p>
             <hr>
-
             <p style="color:#4caf50; font-weight: 600; margin-right: 6px;"></p>
             내용 : <textarea th:field="*{content}" rows="12"></textarea>
 

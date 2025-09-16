@@ -35,6 +35,17 @@
             <label style="color:#4caf50; font-weight: 600; margin-right: 6px;">
                 작성자: <input type="text" th:field="*{id}" readonly/></label>
             <hr/>
+
+            <select th:field="*{fixed}">
+                <option value="0">일반 게시글</option>
+                <option value="1">고정 게시글</option>
+            </select>
+
+            <select th:field="*{category}">
+                <option value="FREEBOARD">자유</option>
+                <option value="NOTICE">공지사항</option>
+            </select>
+
             <label style="color:#4caf50; font-weight: 600; margin-right: 6px;">
                 제목: <input type="text" id="editTitle" th:field="*{title}"/></label><br/>
             <hr>

@@ -15,10 +15,17 @@ import java.time.LocalDateTime;
 @ToString
 @Table("posts")
 public class Post {
+
+    public enum Category {
+        NOTICE, FREEBOARD
+    }
+
     // 게시글 변수 값
     private int id;
     private String author;
     private String title;
     private String content;
     private LocalDateTime created_at;
+    private Category category;
+    private Boolean fixed;
 }

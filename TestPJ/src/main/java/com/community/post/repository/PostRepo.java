@@ -1,5 +1,6 @@
 package com.community.post.repository;
 
+import com.community.course.entity.Course;
 import com.community.post.entity.Post;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,14 +20,16 @@ public class PostRepo {
     //게시글 등록
     public Post add(Post post) {
         System.out.println("==> post added");
-        String sql = "INSERT INTO posts (id, title, author, content, created_at) " +
-                " VALUES (?,?,?,?,?)";;
+        String sql = "INSERT INTO posts (id, author, title, content, created_at, category, fixed) " +
+                " VALUES (?,?,?,?,?,?,?)";;
         int result = jdbc.update(sql,
                 post.getId(),
-                post.getTitle(),
                 post.getAuthor(),
+                post.getTitle(),
                 post.getContent(),
-                post.getCreated_at()
+                post.getCreated_at(),
+                post.getCategory().name().toUpperCase(),
+                post.getFixed()
         );
         if (result == 1) {
             System.out.println(result);
@@ -49,13 +52,15 @@ public class PostRepo {
         return (rs, rowNum) -> {
             java.sql.Timestamp timestamp = rs.getTimestamp("created_at");
             LocalDateTime createdAt = (timestamp != null) ? timestamp.toLocalDateTime() : null;
-            return new Post(
-                    rs.getInt("id"),
-                    rs.getString("author"),
-                    rs.getString("title"),
-                    rs.getString("content"),
-                    createdAt
-            );
+            Post p = new Post();
+                    p.setId(rs.getInt("id"));
+                    p.setAuthor(rs.getString("author"));
+                    p.setTitle(rs.getString("title"));
+                    p.setContent(rs.getString("content"));
+                    p.setCreated_at(createdAt);
+                    p.setCategory(Post.Category.valueOf(rs.getString("category").toUpperCase()));
+                    p.setFixed(rs.getBoolean("fixed"));
+            return p;
         };
     }
 
@@ -81,10 +86,12 @@ public class PostRepo {
 
     // 게시글 수정
     public void update(Post post) {
-        String sql = "UPDATE posts SET title = ?, content = ? WHERE id = ?";
+        String sql = "UPDATE posts SET title = ?, content = ?, category = ?, fixed = ? WHERE id = ?";
         jdbc.update(sql,
                 post.getTitle(),
                 post.getContent(),
+                post.getCategory().name().toUpperCase(),
+                post.getFixed(),
                 post.getId()
         );
     }
@@ -105,7 +112,7 @@ public class PostRepo {
 
     // 페이지네이션
     public List<Post> getPostsWithPagination(int limit, int offset) {
-        String sql = "SELECT id, author, title, content, created_at FROM posts ORDER BY created_at DESC LIMIT ? OFFSET ?";
+        String sql = "SELECT id, author, title, content, created_at, category, fixed FROM posts ORDER BY created_at DESC LIMIT ? OFFSET ?";
         return jdbc.query(sql, postRowMapper(), limit, offset);
     }
 

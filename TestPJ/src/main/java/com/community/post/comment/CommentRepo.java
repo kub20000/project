@@ -41,7 +41,7 @@ public class CommentRepo {
         String sql = "DELETE FROM comments WHERE id = ?";
         int rowAffected = jdbc.update(sql, id);
         if (rowAffected > 0) {
-            System.out.println(rowAffected);
+            System.out.println("댓글 삭제"+rowAffected);
         } else {
             System.out.println("삭제할 댓글이 없습니다." + id);
         }
@@ -74,5 +74,11 @@ public class CommentRepo {
                 comment.getComments_content(),
                 comment.getId()
         );
+    }
+
+    public void deleteByPostsId(int postsId) {
+        String sql = "DELETE FROM comments WHERE posts_id = ?";
+        int rowAffected = jdbc.update(sql, postsId);
+        System.out.println("게시판 댓글 삭제"+rowAffected);
     }
 }

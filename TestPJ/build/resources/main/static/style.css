@@ -1022,3 +1022,9 @@ main.addPost-detail-container {
   margin-top: 16px;
 }
 
+/* 고정 게시글 강조(임시) */
+.fixed {
+    background-color: #fffacd; /* 연한 노란색 배경 */
+    font-weight: bold; /* 글꼴 굵게 */
+    border-left: 5px solid #ffcc00; /* 왼쪽에 강조선 추가 */
+}

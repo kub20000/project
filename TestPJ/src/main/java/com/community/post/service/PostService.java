@@ -1,10 +1,12 @@
 package com.community.post.service;
 
 import com.community.post.PostDTO;
+import com.community.post.comment.CommentService;
 import com.community.post.entity.Post;
 import com.community.post.repository.PostRepo;
 import com.community.post.repository.PostRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -16,8 +18,12 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 public class PostService {
+
+    @Autowired
     private final PostRepo postRepo;
+
     private final PostRepository postRepository;
+    private final CommentService commentService;
 
     // 모두 단순 연결
     public List<Post> findAll() {
@@ -38,6 +44,7 @@ public class PostService {
 
     public void deleteById(int id) {
         System.out.println("post delete");
+        commentService.deleteByPostsId(id);
         postRepo.deleteById(id);
     }
 
