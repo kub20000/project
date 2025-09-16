@@ -1,6 +1,7 @@
 package com.community.post.repository;
 
 import com.community.post.entity.Post;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -11,13 +12,9 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
+@RequiredArgsConstructor
 public class PostRepo {
     private final JdbcTemplate jdbc;
-
-    @Autowired
-    public PostRepo(JdbcTemplate jdbc) {
-        this.jdbc = jdbc;
-    }
 
     //게시글 등록
     public Post add(Post post) {
@@ -106,6 +103,7 @@ public class PostRepo {
         return Optional.ofNullable(prevId);
     }
 
+    // 페이지네이션
     public List<Post> getPostsWithPagination(int limit, int offset) {
         String sql = "SELECT id, author, title, content, created_at FROM posts ORDER BY created_at DESC LIMIT ? OFFSET ?";
         return jdbc.query(sql, postRowMapper(), limit, offset);

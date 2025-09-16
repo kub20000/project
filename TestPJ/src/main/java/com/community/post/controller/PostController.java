@@ -1,10 +1,16 @@
 package com.community.post.controller;
 
+import com.community.post.PostDTO;
 import com.community.post.comment.Comment;
 import com.community.post.comment.CommentService;
 import com.community.post.entity.Post;
 import com.community.post.repository.PostRepo;
 import com.community.post.service.PostService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -15,17 +21,12 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Controller
+@RequiredArgsConstructor
 public class PostController {
 
     private final PostService postService;
     private final CommentService commentService;
     private final PostRepo postRepo;
-
-    public PostController(PostService postService, CommentService commentService, PostRepo postRepo) {
-        this.postService = postService;
-        this.commentService = commentService;
-        this.postRepo = postRepo;
-    }
 
     // 메인에 게시글 리스트 출력
     @GetMapping("/post/list")
@@ -51,6 +52,19 @@ public class PostController {
         model.addAttribute("totalPages", totalPages);
 
         return "/post/main";
+    }
+
+    //검색
+    @GetMapping("/post/search")
+    public String search(@ModelAttribute PostDTO dto,
+                         @PageableDefault(size = 10, sort = "created_at", direction = Sort.Direction.DESC) Pageable pageable,
+                         Model model) {
+        Page<Post> postPage = postService.searchPosts(dto, pageable);
+        model.addAttribute("postPage", postPage);
+        model.addAttribute("postList", postPage.getContent()); // 템플릿의 `postList`를 위해 추가
+        model.addAttribute("searchType", dto.getSearchType()); // 검색 조건 유지를 위해 추가
+        model.addAttribute("keyword", dto.getKeyword()); // 검색 조건 유지를 위해 추가
+        return "post/searchResult";
     }
 
     // 게시글 추가(페이지 연결)
@@ -134,6 +148,7 @@ public class PostController {
         redirectAttributes.addAttribute("id", post.getId());
         return "redirect:/post/detail/{id}";
     }
+
 
 
 

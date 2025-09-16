@@ -30,4 +30,9 @@ public class CommentService {
         }
         commentRepo.add(comment);
     }
+
+    public void update(Comment comment) {
+        System.out.println("comment update");
+        commentRepo.update(comment);
+    }
 }

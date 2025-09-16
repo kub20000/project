@@ -8,7 +8,7 @@
 <body>
 
 <header>
-    <h1>Vegan delight</h1>
+    <h1><a href="/">Vegan Delight</a></h1>
     <nav>
         <a href="/">Home</a>
         <a href="/course/main">Courses</a>
@@ -64,11 +64,19 @@
                             <p>댓글이 없습니다.</p>
                         </div>
 
+                        <form th:action="@{/comment/edit}" method="post">
+                            <input type="hidden" name="id" th:value="${comment.id}">
+                            <input type="hidden" name="postId" th:value="${comment.posts_id}">
+                            <input type="text" th:field="*{comment.comments_content}">
+                            <button type="submit">댓글 수정</button>
+                        </form>
+
                         <form th:action="@{/comment/delete}" method="post">
                             <input type="hidden" name="id" th:value="${comment.id}">
                             <input type="hidden" name="posts_id" th:value="${comment.posts_id}">
                             <button type="submit">댓글 삭제</button>
                         </form>
+
                     </div>
                 </div>
 

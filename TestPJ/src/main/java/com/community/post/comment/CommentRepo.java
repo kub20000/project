@@ -67,4 +67,12 @@ public class CommentRepo {
             return null;
         }
     }
+
+    public void update(Comment comment) {
+        String sql = "UPDATE comments SET comments_content = ? WHERE id = ?";
+        jdbc.update(sql,
+                comment.getComments_content(),
+                comment.getId()
+        );
+    }
 }

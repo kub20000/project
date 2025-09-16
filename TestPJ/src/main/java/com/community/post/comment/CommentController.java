@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 public class CommentController {
@@ -33,6 +34,13 @@ public class CommentController {
     }
 
     // 댓글 수정
+    @PostMapping("/comment/edit")
+    public String userEdit(@ModelAttribute Comment comment, RedirectAttributes redirectAttributes, @RequestParam int postId){
+        comment.setPosts_id(postId);
+        commentService.update(comment);
+        redirectAttributes.addAttribute("id", comment.getId());
+        return "redirect:/post/detail/"+postId;
+    }
 
 
 
