@@ -30,34 +30,96 @@ nav a {
   font-weight: 500;
 }
 
+ .control {
+  display: flex;
+  gap: 20px;      /* select끼리 간격 */
+  margin-bottom: 20px;
+  background: none;
+  border: none;
+  padding: 0;
+}
+
+.control select {
+ width: 150px;
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+  background-color: #f9f9f9; 
+}
+
+
 
 /* ===== 게시판 공지사항 ===== */
 
 /* 검색 + 제목 */
 .board-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
   width: 90%;
-  margin: auto;
-   margin: 5px auto 5px auto;
+  margin: 60px auto 0 auto; 
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
 }
+
+.search-box {
+  display: flex;
+  align-items: center;
+  justify-content: space-between; 
+  margin: 10px;
+  gap: 10px;
+}
+
 .board-header p {
   font-size: 30px;
   font-weight: bold;
+  margin: 0;
 }
-.board-header a.active {
-  text-decoration: none; /* 링크 밑줄 제거 */
-  color: black; /* 원래 텍스트 색상 */
-}
+
+
 .board-tools {
-    display: flex;
-    justify-content: space-between; /* 좌우 끝으로 배치 */
-    align-items: center;
-    width: 90%;
-    margin: auto;
-    margin-top: 10px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
+
+
+.board-tools {
+  margin-left: auto;
+}
+
+
+.board-header p a {
+  text-decoration: none;
+  color: black;
+}
+.board-header p a:visited,
+.board-header p a:hover,
+.board-header p a:active {
+  text-decoration: none;
+  color: black;
+}
+
+
+
+.board-tools-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.searchForm {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.searchForm input {
+  flex: 1;
+  font-size: 16px;
+  padding: 8px 12px;
+  border: 1px solid #ddd;
+  border-radius: 20px;
+  outline: none;}
 
 .select-control{
  background: var(--card, #e5e7eb); 
@@ -80,7 +142,10 @@ nav a {
 }
 
 .write-btn-container {
-    margin-left: auto; /* 왼쪽 여백 자동으로 채워서 오른쪽 정렬 */
+    margin-left: auto;
+}
+.write-btn-container {
+  margin-left: auto; 
 }
 
 .search-form {
@@ -114,6 +179,9 @@ nav a {
   align-items: center;
 }
 
+.writeBtn a {
+    text-decoration: none;
+}
 
 /* 게시판 테이블 */
 table {
@@ -169,6 +237,29 @@ tr:hover {
 .pagination a.active {
   font-weight: bold;
   color: #49951d;
+}
+
+/* 게시판 테이블 칸 너비 조정 */
+#noticeTable th:nth-child(1), /* 분류 */
+#noticeTable td:nth-child(1) {
+    width: 10%;
+}
+
+#noticeTable th:nth-child(2), /* 제목 */
+#noticeTable td:nth-child(2) {
+    width: 55%;
+    text-align: center; /* 제목은 왼쪽 정렬 */
+    padding-left: 12px;
+}
+
+#noticeTable th:nth-child(3), /* 작성자 */
+#noticeTable td:nth-child(3) {
+    width: 20%;
+}
+
+#noticeTable th:nth-child(4), /* 등록일 */
+#noticeTable td:nth-child(4) {
+    width: 15%;
 }
 
 
@@ -484,7 +575,7 @@ main.addPost-detail-container {
   flex-direction: column;
 }
 
-.addPost-card input#editTitle {
+.addPost-card input#addTitle {
   width: 80%;
   padding: 10px 14px;      
   border: 1px solid #ccc;  

@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Courses - Vegan quiz</title>
+  <link rel="stylesheet" href="styleCourse.css">
+</head>
+
+<body>
+  <header>
+    <h1>Vegan delight</h1>
+    <nav id="navMenu">
+      <a href="index.html">Home</a>
+      <a href="courses.html">Courses</a>
+      <a href="myFridge.html">나의 냉장고</a>
+      <a href="login.html" id="loginBtn">Login</a>
+      <a href="notice.html" id="">게시판</a>
+      <a href="mypage.html" id="">my page</a> 
+    </nav>
+  </header>
+  <main class="quiz-container">
+    
+      <div class="quiz-card">
+        <div class="quiz-card-head">
+         <h2>퀴즈</h2>
+         <button id="closeQuiz" type="button" type="submit" onclick="confirmExit()">
+          X</button>
+        </div>
+        
+       <p style="color:#4caf50; font-weight: 600; margin-right: 6px; font-size: large;">
+        강의명 : <input type="text" readonly></p>
+      
+       
+        <div class="question">
+         <p style="font-weight: 600; font-size: 20px; margin-left: 12px;">
+          Q1.<span></span>
+        </p>
+          <section class="question-input"> <!-- 문제 내용 입력칸-->
+           <span></span>
+          </section>
+        </div>
+
+        
+        <div class="answer">
+         <p style="color:#4caf50; font-weight: 600; margin-right: 6px; font-size: large;">
+            정답:</p>
+        <div class="answer-input">
+            <input type="text" placeholder="정답을 입력하세요">
+        </div>
+         
+        </div>
+
+    <div class="quizNav-buttons">
+     <button type="submit" name="action" value="prev" th:if="${quiz.id > 1}">이전</button> 
+     <button type="submit" name="action" value="next" th:if="${quiz.id < 5}">다음</button>
+    </div>
+
+       <div class="answerSubmit" onclick="location.href='quizResult.html'">
+          <button type="submit" name="action" value="last">제출</button>
+       </div>
+    </div>
+   </div>
+</main>
+</body>
+<script>
+  function confirmExit() {
+    if (confirm("퀴즈를 나가시겠습니까?")) {
+      location.href = 'courses.html'; 
+    }
+  }
+
+   document.querySelector(".answerSubmit").addEventListener("click", function() {
+    alert("퀴즈 결과를 확인합니다.");
+    location.href = 'quizResult.html'; 
+  });
+</script>
+</html>
