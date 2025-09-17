@@ -232,9 +232,8 @@ body.joinUser {
   background: #f9f9f9;
 }
 
-
 #entryInfo {
-  width: 350px;
+  width: 500px;
   margin: 50px auto;
   padding: 20px;
   border: 1px solid #49951d;
@@ -249,30 +248,42 @@ body.joinUser {
   flex-direction: column;
 }
 
+/* 회원가입 버튼을 더 일관된 초록색 계열로 */
 button.joinUser {
-  width: 100%;
-  padding: 10px;
-  border: none;
-  border-radius: 6px;
+  width: 80%;
+  /* 버튼을 폼 너비에 맞춤 */
   background-color: #4caf50;
-  color: white;
-  font-size: 16px;
-  cursor: pointer;
-  margin-top: 5px;
+  transition: background-color 0.2s;
+}
+
+button.joinUser:hover {
+  background-color: #43a047;
 }
 
 #checkNicknameBtn,
 #checkPwBtn {
-  width: auto;
-  padding: 5px 10px;
+  width: 80%;
   margin-top: 5px;
+}
+
+.role-options {
+  display: flex;
+  gap: 20px;
+}
+
+.role-item {
+  display: flex;
+  align-items: center; /* 같은 행 정렬 */
+  gap: 5px;           /* 라벨과 버튼 사이 간격 */
+}
+.role-options input[type="radio"] {
+  margin-right: 5px;
 }
 
 .msg {
   font-size: 13px;
-  margin-top: 3px;
+  line-height: 1.4;
 }
-
 /* 완료 메시지 스타일 */
 #successMsg {
   display: none;
@@ -308,10 +319,10 @@ label {
   color: #333;
 }
 
-input.joinUser {
-  padding: 0.8rem;
-  border: 1px solid #aaa;
-  border-radius: 6px;
+/* 입력창 focus 효과를 기존 초록 계열로 맞춤 */
+input.joinUser:focus {
+  border-color: #4caf50;
+  box-shadow: 0 0 6px rgba(76, 175, 80, 0.3);
 }
 
 body.myInfo {
@@ -365,7 +376,8 @@ body.myInfo .container {
 
 /* 왼쪽 메뉴 */
 body.myInfo #subNav {
-  flex: 0 0 200px; /* 너비 200px 고정 */
+  flex: 0 0 200px;
+  /* 너비 200px 고정 */
   background: #f7f7f7;
   border-right: 1px solid #ddd;
   padding: 15px;
@@ -389,7 +401,8 @@ body.myInfo #subNav a:hover {
 
 /* 오른쪽 본문 */
 body.myInfo .wrap {
-  flex: 1; /* 남은 공간 차지 */
+  flex: 1;
+  /* 남은 공간 차지 */
   max-width: 1100px;
   margin: 0 auto;
   padding: 24px;
@@ -649,7 +662,7 @@ body.myBoard #subNav {
   flex-direction: column;
   gap: 10px;
   flex-shrink: 0;
-  box-shadow: 0 0 5px rgba(0,0,0,0.1);
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
 }
 
 body.myBoard #subNav a {
@@ -692,7 +705,7 @@ body.myBoard table {
   background: white;
   border-radius: 6px;
   overflow: hidden;
-  box-shadow: 0 0 5px rgba(0,0,0,0.1);
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
 }
 
 body.myBoard th,
@@ -724,16 +737,25 @@ body.myBoard button:hover {
   opacity: 0.8;
 }
 
-body.myBoard button.edit { background: #4cb94e; color: white; }
-body.myBoard button.delete { background: #f44336; color: white; }
+body.myBoard button.edit {
+  background: #4cb94e;
+  color: white;
+}
+
+body.myBoard button.delete {
+  background: #f44336;
+  color: white;
+}
 
 /* 모달 */
 body.myBoard .modal {
   display: none;
   position: fixed;
-  top: 0; left: 0;
-  width: 100%; height: 100%;
-  background: rgba(0,0,0,0.5);
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
   justify-content: center;
   align-items: center;
 }
@@ -772,4 +794,3 @@ body.myBoard .close-modal {
 
 /* 기타 세부 스타일은 필요에 따라 그대로 유지 */
 /* 예: 냉장고 페이지, 강의 페이지 등 */
-

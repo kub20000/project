@@ -95,7 +95,7 @@ nav a:hover, #navMenu a:hover {
 
 /* 공통 폼 스타일 */
 .form-container, #fixInfo {
-  max-width: 600px;
+  max-width: 500px;
   margin: 3rem auto;
   background: white;
   padding: 2rem;
