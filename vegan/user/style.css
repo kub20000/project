@@ -724,7 +724,7 @@ body.myBoard button:hover {
   opacity: 0.8;
 }
 
-body.myBoard button.edit { background: #4cb94e; color: #white; }
+body.myBoard button.edit { background: #4cb94e; color: white; }
 body.myBoard button.delete { background: #f44336; color: white; }
 
 /* 모달 */

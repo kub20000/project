@@ -5,77 +5,178 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>공지사항 수정</title>
-    <link rel="stylesheet" href="style.css">
     <style>
-        header {
-            background: #4caf50;
-            color: white;
-            padding: 1rem 2rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        header h1 {
+        /* 전체 폰트 및 배경 */
+        body {
+            font-family: Arial, sans-serif;
+            background: #f9f9f9;
             margin: 0;
+            padding: 0;
         }
 
-        nav a,
-        #navMenu a {
-            color: white;
-            margin-left: 1rem;
-            text-decoration: none;
-            font-weight: 500;
+        /* 컨테이너 */
+        .form-container {
+            max-width: 500px;
+            margin: 50px auto;
+            padding: 2rem;
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
         }
 
-        nav a:hover,
-        #navMenu a:hover {
-            text-decoration: underline;
+        .form-container h2 {
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+
+        /* 입력폼 */
+        .form-row {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 1rem;
+        }
+
+        .form-row.column {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .form-row label {
+            font-weight: bold;
+            width: 30px;
+            min-width: 30px;
+        }
+
+        .form-row input,
+        .form-row textarea {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-size: 1rem;
+            width: 100%;
+            box-sizing: border-box;
         }
 
         textarea {
-            width: 300px;
-            /* 가로 고정 */
             height: 150px;
-            /* 세로 고정 */
             resize: none;
-            /* 크기 조절 비활성화 */
-            border: 1px solid #ccc;
+        }
+
+        /* 버튼 영역 */
+        .form-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-top: 1.5rem;
+            flex-wrap: wrap;
+            /* 모바일에서 줄바꿈 */
+        }
+
+        .form-actions button {
+            min-width: 100px;
+            padding: 0.6rem 1.2rem;
+            border: none;
             border-radius: 6px;
-            /* 모서리 둥글게 */
-            padding: 0.8rem;
-            /* 안쪽 여백 */
-            font-size: 14px;
-            /* 글자 크기 */
-            line-height: 1.4;
-            /* 줄 간격 */
+            font-size: 1rem;
+            cursor: pointer;
+        }
+
+        .form-actions button[type="submit"] {
+            background-color: #4caf50;
+            color: white;
+        }
+
+        .form-actions button[type="button"] {
+            background-color: #ccc;
+            color: black;
+        }
+
+        .form-actions button:hover {
+            opacity: 0.9;
+        }
+
+        /* 반응형 */
+        @media (max-width: 480px) {
+            .form-row {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .form-row label {
+                width: 100%;
+                margin-bottom: 5px;
+            }
+
+            .form-actions {
+                justify-content: center;
+            }
+        }
+
+        /* 헤더 */
+        header {
+            padding: 1rem;
+            background: #4caf50;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        header h1 {
+            font-size: 1.2rem;
+            margin: 0;
+        }
+
+        header nav a {
+            color: white;
+            margin-left: 15px;
+            text-decoration: none;
+        }
+
+        header nav a:hover {
+            text-decoration: underline;
         }
     </style>
 </head>
 
 <body>
     <header>
-        <h1>Vegan Delight - 관리자 mode<img src="/vegan/supervice/img/회원관리.png" alt="마이페이지" width="36"></h1>
-        <nav id="navMenu">
+        <h1>Vegan Delight - 관리자 mode</h1>
+        <nav>
             <a href="indexmg.html">Home</a>
-            <a href="mgcourses.html">강의</a>
             <a href="post.html">게시판</a>
             <a href="usermng.html">회원관리</a>
         </nav>
     </header>
-    <main class="form-container" style="text-align: center;">
+
+    <main class="form-container">
         <h2>공지사항 수정</h2>
         <form id="editForm">
-            제목 <input type="text" id="title" style="width:300px;" required><br><br>
-            <label for="content" style="vertical-align: top;">내용</label>
-            <textarea id="content" rows="8" required></textarea>
-            <button type="submit">저장</button>
-            <button type="button" onclick="history.back()">취소</button>
+            <div class="form-row">
+                <label for="title">제목</label>
+                <input type="text" id="title" required>
+            </div>
+
+            <div class="form-row column">
+                <label for="content">내용</label>
+                <textarea id="content" rows="8" required></textarea>
+            </div>
+
+            <div class="form-actions">
+                <button type="submit">저장</button>
+                <button type="button" onclick="history.back()">취소</button>
+            </div>
         </form>
     </main>
+
     <script>
+        // URL에서 id 가져오기
         const params = new URLSearchParams(window.location.search);
         const id = Number(params.get("id"));
+
+        // localStorage 예제 (백엔드 연동 시 fetch로 대체 가능)
         let posts = JSON.parse(localStorage.getItem("posts")) || [];
         const post = posts.find(p => p.id === id);
 
@@ -86,8 +187,11 @@
 
         document.getElementById("editForm").addEventListener("submit", function (e) {
             e.preventDefault();
+
             post.title = document.getElementById("title").value;
             post.content = document.getElementById("content").value;
+
+            // 로컬 저장 → 나중에는 fetch PUT 요청으로 대체 가능
             localStorage.setItem("posts", JSON.stringify(posts));
             alert("수정이 완료되었습니다.");
             window.location.href = `post-view.html?id=${id}`;

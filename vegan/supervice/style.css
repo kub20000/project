@@ -95,7 +95,7 @@ nav a:hover, #navMenu a:hover {
 
 /* 공통 폼 스타일 */
 .form-container, #fixInfo {
-  max-width: 400px;
+  max-width: 600px;
   margin: 3rem auto;
   background: white;
   padding: 2rem;
@@ -104,7 +104,7 @@ nav a:hover, #navMenu a:hover {
 }
 
 .form-container input, input {
-  width: 100%;
+  width: 80%;
   padding: 0.8rem;
   margin: 0.5rem 0;
   border: 1px solid #ccc;
@@ -118,7 +118,6 @@ input:focus {
 }
 
 .form-container button, button {
-  width: 100%;
   padding: 10px;
   border: none;
   border-radius: 6px;
@@ -127,6 +126,7 @@ input:focus {
   font-size: 16px;
   cursor: pointer;
   margin-top: 0.5rem;
+  width: 120px;
 }
 
 .form-container button:hover, button:hover {
