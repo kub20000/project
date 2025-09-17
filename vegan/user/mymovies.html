@@ -12,14 +12,14 @@
   <header>
     <h1>Vegan delight</h1>
     <nav id="mainNav">
-    <nav id="mainNav">
-      <a href="index.html">Home</a>
-      <a href="courses.html">Courses</a>
-      <a href="myFridge.html">나의 냉장고</a>
-      <a href="login.html" id="loginBtn">Login</a>
-      <a href="notice.html">게시판</a>
-      <a href="mypage.html" class="active"><img src="/vegan/123.png" alt="마이페이지" width="36"></a>
-    </nav>
+      <nav id="mainNav">
+        <a href="index.html">Home</a>
+        <a href="courses.html">Courses</a>
+        <a href="myFridge.html">나의 냉장고</a>
+        <a href="login.html" id="loginBtn">Login</a>
+        <a href="notice.html">게시판</a>
+        <a href="mypage.html" class="active"><img src="/vegan/123.png" alt="마이페이지" width="36"></a>
+      </nav>
     </nav>
   </header>
 
@@ -46,7 +46,7 @@
 
   <script src="https://www.youtube.com/iframe_api"></script>
   <script>
-    const STORAGE_KEY = 'lms.progress';
+    const API_BASE = "/api/progress"; // 백엔드 REST API 엔드포인트
     const now = () => new Date().toISOString();
 
     const SampleVideos = {
@@ -55,14 +55,35 @@
     };
     const DEFAULT_POSTER = './img/default.png';
 
-    // Storage helpers
-    function readMap() { try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}'); } catch (e) { return {}; } }
-    function writeMap(map) { localStorage.setItem(STORAGE_KEY, JSON.stringify(map)); }
-    function upsertProgress(p) { const map = readMap(); map[p.id] = { ...(map[p.id] || {}), ...p, updatedAt: now() }; writeMap(map); }
-    function listProgress() { return Object.values(readMap()).sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt)); }
-    function getProgress(id) { return readMap()[id]; }
-    function clearProgress(id) { const m = readMap(); delete m[id]; writeMap(m); }
+    // -------------------------
+    // ✅ API 통신 헬퍼
+    // -------------------------
+    async function listProgress() {
+      const res = await fetch(API_BASE);
+      return await res.json(); // [{id,title,lastTime,duration,updatedAt}, ...]
+    }
 
+    async function getProgress(id) {
+      const res = await fetch(`${API_BASE}/${id}`);
+      if (res.ok) return await res.json();
+      return null;
+    }
+
+    async function upsertProgress(p) {
+      await fetch(API_BASE, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(p)
+      });
+    }
+
+    async function clearProgress(id) {
+      await fetch(`${API_BASE}/${id}`, { method: 'DELETE' });
+    }
+
+    // -------------------------
+    // ✅ UI 유틸
+    // -------------------------
     const app = document.getElementById('app');
     const tabHome = document.getElementById('tab-home');
     const tabPlayer = document.getElementById('tab-player');
@@ -87,21 +108,24 @@
     }
 
     function getVideoMeta(id) {
-      return SampleVideos[id] || getProgress(id) || Object.values(SampleVideos)[0];
+      return SampleVideos[id] || { id, title: id, poster: DEFAULT_POSTER };
     }
 
-    // Render Video Card
+    // -------------------------
+    // ✅ 렌더링
+    // -------------------------
     function VideoCard(v) {
       return `<article class="video-item">
-        <a class="thumb" href="#" data-id="${v.id}">
-          <img src="${v.poster || DEFAULT_POSTER}" alt="${v.title}">
-        </a>
-        <div class="row">
-          <div>${v.title}</div>
-          <a class="btn primary" href="#" data-id="${v.id}">재생</a>
-        </div>
-      </article>`;
+      <a class="thumb" href="#" data-id="${v.id}">
+        <img src="${v.poster || DEFAULT_POSTER}" alt="${v.title}">
+      </a>
+      <div class="row">
+        <div>${v.title}</div>
+        <a class="btn primary" href="#" data-id="${v.id}">재생</a>
+      </div>
+    </article>`;
     }
+
     function renderProgressCard(p) {
       const percent = (p.duration && p.lastTime)
         ? Math.min(100, Math.round((p.lastTime / p.duration) * 100))
@@ -110,63 +134,66 @@
       const btnLabel = percent >= 100 ? "다시보기" : "이어보기";
 
       return `<article class="video-item">
-    <a class="thumb" href="#" data-id="${p.id}">
-      <img src="${poster}" alt="${p.title || p.id}">
-    </a>
-    <div class="progress"><div class="bar" style="width:${percent}%"></div></div>
-    <div class="row">
-      <div>
-        ${p.title || p.id}<br>
-        <span class="muted">진행도 ${percent}%</span>
+      <a class="thumb" href="#" data-id="${p.id}">
+        <img src="${poster}" alt="${p.title || p.id}">
+      </a>
+      <div class="progress"><div class="bar" style="width:${percent}%"></div></div>
+      <div class="row">
+        <div>
+          ${p.title || p.id}<br>
+          <span class="muted">진행도 ${percent}%</span>
+        </div>
+        <div style="display:flex; gap:6px;">
+          <a class="btn primary" href="#" data-id="${p.id}">${btnLabel}</a>
+          <button class="btn ghost delete-btn" data-del="${p.id}">기록 삭제</button>
+        </div>
       </div>
-      <div style="display:flex; gap:6px;">
-        <a class="btn primary" href="#" data-id="${p.id}">${btnLabel}</a>
-        <button class="btn ghost delete-btn" data-del="${p.id}">기록 삭제</button>
-      </div>
-    </div>
-  </article>`;
+    </article>`;
     }
 
-    // Render Home
-    function renderHome() {
+    async function renderHome() {
       setActiveTab(tabHome);
-      const list = listProgress();
+      const list = await listProgress(); // 🔥 서버에서 기록 가져옴
       let html = '';
       if (list.length === 0) {
         html = `<div class="grid">
-          <div class="card">
-            <h2>최근 본 강의</h2>
-            <p class="muted">아직 기록이 없어요.</p>
-            <div class="grid videos">${Object.values(SampleVideos).map(v => VideoCard(v)).join('')}</div>
-          </div>
-        </div>`;
+        <div class="card">
+          <h2>최근 본 강의</h2>
+          <p class="muted">아직 기록이 없어요.</p>
+          <div class="grid videos">${Object.values(SampleVideos).map(v => VideoCard(v)).join('')}</div>
+        </div>
+      </div>`;
       } else {
         html = `<div class="grid">
-          <div class="card">
-            <h2>최근 본 강의</h2>
-            <div id="list" class="grid videos">${list.map(renderProgressCard).join('')}</div>
-          </div>
-        </div>`;
+        <div class="card">
+          <h2>최근 본 강의</h2>
+          <div id="list" class="grid videos">${list.map(renderProgressCard).join('')}</div>
+        </div>
+      </div>`;
       }
       app.innerHTML = html;
     }
 
-    // YouTube Player
+    // -------------------------
+    // ✅ 유튜브 플레이어
+    // -------------------------
     let ytPlayer = null;
     let saveTimer = null;
-    function renderPlayer(videoId) {
+
+    async function renderPlayer(videoId) {
       setActiveTab(tabPlayer);
       const meta = getVideoMeta(videoId);
-      const last = getProgress(meta.id)?.lastTime || 0;
+      const progress = await getProgress(meta.id);
+      const last = progress?.lastTime || 0;
 
       app.innerHTML = `<div class="player">
-        <div class="row"><div class="pill" id="backHome">← 마이페이지</div></div>
-        <div class="card">
-          <h2>${meta.title}</h2>
-          <div id="ytplayer"></div>
-          <div class="muted">${last > 0 ? `이어서 ${fmtTime(last)} 부터 가능` : '처음부터 재생'}</div>
-        </div>
-      </div>`;
+      <div class="row"><div class="pill" id="backHome">← 마이페이지</div></div>
+      <div class="card">
+        <h2>${meta.title}</h2>
+        <div id="ytplayer"></div>
+        <div class="muted">${last > 0 ? `이어서 ${fmtTime(last)} 부터 가능` : '처음부터 재생'}</div>
+      </div>
+    </div>`;
 
       ytPlayer = new YT.Player('ytplayer', {
         videoId: meta.youtubeId,
@@ -176,10 +203,10 @@
           'onStateChange': e => {
             if (e.data === YT.PlayerState.PLAYING) {
               if (saveTimer) clearInterval(saveTimer);
-              saveTimer = setInterval(() => {
+              saveTimer = setInterval(async () => {
                 const t = ytPlayer.getCurrentTime();
                 const d = ytPlayer.getDuration();
-                upsertProgress({ id: meta.id, title: meta.title, duration: d, lastTime: t });
+                await upsertProgress({ id: meta.id, title: meta.title, duration: d, lastTime: t });
               }, 5000);
             }
             if (e.data === YT.PlayerState.ENDED) {
@@ -191,48 +218,33 @@
       });
     }
 
-    // Event Delegation
-    app.addEventListener('click', e => {
-      if (e.target.id === 'backHome') {
-        renderHome();
-        return;
-      }
-      if (e.target.dataset.id) {
-        e.preventDefault();
-        renderPlayer(e.target.dataset.id);
-      }
-    });
-
-    // YouTube API Ready
-    window.onYouTubeIframeAPIReady = function () {
-      renderHome();
-    };
-
-    tabHome.addEventListener('click', renderHome);
-    app.addEventListener('click', e => {
-      // 뒤로가기
+    // -------------------------
+    // ✅ 이벤트 바인딩
+    // -------------------------
+    app.addEventListener('click', async e => {
       if (e.target.id === 'backHome') {
         renderHome();
         return;
       }
 
-      // 영상 재생
       if (e.target.dataset.id) {
         e.preventDefault();
         renderPlayer(e.target.dataset.id);
         return;
       }
 
-      // 기록 삭제
       if (e.target.dataset.del) {
         e.preventDefault();
-        clearProgress(e.target.dataset.del);
+        await clearProgress(e.target.dataset.del);
         renderHome();
         toast("기록이 삭제되었습니다.");
         return;
       }
     });
-  </script>
-</body>
 
-</html>
+    window.onYouTubeIframeAPIReady = function () {
+      renderHome();
+    };
+
+    tabHome.addEventListener('click', renderHome);
+  </script>

@@ -6,25 +6,20 @@
   <title>공지사항 상세보기</title>
   
   <style>
-    body {
+    body.view {
       font-family: Arial, sans-serif;
       background: #f9f9f9;
       margin: 0;
       padding: 0;
     }
-    header {
-      background: #4caf50;
-      color: white;
-      padding: 1rem;
-    }
-    .post-container {
+    /* .post-container {
       width: 80%;
       margin: 30px auto;
       background: white;
       padding: 20px;
       border-radius: 8px;
       box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-    }
+    } */
     .post-title {
       font-size: 24px;
       font-weight: bold;
@@ -91,7 +86,7 @@
     }
   </script>
 </body> -->
-<body>
+<body class="view">
     <h2 id="postTitle"></h2>
     <p><strong>작성자:</strong> <span id="postAuthor"></span></p>
     <p><strong>작성일:</strong> <span id="postDate"></span></p>

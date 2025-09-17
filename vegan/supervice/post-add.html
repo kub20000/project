@@ -1,158 +1,79 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>공지 작성</title>
     <link rel="stylesheet" href="style.css">
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            background: #f9f9f9;
-            margin: 0;
-            padding: 0;
-        }
-
-        .form-container {
-            max-width: 500px;
-            margin: 50px auto;
-            padding: 2rem;
-            background: white;
-            border-radius: 10px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-        }
-
-        .form-row {
-            display: flex;
-            align-items: flex-start;
-            gap: 15px;
-            margin-bottom: 1rem;
-        }
-
-        .form-row label {
-            width: 30px;
-            font-weight: bold;
-        }
-
-        .form-row input,
-        .form-row textarea {
-            flex: 1;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 6px;
-            font-size: 1rem;
-        }
-
-        textarea {
-            height: 150px;
-            resize: none;
-        }
-
-        .form-actions {
-            display: flex;
-            justify-content: flex-end;
-            gap: 10px;
-            margin-top: 1rem;
-        }
-
-        .form-actions button {
-            width: 120px;
-            padding: 0.6rem 1.2rem;
-            border: none;
-            border-radius: 6px;
-            font-size: 1rem;
-            cursor: pointer;
-        }
-
-        .form-actions button[type="submit"] {
-            background-color: #4caf50;
-            color: white;
-        }
-
-        .form-actions button[type="button"] {
-            background-color: #ccc;
-            color: black;
-        }
-
-        .form-actions button:hover {
-            opacity: 0.9;
-        }
-
-        @media (max-width: 480px) {
-            .form-row {
-                flex-direction: column;
-            }
-
-            .form-row label {
-                width: 100%;
-                margin-bottom: 5px;
-            }
-        }
     </style>
 </head>
-<body>
-<header>
-    <h1>Vegan Delight - 관리자 mode<img src="/vegan/supervice/img/회원관리.png" alt="마이페이지" width="36"></h1>
-    <nav id="navMenu">
-        <a href="indexmg.html">Home</a>
-        <a href="post.html">게시판</a>
-        <a href="usermng.html">회원관리</a>
-    </nav>
-</header>
 
-<div class="form-container">
-    <h2>공지 작성</h2>
-    <form id="addForm">
-        <div class="form-row">
-            <label for="title">제목</label>
-            <input type="text" id="title" required>
-        </div>
-        <div class="form-row">
-            <label for="content">내용</label>
-            <textarea id="content" required></textarea>
-        </div>
+<body class="add">
+    <header>
+        <h1>Vegan Delight - 관리자 mode<img src="/vegan/supervice/img/회원관리.png" alt="마이페이지" width="36"></h1>
+        <nav id="navMenu">
+            <a href="indexmg.html">Home</a>
+            <a href="post.html">게시판</a>
+            <a href="usermng.html">회원관리</a>
+        </nav>
+    </header>
 
-        <!-- 버튼은 textarea 밖, 오른쪽 정렬 -->
-        <div class="form-actions">
-            <button type="submit">저장</button>
-            <button type="button" onclick="history.back()">취소</button>
-        </div>
-    </form>
-</div>
+    <div class="form-container">
+        <h2>공지 작성</h2>
+        <form id="addForm">
+            <div class="addForm-row">
+                <label for="title">제목</label>
+                <input type="text" id="title" required>
+            </div>
+            <div class="addForm-row">
+                <label for="content">내용</label>
+                <textarea id="content" required></textarea>
+            </div>
 
-<script>
-const API_BASE = "http://localhost:8080/api"; // 서버 API 주소로 변경 필요
+            <!-- 버튼은 textarea 밖, 오른쪽 정렬 -->
+            <div class="addForm-actions">
+                <button type="submit">저장</button>
+                <button type="button" onclick="history.back()">취소</button>
+            </div>
+        </form>
+    </div>
 
-document.getElementById("addForm").addEventListener("submit", function(e){
-    e.preventDefault();
+    <script>
+        const API_BASE = "http://localhost:8080/api"; // 서버 API 주소로 변경 필요
 
-    const newPost = {
-        title: document.getElementById("title").value,
-        content: document.getElementById("content").value,
-        author: "관리자" // 나중에 로그인 연동 가능
-    };
+        document.getElementById("addForm").addEventListener("submit", function (e) {
+            e.preventDefault();
 
-    fetch(`${API_BASE}/posts`, {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-            // "Authorization": "Bearer <token>" // 인증 필요시 추가
-        },
-        body: JSON.stringify(newPost)
-    })
-    .then(res => {
-        if(!res.ok) throw new Error("공지사항 등록 실패");
-        return res.json();
-    })
-    .then(data => {
-        alert("공지사항이 등록되었습니다.");
-        window.location.href = "post.html"; // 목록 페이지 이동
-    })
-    .catch(err => {
-        console.error(err);
-        alert(err.message);
-    });
-});
-</script>
+            const newPost = {
+                title: document.getElementById("title").value,
+                content: document.getElementById("content").value,
+                author: "관리자" // 나중에 로그인 연동 가능
+            };
+
+            fetch(`${API_BASE}/posts`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    // "Authorization": "Bearer <token>" // 인증 필요시 추가
+                },
+                body: JSON.stringify(newPost)
+            })
+                .then(res => {
+                    if (!res.ok) throw new Error("공지사항 등록 실패");
+                    return res.json();
+                })
+                .then(data => {
+                    alert("공지사항이 등록되었습니다.");
+                    window.location.href = "post.html"; // 목록 페이지 이동
+                })
+                .catch(err => {
+                    console.error(err);
+                    alert(err.message);
+                });
+        });
+    </script>
 </body>
+
 </html>
