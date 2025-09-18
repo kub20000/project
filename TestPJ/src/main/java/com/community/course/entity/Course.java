@@ -23,4 +23,5 @@ public class Course {
     private int duration_sec;
     private int like_count;
     private int total_sec;
+    private String thumbnail_url;
 }

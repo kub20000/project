@@ -1,4 +1,21 @@
 package com.community.course.quiz;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
+
+@Data
+@ToString
+@NoArgsConstructor
+@AllArgsConstructor
 public class Quiz {
+
+    private long id;
+    private long courses_id;
+    private String quiz_name;
+    private String quiz_question;
+    private String quiz_answer;
+
 }
+

@@ -44,9 +44,27 @@ public class CourseRepo {
             c.setDuration_sec(rs.getInt("duration_sec"));
             c.setLike_count(rs.getInt("like_count"));
             c.setTotal_sec(rs.getInt("total_sec"));
+            c.setThumbnail_url(rs.getString("thumbnail_url"));
             return c;
         };
     }
 
+    // 좋아요 수 증가 후 업데이트된 좋아요 수 반환
+    public int increaseLikeCount(int courseId) {
+        String updateSql = "UPDATE courses SET like_count = like_count + 1 WHERE id = ?";
+        jdbc.update(updateSql, courseId);
+
+        String selectSql = "SELECT like_count FROM courses WHERE id = ?";
+        return jdbc.queryForObject(selectSql, Integer.class, courseId);
+    }
+
+    // 좋아요 수 감소 후 업데이트된 좋아요 수 반환
+    public int decreaseLikeCount(int courseId) {
+        String updateSql = "UPDATE courses SET like_count = like_count - 1 WHERE id = ?";
+        jdbc.update(updateSql, courseId);
+
+        String selectSql = "SELECT like_count FROM courses WHERE id = ?";
+        return jdbc.queryForObject(selectSql, Integer.class, courseId);
+    }
 
 }
