@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>공지사항</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <header>
+        <h1>Vegan Delight - 관리자 mode<img src="./img/회원관리.png" alt="마이페이지" width="36"></h1>
+        <nav id="navMenu">
+            <a href="indexmg.html">Home</a>
+            <a href="post.html">게시판</a>
+            <a href="usermng.html">회원관리</a>
+        </nav>
+    </header>
+
+    <div class="board-tabs">
+        <a href="post.html" class="active">공지사항</a>
+        <a href="freepost-delete.html">자유 게시판</a>
+    </div>
+    <div class="board-header">
+        <p>공지사항</p>
+        <div class="search-box">
+            <input type="text" id="searchInput" placeholder="검색어를 입력해 주세요">
+            <button id="searchBtn">
+                <img src="img/검색.png" alt="검색">
+            </button>
+        </div>
+    </div>
+
+    <table id="noticeTable">
+        <thead>
+            <tr>
+                <th>번호</th>
+                <th>제목</th>
+                <th>작성자</th>
+                <th>등록일</th>
+                <th>관리</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- JS로 렌더링 -->
+        </tbody>
+    </table>
+    <div>
+        <div class="plusNotice">
+            <button id="addNoticeBtn" style=" margin-left:1760px; width: 60px;">+공지</button>
+        </div>
+    </div>
+
+    <div class="pagination" id="pagination"></div>
+
+    <script>
+        // 전체 게시글 데이터 유지
+        const allPosts = JSON.parse(localStorage.getItem("posts")) || [
+            { id: 10, title: "최신 공지사항", author: "관리자", date: "2025.09.09" },
+            { id: 9, title: "공지사항 예시", author: "a", date: "2025.09.05" },
+            { id: 8, title: "테스트 제목", author: "a", date: "2025.09.01" },
+            { id: 7, title: "업데이트 알림", author: "a", date: "2025.08.30" },
+            { id: 6, title: "공지사항 제목", author: "a", date: "2025.08.25" },
+            { id: 5, title: "임시 테스트", author: "a", date: "2025.08.20" },
+            { id: 4, title: "공지 예시", author: "a", date: "2025.08.10" },
+            { id: 3, title: "이전 글", author: "a", date: "2025.08.05" },
+            { id: 2, title: "공지사항 테스트", author: "a", date: "2025.08.01" },
+            { id: 1, title: "첫 글", author: "a", date: "2025.07.25" }
+        ];
+
+        // 현재 페이지, 페이지당 게시물 수, 검색어 적용 데이터
+        let currentPage = 1;
+        const postsPerPage = 5;
+        let filteredPosts = [...allPosts];
+
+        function renderPosts() {
+            const tbody = document.querySelector("#noticeTable tbody");
+            tbody.innerHTML = "";
+
+            const start = (currentPage - 1) * postsPerPage;
+            const pagePosts = filteredPosts.slice(start, start + postsPerPage);
+
+            pagePosts.forEach(post => {
+                const row = tbody.insertRow();
+                row.innerHTML = `
+        <td>${post.id}</td>
+        <td><span class="title-link" onclick="viewPost(${post.id})">${post.title}</span></td>
+        <td>${post.author}</td>
+        <td>${post.date}</td>
+        <td>
+            <button onclick="editPost(${post.id})">수정</button>
+            <button onclick="deletePost(${post.id})">삭제</button>
+        </td>
+        `;
+            });
+
+            renderPagination();
+        }
+
+        function renderPagination() {
+            const pagination = document.getElementById("pagination");
+            pagination.innerHTML = "";
+            const totalPages = Math.ceil(filteredPosts.length / postsPerPage);
+
+            // 이전
+            const prev = document.createElement("button");
+            prev.textContent = "<";
+            prev.classList.add("page-btn", "prev-btn");
+            prev.disabled = currentPage === 1;
+            prev.onclick = () => { currentPage--; renderPosts(); }
+            pagination.appendChild(prev);
+
+            // 페이지 번호
+            let pageNumbers = [];
+            if (totalPages <= 7) {
+                for (let i = 1; i <= totalPages; i++) pageNumbers.push(i);
+            } else {
+                pageNumbers = [1];
+                if (currentPage > 4) pageNumbers.push("…");
+                for (let i = currentPage - 2; i <= currentPage + 2; i++) {
+                    if (i > 1 && i < totalPages) pageNumbers.push(i);
+                }
+                if (currentPage < totalPages - 3) pageNumbers.push("…");
+                pageNumbers.push(totalPages);
+            }
+
+            pageNumbers.forEach(num => {
+                const btn = document.createElement("button");
+                btn.textContent = num;
+                if (num !== "…") {
+                    btn.classList.add("page-btn");
+                    if (num === currentPage) btn.classList.add("active");
+                    btn.onclick = () => { currentPage = num; renderPosts(); }
+                } else {
+                    btn.classList.add("ellipsis");
+                    btn.disabled = true;
+                }
+                pagination.appendChild(btn);
+            });
+
+            // 다음
+            const next = document.createElement("button");
+            next.textContent = ">";
+            next.classList.add("page-btn", "next-btn");
+            next.disabled = currentPage === totalPages;
+            next.onclick = () => { currentPage++; renderPosts(); }
+            pagination.appendChild(next);
+        }
+
+        // 상세, 수정, 삭제
+        function viewPost(id) { window.location.href = `post-view.html?id=${id}`; }
+        function editPost(id) { window.location.href = `addNotice.html?id=${id}`; }
+        function deletePost(id) {
+            if (!confirm("정말 삭제하시겠습니까?")) return;
+            const indexAll = allPosts.findIndex(p => p.id === id);
+            if (indexAll !== -1) allPosts.splice(indexAll, 1);
+            filteredPosts = filteredPosts.filter(p => p.id !== id);
+            localStorage.setItem("posts", JSON.stringify(allPosts));
+            renderPosts();
+        }
+
+        // 공지 추가
+        document.getElementById("addNoticeBtn").addEventListener("click", () => { window.location.href = "post-add.html"; })
+
+        // 검색
+        document.getElementById("searchInput").addEventListener("keyup", function () {
+            const keyword = this.value.toLowerCase();
+            filteredPosts = allPosts.filter(p => p.title.toLowerCase().includes(keyword));
+            currentPage = 1;
+            renderPosts();
+        });
+
+        // 초기 렌더링
+        renderPosts();
+
+        // 검색 기능
+        document.getElementById("search").addEventListener("input", (e) => {
+            const keyword = e.target.value.toLowerCase();
+            const rows = document.querySelectorAll("#userTable tbody tr");
+            rows.forEach(row => {
+                const idCell = row.children[1].textContent.toLowerCase();
+                row.style.display = idCell.includes(keyword) ? "" : "none";
+            });
+        });
+        document.getElementById("searchBtn").addEventListener("click", function () {
+            const keyword = document.getElementById("search").value.trim();
+            if (keyword) {
+                alert("검색 실행: " + keyword);
+                // 👉 여기서 검색 함수 실행 또는 서버 요청
+            } else {
+                alert("검색어를 입력하세요.");
+            }
+        });
+        // form 제출 이벤트 처리
+        document.getElementById("searchForm").addEventListener("submit", function (e) {
+            e.preventDefault(); // 기본 form 제출 막기 (페이지 이동 방지)
+
+            const keyword = document.getElementById("search").value.trim();
+            if (keyword) {
+                alert("검색 실행: " + keyword);
+                // 👉 여기에 검색 함수나 서버 요청 코드 작성
+            } else {
+                alert("검색어를 입력하세요.");
+            }
+        });
+    </script>
+</body>
+
+</html>
