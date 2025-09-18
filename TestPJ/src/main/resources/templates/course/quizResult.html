@@ -4,19 +4,19 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Courses - Vegan quizResult</title>
-  <link rel="stylesheet" href="/course/styleCourse.css">
+  <link rel="stylesheet" href="styleCourse.css">
 </head>
 
 <body>
   <header>
     <h1><a href="/">Vegan Delight</a></h1>
     <nav id="navMenu">
-      <a href="/">Home</a>
-      <a href="/course/main">Courses</a>
-      <a href="/myFridge/main">나의 냉장고</a>
-      <a href="login.html">Login</a>
-      <a href="/post/main">게시판</a>
-      <a href="mypage.html">my page</a>
+      <a href="index.html">Home</a>
+      <a href="courses.html">Courses</a>
+      <a href="myFridge.html">나의 냉장고</a>
+      <a href="login.html" id="loginBtn">Login</a>
+      <a href="notice.html" id="">게시판</a>
+      <a href="mypage.html" id="">my page</a> 
     </nav>
   </header>
   <main class="quizResult-container">
@@ -33,14 +33,20 @@
   <span class="slash">/</span>
   <span class="total">5</span>
   </div>
+  <p class="score-label">정답 수</p>
 
 
-
+  <h3>오답 목록</h3>
   <div class="wrong-questions">
-    <h3>오답 목록</h3>
-    <ul>
-      <li> ex Q2. 올바른 답: </li>
-    </ul>
+    <span style="color:#b91c1c; font-weight: 600; margin-right: 6px; font-size: large;">
+      Q2.</span>
+    <div class="wrong-questionsBox">
+     <span>
+      퀴즈 문제 내용
+     </span> 
+    </div>
+    <p style="color:#b91c1c; font-weight: 500; margin-right: 6px;">
+      정답:</p>
   </div>
 
      <div class="retake">

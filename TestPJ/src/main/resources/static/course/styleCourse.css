@@ -20,6 +20,16 @@ header h1 {
   font-size: 1.5rem;
   font-weight: bold;
 }
+header h1 a {
+    text-decoration: none;
+    color: white;
+}
+header h1 a:visited,
+header h1 a:hover,
+header h1 a:active {
+    text-decoration: none;
+    color: white;
+}
 nav {
   display: flex;
   gap: 1rem;
@@ -265,7 +275,27 @@ nav a {
 }
 
 .like-btn.liked {
-  color: var(--primary);
+    color: var(--primary)
+}
+
+.like-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+}
+
+.like-wrapper .badge.gray {
+    all: unset;
+    font-size: 14px;
+    color: #555;
+}
+
+.like-wrapper .like-btn {
+    line-height: 1;
+    cursor: pointer;
+    border: none;
+    background: none;
 }
 
 

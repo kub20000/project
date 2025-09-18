@@ -49,14 +49,21 @@
          <p style="color:#4caf50; font-weight: 600; margin-right: 6px; font-size: large;">
             정답:</p>
         <div class="answer-input">
+            <input type="hidden" th:value="${quiz.quiz_answer}">
             <input type="text" placeholder="정답을 입력하세요">
         </div>
          
         </div>
 
     <div class="quizNav-buttons">
-     <button type="submit" name="action" value="prev" th:if="${quiz.id > 1}">이전</button> 
-     <button type="submit" name="action" value="next" th:if="${quiz.id < 5}">다음</button>
+        <form th:action="@{/quiz/{courseId}(courseId=${quiz.courses_id}, quizId=${prevId})}" method="get">
+            <button type="submit" th:if="${prevId}">이전</button>
+        </form>
+
+        <form th:action="@{/quiz/{courseId}(courseId=${quiz.courses_id}, quizId=${nextId})}" method="get">
+            <button type="submit" th:if="${nextId}">다음</button>
+        </form>
+
     </div>
 
        <div class="answerSubmit" onclick="location.href='quizResult.html'">
@@ -69,13 +76,14 @@
 <script>
   function confirmExit() {
     if (confirm("퀴즈를 나가시겠습니까?")) {
-      location.href = 'courses.html'; 
+      location.href = '/course/main';
     }
   }
 
    document.querySelector(".answerSubmit").addEventListener("click", function() {
-    alert("퀴즈 결과를 확인합니다.");
-    location.href = 'quizResult.html'; 
+       alert("제출 되었습니다.");
+    location.href = '/quizResult.html';
+
   });
 </script>
 </html>

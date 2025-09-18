@@ -47,8 +47,10 @@ function render(data = []) {
                 <div class="actions">
                     <button class="btn primary" data-play="${course.id}">강의 재생</button>
                     <button class="btn" data-quiz="${course.id}">퀴즈 풀기</button>
+                    <span class="like-wrapper">
                     <span class="badge gray">${course.like_count}</span>
                     <button class="like-btn" data-like="${course.id}">♡</button>
+                    </span>
                 </div>
             </div>
         </article>
@@ -96,7 +98,7 @@ function closeVideoModal(){ videoModal.classList.remove('open'); }
 grid.addEventListener('click', (e) => {
 
     const playId = e.target.getAttribute('data-play');
-    const quizId = e.target.getAttribute('data-quiz');
+    const courseId = e.target.getAttribute('data-quiz');
 
     if (playId) {
         // 백엔드 API 호출
@@ -110,9 +112,9 @@ grid.addEventListener('click', (e) => {
     }
 
     // 퀴즈 버튼 클릭 시 페이지 연결
-    if (quizId) {
+    if (courseId) {
         // 기존 fetch API 호출 대신 페이지를 직접 이동
-        window.location.href = `/api/quiz/${quizId}`;
+        window.location.href = `/quiz/${courseId}`;
     }
 
 });

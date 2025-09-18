@@ -66,8 +66,8 @@
     <tbody>
     <tr th:each="post : ${fixedPosts}">
         <td>
-            <span class="fixed" th:if="${post.category.name() == 'NOTICE'}">공지사항</span>
-            <span class="fixed" th:unless="${post.category.name() == 'NOTICE'}">자유</span>
+            <span class="fixed" th:if="${post.category.name() == 'NOTICE'}">공지사항&nbsp📌</span>
+            <span class="fixed" th:unless="${post.category.name() == 'NOTICE'}">자유&nbsp📌</span>
         </td>
         <td>
             <a th:href="@{/post/detail/{id}(id=${post.id})}" th:text="${post.title}"></a>
