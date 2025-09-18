@@ -20,6 +20,19 @@ header h1 {
   font-size: 1.5rem;
   font-weight: bold;
 }
+
+header h1 a {
+  text-decoration: none;
+  color: white;
+}
+header h1 a:visited,
+header h1 a:hover,
+header h1 a:active {
+  text-decoration: none;
+  color: white;
+}
+
+
 nav {
   display: flex;
   gap: 1rem;
@@ -286,7 +299,7 @@ main.post-detail-container {
 
 .post-content {
   font-size: 16px;
-  line-height: 1.8;
+  line-height: 1;
   white-space: pre-wrap;
   margin-bottom: 1.5rem;
 }
@@ -479,10 +492,13 @@ main.post-detail-container {
 }
 
 /* 작성 버튼 전용 */
-#addPostBtn {
-  align-self: flex-end;
+.addPostBtn {
   padding: 12px 20px;
   font-size: 15px;
+  display: flex;
+  justify-content: flex-end;  
+  gap: 10px;
+  margin-top: 16px;
 }
 
 /* 댓글 삭제 버튼*/
@@ -592,3 +608,44 @@ main.addPost-detail-container {
   margin-top: 16px;
 }
 
+
+
+
+/*editComment*/
+main.editComment-container {
+  max-width: 900px;
+  margin: 2rem auto;
+  padding: 0 1rem;
+}
+
+.editComment-card {
+  background: white;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.06);
+  display: flex;
+  flex-direction: column;
+}
+
+.editCommentBtn{
+  display: flex;
+  gap: 10px;        
+  justify-content: flex-end; 
+  margin-top: 16px;
+}
+
+.editComment-card button{
+  background: #4caf50;
+  color: white;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.2s ease;
+}
+
+.editComment-card textarea{
+  width: 100%;
+  min-height: 100px;
+}
