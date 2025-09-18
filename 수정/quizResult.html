@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Courses - Vegan quizResult</title>
+  <link rel="stylesheet" href="styleCourse.css">
+</head>
+
+<body>
+  <header>
+    <h1><a href="/">Vegan Delight</a></h1>
+    <nav id="navMenu">
+      <a href="index.html">Home</a>
+      <a href="courses.html">Courses</a>
+      <a href="myFridge.html">나의 냉장고</a>
+      <a href="login.html" id="loginBtn">Login</a>
+      <a href="notice.html" id="">게시판</a>
+      <a href="mypage.html" id="">my page</a> 
+    </nav>
+  </header>
+  <main class="quizResult-container">
+
+<div class="quizResult-card">
+  <div class="quizResult-card-head">
+    <h2>퀴즈 결과</h2>
+    <button id="closeQuiz">X</button>
+  </div>
+  
+
+  <div class="score-display">
+  <span class="correct">3</span>
+  <span class="slash">/</span>
+  <span class="total">5</span>
+  </div>
+  <p class="score-label">정답 수</p>
+
+
+  <h3>오답 목록</h3>
+  <div class="wrong-questions">
+    <span style="color:#b91c1c; font-weight: 600; margin-right: 6px; font-size: large;">
+      Q2.</span>
+    <div class="wrong-questionsBox">
+     <span>
+      퀴즈 문제 내용
+     </span> 
+    </div>
+    <p style="color:#b91c1c; font-weight: 500; margin-right: 6px;">
+      정답:</p>
+  </div>
+
+     <div class="retake">
+          <button type="submit" onclick="location.href='quiz.html'" >
+            재응시</button>
+    </div>
+    
+    </div>
+   </div>
+</main>
+</body>
+ <script>
+  document.getElementById("closeQuiz").addEventListener("click", function(event) {
+    alert("학습 결과를 저장 합니다.");
+    location.href = 'courses.html'; 
+  });
+
+  document.querySelector(".retake").addEventListener("click", function() {
+    alert("1번 문제로 이동합니다.");
+    location.href = 'quiz.html'; 
+  });
+  
+  </script>
+</html>
