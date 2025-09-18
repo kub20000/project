@@ -6,149 +6,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>공지사항</title>
     <link rel="stylesheet" href="style.css">
-    <style>
-        /* 기존 스타일 유지 */
-        .board-tabs {
-            display: flex;
-            justify-content: center;
-            margin: 20px auto;
-            max-width: 600px;
-            gap: 10px;
-        }
-
-        .board-tabs a {
-            flex: 1;
-            text-align: center;
-            padding: 10px 0;
-            background: #a9d18e;
-            color: white;
-            font-size: 1rem;
-            font-weight: bold;
-            text-decoration: none;
-            border-radius: 8px;
-            transition: 0.3s;
-        }
-
-        .board-tabs a.active {
-            background: #49951d;
-        }
-
-        .board-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            width: 90%;
-            margin: auto;
-            margin-top: 20px;
-        }
-
-        .board-header p {
-            font-size: 24px;
-            font-weight: bold;
-        }
-
-        .search-box {
-            display: flex;
-            align-items: center;
-        }
-
-        .search-box input {
-            padding: 8px;
-            width: 300px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-        }
-
-        table {
-            width: 90%;
-            margin: auto;
-            border-collapse: collapse;
-            background: white;
-        }
-
-        th,
-        td {
-            padding: 12px;
-            border-bottom: 1px solid #ddd;
-            text-align: center;
-        }
-
-        th {
-            font-weight: bold;
-            border-bottom: 2px solid black;
-        }
-
-        tr:hover {
-            background: #f1f1f1;
-        }
-
-        button {
-            width: 70px;
-            padding: 5px;
-        }
-
-        /* 페이지네이션 전용 스타일 */
-        .pagination {
-            text-align: center;
-            margin: 20px 0;
-        }
-
-        .page-btn {
-            margin: 0 3px;
-            padding: 6px 12px;
-            border: 1px solid #ccc;
-            background: white;
-            cursor: pointer;
-            border-radius: 5px;
-            font-size: 14px;
-            transition: 0.2s;
-        }
-
-        .page-btn:hover:not(:disabled) {
-            background: #a9d18e;
-            color: white;
-        }
-
-        .page-btn.active {
-            background: #49951d;
-            color: white;
-            border-color: #49951d;
-            font-weight: bold;
-        }
-
-        .prev-btn,
-        .next-btn {
-            font-weight: bold;
-            background: #f0f0f0;
-            border-color: #bbb;
-        }
-
-        .prev-btn:hover,
-        .next-btn:hover {
-            background: #a9d18e;
-            color: white;
-        }
-
-        .page-btn:disabled {
-            background: #f1f1f1;
-            color: #888;
-            border-color: #ddd;
-            cursor: default;
-        }
-
-        .ellipsis {
-            background: transparent;
-            border: none;
-            color: #666;
-            cursor: default;
-            font-weight: bold;
-        }
-    </style>
 </head>
 
 <body>
     <header>
-        <h1>Vegan Delight - 관리자 mode<img src="/vegan/supervice/img/회원관리.png" alt="마이페이지" width="36"></h1>
+        <h1>Vegan Delight - 관리자 mode<img src="./img/회원관리.png" alt="마이페이지" width="36"></h1>
         <nav id="navMenu">
             <a href="indexmg.html">Home</a>
             <a href="post.html">게시판</a>
@@ -160,12 +22,13 @@
         <a href="post.html" class="active">공지사항</a>
         <a href="freepost-delete.html">자유 게시판</a>
     </div>
-
     <div class="board-header">
         <p>공지사항</p>
         <div class="search-box">
             <input type="text" id="searchInput" placeholder="검색어를 입력해 주세요">
-            <button id="addNoticeBtn" style="margin-left:10px; width: 60px;">+공지</button>
+            <button id="searchBtn">
+                <img src="img/검색.png" alt="검색">
+            </button>
         </div>
     </div>
 
@@ -183,6 +46,11 @@
             <!-- JS로 렌더링 -->
         </tbody>
     </table>
+    <div>
+        <div class="plusNotice">
+            <button id="addNoticeBtn" style=" margin-left:1760px; width: 60px;">+공지</button>
+        </div>
+    </div>
 
     <div class="pagination" id="pagination"></div>
 
@@ -282,7 +150,7 @@
 
         // 상세, 수정, 삭제
         function viewPost(id) { window.location.href = `post-view.html?id=${id}`; }
-        function editPost(id) { window.location.href = `post-edit.html?id=${id}`; }
+        function editPost(id) { window.location.href = `addNotice.html?id=${id}`; }
         function deletePost(id) {
             if (!confirm("정말 삭제하시겠습니까?")) return;
             const indexAll = allPosts.findIndex(p => p.id === id);
@@ -305,6 +173,37 @@
 
         // 초기 렌더링
         renderPosts();
+
+        // 검색 기능
+        document.getElementById("search").addEventListener("input", (e) => {
+            const keyword = e.target.value.toLowerCase();
+            const rows = document.querySelectorAll("#userTable tbody tr");
+            rows.forEach(row => {
+                const idCell = row.children[1].textContent.toLowerCase();
+                row.style.display = idCell.includes(keyword) ? "" : "none";
+            });
+        });
+        document.getElementById("searchBtn").addEventListener("click", function () {
+            const keyword = document.getElementById("search").value.trim();
+            if (keyword) {
+                alert("검색 실행: " + keyword);
+                // 👉 여기서 검색 함수 실행 또는 서버 요청
+            } else {
+                alert("검색어를 입력하세요.");
+            }
+        });
+        // form 제출 이벤트 처리
+        document.getElementById("searchForm").addEventListener("submit", function (e) {
+            e.preventDefault(); // 기본 form 제출 막기 (페이지 이동 방지)
+
+            const keyword = document.getElementById("search").value.trim();
+            if (keyword) {
+                alert("검색 실행: " + keyword);
+                // 👉 여기에 검색 함수나 서버 요청 코드 작성
+            } else {
+                alert("검색어를 입력하세요.");
+            }
+        });
     </script>
 </body>
 

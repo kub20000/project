@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="Noticestyle.css">
+    <style>
+        textarea {
+            width: 100%;
+            height: 400px;
+            resize: vertical;
+            font-family: inherit;
+            font-family: 'Malgun Gothic', '맑은 고딕', sans-serif;
+        }
+    </style>
+</head>
+
+<body>
+<header>
+    <h1><a href="/">Vegan Delight</a></h1>
+    <nav>
+        <a href="/">Home</a>
+        <a href="/course/main">Courses</a>
+        <a href="/myFridge/main">나의 냉장고</a>
+        <a href="login.html">Login</a>
+        <a href="/post/main">게시판</a>
+        <a href="mypage.html">my page</a>
+    </nav>
+</header>
+
+<main class="addPost-detail-container">
+
+    <div class="addPost-card">
+        <h2>공지사항 추가</h2>
+
+        <form th:action="@{/post/add}" th:object="${post}" method="post">
+            
+            <div class="control">
+            <div class="category">
+            <select th:field="*{fixed}">
+                <option value="0">일반 게시</option>
+                <option value="1">고정 게시</option>
+            </select>
+            </div>
+            
+            <div class="category">
+            <select th:field="*{category}">
+                <option value="importNotice">고정 공지사항</option>
+                <option value="todayNotice">금주 공지사항</option>
+            </select>
+            </div>
+            </div>
+
+            <p style="color:#4caf50; font-weight: 600; margin-right: 6px;">
+                제목 : <input type="text" id="addTitle" th:field="*{title}"/></p>
+            <hr>
+            <p style="color:#4caf50; font-weight: 600; margin-right: 6px;">
+            내용 : </p><textarea th:field="*{content}" rows="12"></textarea>
+
+            <div class="addPostBtn">
+                <button type="submit" onclick="location.href='/'">등록</button>
+                <button type="button" onclick="location.href='/post/list'">취소</button>
+            </div>
+        </form>
+    </div>
+
+
+</main>
+</body>
+</html>
