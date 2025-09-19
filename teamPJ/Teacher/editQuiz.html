@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vegan LMS - editQuiz</title>
+  <link rel="stylesheet" href="styleT.css">
+</head>
+<body>
+  <header>
+    <h1><a href="/">Vegan Delight</a></h1>
+    <nav id="navMenu">
+      <a href="index.html">Home</a>
+      <a href="courses.html">Courses</a>
+      <a href="myFridge.html">나의 냉장고</a>
+      <a href="login.html" id="loginBtn">Login</a>
+      <a href="notice.html">게시판</a>
+      <a href="mypage.html">My Page</a> 
+    </nav>
+  </header>
+
+
+  <div class="page-wrapper">
+    <nav id="subNavT">
+      <a href="">나의 강의 관리</a>
+      <a href="uploadCourse.html">강의 등록 / 퀴즈 출제</a>
+    </nav>
+  
+    <main class="editQuiz-container">
+     <h2>퀴즈 수정</h2>
+     
+        <p style="color:#4caf50; font-weight: 600; margin-right: 6px;">
+          강의 제목 :<input type="text" readonly> </p>
+          <hr>
+
+
+      <div class="quiz-card">
+         <h3>Q1.</h3>
+         <textarea class="quizCard-area" rows="2" placeholder="문제를 입력하세요"></textarea>
+         <label style="font-size: large; font-weight: 600;">정답: </label>
+         <input type="text" placeholder="정답 입력">
+         
+         
+         <br>
+         <br>
+         <h3>Q2.</h3>
+         <textarea class="quizCard-area" rows="2" placeholder="문제를 입력하세요"></textarea>
+         <label style="font-size: large; font-weight: 600;">정답: </label>
+         <input type="text" placeholder="정답 입력">
+         
+
+         <br>
+         <br>
+         <h3>Q3.</h3>
+         <textarea class="quizCard-area" rows="2" placeholder="문제를 입력하세요"></textarea>
+         <label style="font-size: large; font-weight: 600;">정답: </label>
+         <input type="text" placeholder="정답 입력">
+        
+
+         <br>
+         <br>
+         <h3>Q4.</h3>
+         <textarea class="quizCard-area" rows="2" placeholder="문제를 입력하세요"></textarea>
+         <label style="font-size: large; font-weight: 600;">정답: </label>
+         <input type="text" placeholder="정답 입력">
+         
+
+         <br>
+         <br>
+         <h3>Q5.</h3>
+         <textarea class="quizCard-area" rows="2" placeholder="문제를 입력하세요"></textarea>
+         <label style="font-size: large; font-weight: 600;">정답: </label>
+         <input type="text" placeholder="정답 입력">
+         
+      </div>
+
+
+        <div class="editBtns">
+        <button id="editQuiz-btn" type="submit">수정 완료</button>
+        <button type="submit">닫기</button>
+        </div>
+    </main>
+  </div>
+</body>
+
+<script>
+  document.getElementById("editQuiz-btn").addEventListener("click", function(event) {
+    alert("퀴즈 수정이 완료 되었습니다.");
+  });
+</script>
+</div>
+</html>

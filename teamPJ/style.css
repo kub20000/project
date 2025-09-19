@@ -140,7 +140,6 @@ nav a {
   background: #0f172a;
   color: #e0e0e0;
   padding: 40px 16px 20px;
-  font-family: Inter, system-ui, sans-serif;
 }
 .footer-top {
   display:grid; 
@@ -149,14 +148,15 @@ nav a {
  /* margin: 0 auto 20px;*/
 }
 .footer-logo {
-  font-family: 'Pacifico', cursive;
   font-size: 24px;
   color: #4caf50;
   margin-bottom: 12px;
+  
 }
 .footer-left p {
   font-size: 14px;
   line-height: 1.6;
+
 }
 .socials {
   margin-top: 12px;

@@ -226,15 +226,6 @@ tr:hover {
   color: #2b6f2b;
 }
 
-/* new 표시 */
-.new-label {
-  background: #6fa84f;
-  color: white;
-  font-size: 0.8rem;
-  padding: 3px 6px;
-  border-radius: 4px;
-  margin-left: 5px;
-}
 
 /* 페이지네이션 */
 .pagination {
