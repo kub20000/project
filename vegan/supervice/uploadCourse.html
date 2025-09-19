@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vegan LMS - uploadCourse</title>
+  <link rel="stylesheet" href="styleT.css">
+</head>
+<body>
+  <header>
+    <h1><a href="/">Vegan Delight</a></h1>
+    <nav id="navMenu">
+      <a href="index.html">Home</a>
+      <a href="courses.html">Courses</a>
+      <a href="myFridge.html">나의 냉장고</a>
+      <a href="login.html" id="loginBtn">Login</a>
+      <a href="notice.html">게시판</a>
+      <a href="mypage.html">My Page</a> 
+    </nav>
+  </header>
+   
+  
+  <div class="page-wrapper">
+    <nav id="subNavT">
+      <a href="">나의 강의 관리</a>
+      <a href="uploadCourse.html">강의 등록 / 퀴즈 출제</a> 
+    </nav>
+
+    <main class="uploadCourse-container">
+     <h2>강의 등록</h2>
+     
+     <div class="uploadCourse-Control">
+      <select id="uploadCourse-Category">
+        <option value="비건 라이프 스타일">비건 라이프 스타일</option>
+        <option value="요리 레시피">요리 레시피</option>
+        <option value="조리 스킬">조리 스킬</option>
+      </select>
+     </div>
+
+        <p style="color:#4caf50; font-weight: 600; margin-right: 6px;">
+          강의 제목 : <input type="text" placeholder="제목 입력"></p>
+          <hr>
+        <div class="uploadMedia-card">
+         
+          <div class="uploadMedia-action">
+               <label class="upload-btn">
+                🎬 영상 업로드
+                <input type="file" accept="video/*" style="display:none" onchange="handleFileSelect(event, 'video')">
+               </label>
+          </div>
+
+           <div class="uploadMedia-action">
+                <label class="upload-btn">
+                  🖼️ 이미지 업로드
+                  <input type="file" accept="image/*" style="display:none" onchange="handleFileSelect(event, 'image')">
+                </label>
+           </div>
+       </div>
+        
+       
+        <p style="color:#4caf50; font-weight: 600; margin-right: 6px;">
+          강의 내용 </p>
+        <textarea placeholder="내용 입력" rows="12" style="font-size: 16px;"></textarea>
+          
+          
+        <div class="uploadBtns">
+        <button id="uploadCourse-btn" type="submit">등록</button>
+        <button type="submit">닫기</button>
+        </div>
+  </main>
+</div>
+</body>
+<script>
+  document.getElementById("uploadCourse-btn").addEventListener("click", function(event) {
+    alert("퀴즈 출제 화면으로 이동합니다");
+  });
+</script>
+</html>

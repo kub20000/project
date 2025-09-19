@@ -174,7 +174,8 @@ button:hover {
 #subNav {
   width: 200px;
   background: #ffffff;
-  padding: 1rem;
+  padding: 3px 0 8px;
+  /* padding: 1rem; */
   margin: 2rem;
   border-radius: 6px;
   display: flex;
@@ -310,7 +311,8 @@ button.joinUser:hover {
   width: 20%;
   margin-top: 20px;
   padding: 10px 20px;
-  border: block;
+  display: flex;
+  /* border: block; */
   border-radius: 6px;
   background-color: #4caf50;
   color: white;
@@ -495,7 +497,8 @@ body.myInfo .thumb img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  display: block;
+  display: flex;
+  /* display: block; */
   filter: brightness(.9);
 }
 
@@ -665,7 +668,7 @@ body.myBoard .container {
 body.myBoard #subNav {
   width: 200px;
   background: #ffffff;
-  padding: 1rem;
+  /* padding: 1rem; */
   border-radius: 6px;
   display: flex;
   flex-direction: column;
@@ -675,7 +678,8 @@ body.myBoard #subNav {
 }
 
 body.myBoard #subNav a {
-  display: block;
+  /* display: block; */
+  display: flex;
   padding: 0.5rem 1rem;
   background: #4cb94e;
   color: white;

@@ -77,7 +77,7 @@ button[type="submit"] {
   color: white;
   margin-left: 320px;
   width: 100px;
-  
+
 }
 
 button[type="button"] {
@@ -225,33 +225,6 @@ button:hover {
   background-color: #45a049;
 }
 
-/* 서브 내비게이션 */
-#subNav {
-  width: 200px;
-  background: #ffffff;
-  padding: 1rem;
-  margin: 2rem;
-  border-radius: 6px;
-  display: block;
-  flex-direction: column;
-  gap: 10px;
-}
-
-#subNav a {
-  display: block;
-  margin: 8px;
-  padding: 0.5rem 1rem;
-  height: 100%;
-  background: #4cb94e;
-  color: white;
-  text-decoration: none;
-  border-radius: 4px;
-}
-
-#subNav a:hover {
-  background: #549850;
-}
-
 /* 푸터 */
 .site-footer {
   position: relative;
@@ -266,384 +239,472 @@ button:hover {
 
 /* 자유게시판 */
 
-    header{
-        padding: 0.8rem 2rem;
-    }
-    /* 기존 스타일 유지 */
-    .board-tabs {
-        display: flex;
-        justify-content: center;
-        margin: 20px auto;
-        max-width: 600px;
-        gap: 10px;
-    }
+header {
+  padding: 0.8rem 2rem;
+}
 
-    .board-tabs a {
-        flex: 1;
-        text-align: center;
-        padding: 10px 0;
-        background: #a9d18e;
-        color: white;
-        font-size: 1rem;
-        font-weight: bold;
-        text-decoration: none;
-        border-radius: 8px;
-        transition: 0.3s;
-    }
+/* 기존 스타일 유지 */
+.board-tabs {
+  display: flex;
+  justify-content: center;
+  margin: 20px auto;
+  max-width: 600px;
+  gap: 10px;
+}
 
-    .board-tabs a.active {
-        background: #49951d;
-    }
+.board-tabs a {
+  flex: 1;
+  text-align: center;
+  padding: 10px 0;
+  background: #a9d18e;
+  color: white;
+  font-size: 1rem;
+  font-weight: bold;
+  text-decoration: none;
+  border-radius: 8px;
+  transition: 0.3s;
+}
 
-    .board-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        width: 90%;
-        margin: auto;
-        margin-top: 20px;
-    }
+.board-tabs a.active {
+  background: #49951d;
+}
 
-    .board-header p {
-        font-size: 24px;
-        font-weight: bold;
-    }
+.board-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 90%;
+  margin: auto;
+  margin-top: 20px;
+}
 
-    .search-box {
-        display: flex;
-        align-items: center;
-    }
+.board-header p {
+  font-size: 24px;
+  font-weight: bold;
+}
 
-    .search-box input {
-        padding: 8px;
-        width: 300px;
-        border: 1px solid #ccc;
-        border-radius: 5px;
-    }
+.search-box {
+  display: flex;
+  align-items: center;
+}
 
-    table {
-        width: 90%;
-        margin: auto;
-        border-collapse: collapse;
-        background: white;
-    }
+.search-box input {
+  padding: 8px;
+  width: 300px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
 
-    th,
-    td {
-        padding: 12px;
-        border-bottom: 1px solid #ddd;
-        text-align: center;
-    }
+table {
+  width: 90%;
+  margin: auto;
+  border-collapse: collapse;
+  background: white;
+}
 
-    th {
-        font-weight: bold;
-        border-bottom: 2px solid black;
-    }
+th,
+td {
+  padding: 12px;
+  border-bottom: 1px solid #ddd;
+  text-align: center;
+}
 
-    tr:hover {
-        background: #f1f1f1;
-    }
+th {
+  font-weight: bold;
+  border-bottom: 2px solid black;
+}
 
-    button {
-        width: 70px;
-        padding: 5px;
-    }
+tr:hover {
+  background: #f1f1f1;
+}
 
-    /* 페이지네이션 전용 스타일 */
-    .pagination {
-        text-align: center;
-        margin: 20px 0;
-    }
+button {
+  width: 70px;
+  padding: 5px;
+}
 
-    .page-btn {
-        margin: 0 3px;
-        padding: 6px 12px;
-        border: 1px solid #ccc;
-        background: white;
-        cursor: pointer;
-        border-radius: 5px;
-        font-size: 14px;
-        transition: 0.2s;
-    }
+.page-link {
+  margin: 10px;
+}
 
-    .page-btn:hover:not(:disabled) {
-        background: #a9d18e;
-        color: white;
-    }
+body.add {
+  font-family: Arial, sans-serif;
+  background: #f9f9f9;
+  margin: 0;
+  padding: 0;
+}
 
-    .page-btn.active {
-        background: #49951d;
-        color: white;
-        border-color: #49951d;
-        font-weight: bold;
-    }
+.addForm {
+  max-width: 500px;
+  margin: 50px auto;
+  padding: 2rem;
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
 
-    .prev-btn,
-    .next-btn {
-        font-weight: bold;
-        background: #f0f0f0;
-        border-color: #bbb;
-    }
+.addForm-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 15px;
+  margin-bottom: 1rem;
+}
 
-    .prev-btn:hover,
-    .next-btn:hover {
-        background: #a9d18e;
-        color: white;
-    }
+.addForm-row label {
+  width: 30px;
+  font-weight: bold;
+}
 
-    .page-btn:disabled {
-        background: #f1f1f1;
-        color: #888;
-        border-color: #ddd;
-        cursor: default;
-    }
+.aadForm-row input,
+.addForm-row textarea {
+  flex: 1;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 1rem;
+}
 
-    .ellipsis {
-        background: transparent;
-        border: none;
-        color: #666;
-        cursor: default;
-        font-weight: bold;
-    }
-            body.add {
-            font-family: Arial, sans-serif;
-            background: #f9f9f9;
-            margin: 0;
-            padding: 0;
-        }
+textarea {
+  height: 150px;
+  border-radius: 10px;
+  resize: none;
+}
 
-        .addForm {
-            max-width: 500px;
-            margin: 50px auto;
-            padding: 2rem;
-            background: white;
-            border-radius: 10px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-        }
+.addForm-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 1rem;
+}
 
-        .addForm-row {
-            display: flex;
-            align-items: flex-start;
-            gap: 15px;
-            margin-bottom: 1rem;
-        }
+.addForm-actions button {
+  width: 120px;
+  border: none;
+  border-radius: 6px;
+  font-size: 1rem;
+  cursor: pointer;
+}
 
-        .addForm-row label {
-            width: 30px;
-            font-weight: bold;
-        }
+.addForm-actions button[type="submit"] {
+  background-color: #4caf50;
+  color: white;
+}
 
-        .aadForm-row input,
-        .addForm-row textarea {
-            flex: 1;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 6px;
-            font-size: 1rem;
-        }
+.addForm-actions button[type="button"] {
+  background-color: #ccc;
+  color: black;
+}
 
-        textarea {
-            height: 150px;
-            resize: none;
-        }
+.addForm-actions button:hover {
+  opacity: 0.9;
+}
 
-        .addForm-actions {
-            display: flex;
-            justify-content: flex-end;
-            gap: 10px;
-            margin-top: 1rem;
-        }
+@media (max-width: 480px) {
+  .addForm-row {
+    flex-direction: column;
+  }
 
-        .addForm-actions button {
-            width: 120px;
-            border: none;
-            border-radius: 6px;
-            font-size: 1rem;
-            cursor: pointer;
-        }
+  .addForm-row label {
+    width: 100%;
+    margin-bottom: 5px;
+  }
+}
 
-        .addForm-actions button[type="submit"] {
-            background-color: #4caf50;
-            color: white;
-        }
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  background: #f9f9f9;
+}
 
-        .addForm-actions button[type="button"] {
-            background-color: #ccc;
-            color: black;
-        }
+/* 헤더 */
+header {
+  background: #4caf50;
+  color: white;
+  padding: 1rem 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
 
-        .addForm-actions button:hover {
-            opacity: 0.9;
-        }
+header h1 {
+  margin: 0;
+}
 
-        @media (max-width: 480px) {
-            .addForm-row {
-                flex-direction: column;
-            }
+nav a,
+#navMenu a {
+  color: white;
+  margin-left: 1rem;
+  text-decoration: none;
+  font-weight: 500;
+}
 
-            .addForm-row label {
-                width: 100%;
-                margin-bottom: 5px;
-            }
-        }
+nav a:hover,
+#navMenu a:hover {
+  text-decoration: underline;
+}
 
-            body {
-      font-family: Arial, sans-serif;
-      margin: 0;
-      padding: 0;
-      background: #f9f9f9;
-    }
+#userTable {
+  border: 1px solid #ccc;
+}
 
-    /* 헤더 */
-    header {
-      background: #4caf50;
-      color: white;
-      padding: 1rem 2rem;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
+table {
+  width: 90%;
+  margin: auto;
+  border-collapse: collapse;
+  background: white;
+}
 
-    header h1 {
-      margin: 0;
-    }
+th,
+td {
+  padding: 12px;
+  border-bottom: 1px solid #ddd;
+  text-align: center;
+}
 
-    nav a,
-    #navMenu a {
-      color: white;
-      margin-left: 1rem;
-      text-decoration: none;
-      font-weight: 500;
-    }
+th {
+  font-weight: bold;
+  border-bottom: 2px solid black;
+}
 
-    nav a:hover,
-    #navMenu a:hover {
-      text-decoration: underline;
-    }
+tr:hover {
+  background: #f1f1f1;
+}
 
-    #userTable {
-      border: 1px solid #ccc;
-    }
+.table-header {
+  width: 90%;
+  margin: 20px auto 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
 
-    table {
-      width: 90%;
-      margin: auto;
-      border-collapse: collapse;
-      background: white;
-    }
+.table-header h2 {
+  margin: 0;
+}
 
-    th,
-    td {
-      padding: 12px;
-      border-bottom: 1px solid #ddd;
-      text-align: center;
-    }
+#search {
+  padding: 0.5rem;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  width: 250px;
+}
 
-    th {
-      font-weight: bold;
-      border-bottom: 2px solid black;
-    }
+button {
+  width: 18%;
+  padding: 8px;
+}
 
-    tr:hover {
-      background: #f1f1f1;
-    }
+/* 모달 */
+#answerModal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  justify-content: center;
+  align-items: center;
+}
 
-    .table-header {
-      width: 90%;
-      margin: 20px auto 10px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
+#answerModalContent {
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+  width: 400px;
+}
 
-    .table-header h2 {
-      margin: 0;
-    }
+#inquiryText {
+  background: #f5f5f5;
+  padding: 10px;
+  border-radius: 5px;
+  margin-bottom: 10px;
+  white-space: pre-wrap;
+}
 
-    #search {
-      padding: 0.5rem;
-      border-radius: 4px;
-      border: 1px solid #ccc;
-      width: 250px;
-    }
+#answerText {
+  width: 100%;
+  resize: none;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  padding: 8px;
+}
 
-    button {
-      width: 18%;
-      padding: 8px;
-    }
+.search-box {
+  display: flex;
+  /* 가로 배치 */
+  align-items: center;
+  /* 세로 중앙 정렬 */
+  gap: 5px;
+  /* input과 버튼 사이 간격 */
+}
 
-    /* 모달 */
-    #answerModal {
-      display: none;
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0, 0, 0, 0.5);
-      justify-content: center;
-      align-items: center;
-    }
+.search-box input {
+  height: 36px;
+  padding: 0 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  flex: 1;
+  /* 공간 꽉 채움 */
+}
 
-    #answerModalContent {
-      background: white;
-      padding: 20px;
-      border-radius: 10px;
-      width: 400px;
-    }
+.search-box button {
+  height: 45px;
+  width: 45px;
+  border: none;
+  background: white;
+  /* 버튼 배경색 */
+  border-radius: 4px;
+  cursor: pointer;
+  display: flex;
+  /* 버튼 안 이미지 정렬 */
+  justify-content: center;
+  align-items: center;
+}
 
-    #inquiryText {
-      background: #f5f5f5;
-      padding: 10px;
-      border-radius: 5px;
-      margin-bottom: 10px;
-      white-space: pre-wrap;
-    }
+.search-box button img {
+  width: 25px;
+  /* 아이콘 크기 조절 */
+  height: 25px;
+}
 
-    #answerText {
-      width: 100%;
-      resize: none;
-      border-radius: 5px;
-      border: 1px solid #ccc;
-      padding: 8px;
-    }
+/* 기존 스타일 유지 */
+.board-tabs {
+  display: flex;
+  justify-content: center;
+  margin: 20px auto;
+  max-width: 600px;
+  gap: 10px;
+}
 
-    .search-box {
-      display: flex;
-      /* 가로 배치 */
-      align-items: center;
-      /* 세로 중앙 정렬 */
-      gap: 5px;
-      /* input과 버튼 사이 간격 */
-    }
+.board-tabs a {
+  flex: 1;
+  text-align: center;
+  padding: 10px 0;
+  background: #a9d18e;
+  color: white;
+  font-size: 1rem;
+  font-weight: bold;
+  text-decoration: none;
+  border-radius: 8px;
+  transition: 0.3s;
+}
 
-    .search-box input {
-      height: 36px;
-      padding: 0 10px;
-      border: 1px solid #ccc;
-      border-radius: 4px;
-      flex: 1;
-      /* 공간 꽉 채움 */
-    }
+.board-tabs a.active {
+  background: #49951d;
+}
 
-    .search-box button {
-      height: 45px;
-      width: 45px;
-      border: none;
-      background: #59c05c;
-      /* 버튼 배경색 */
-      border-radius: 4px;
-      cursor: pointer;
-      display: flex;
-      /* 버튼 안 이미지 정렬 */
-      justify-content: center;
-      align-items: center;
-    }
+.board-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 90%;
+  margin: auto;
+  margin-top: 20px;
+}
 
-    .search-box button img {
-      width: 18px;
-      /* 아이콘 크기 조절 */
-      height: 18px;
-    }
+.board-header p {
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.search-box {
+  display: flex;
+  align-items: center;
+}
+
+.search-box input {
+  padding: 8px;
+  width: 300px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+table {
+  width: 90%;
+  margin: auto;
+  border-collapse: collapse;
+  background: white;
+}
+
+th,
+td {
+  padding: 12px;
+  border-bottom: 1px solid #ddd;
+  text-align: center;
+}
+
+th {
+  font-weight: bold;
+  border-bottom: 2px solid black;
+}
+
+tr:hover {
+  background: #f1f1f1;
+}
+
+button {
+  width: 70px;
+  padding: 5px;
+}
+
+/* 페이지네이션 전용 스타일 */
+.pagination {
+  text-align: center;
+  margin: 20px 0;
+}
+
+.page-btn {
+  margin: 0 3px;
+  padding: 6px 12px;
+  border: 1px solid #ccc;
+  background: white;
+  cursor: pointer;
+  border-radius: 5px;
+  font-size: 14px;
+  transition: 0.2s;
+}
+
+.page-btn:hover:not(:disabled) {
+  background: #a9d18e;
+  color: white;
+}
+
+.page-btn.active {
+  background: #49951d;
+  color: white;
+  border-color: #49951d;
+  font-weight: bold;
+}
+
+.prev-btn,
+.next-btn {
+  font-weight: bold;
+  background: #f0f0f0;
+  border-color: #bbb;
+}
+
+.prev-btn:hover,
+.next-btn:hover {
+  background: #a9d18e;
+  color: white;
+}
+
+.page-btn:disabled {
+  background: #f1f1f1;
+  color: #888;
+  border-color: #ddd;
+  cursor: default;
+}
+
+.ellipsis {
+  background: transparent;
+  border: none;
+  color: #666;
+  cursor: default;
+  font-weight: bold;
+}
+
 /* 기타 세부 스타일은 필요에 따라 그대로 유지 */
 /* 예: 냉장고 페이지, 강의 페이지 등 */

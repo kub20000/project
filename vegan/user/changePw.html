@@ -10,7 +10,7 @@
 
 <body class="changePw">
   <main class="form-container">
-    <h2 style="align-self: flex-start; color: black;">비밀번호 변경<img src="/vegan/pw.png" alt="비밀번호" width="30"></h2>
+    <h2 style="align-self: flex-start; color: black;">비밀번호 변경<img src="/pw.png" alt="비밀번호" width="30"></h2>
     <form id="changePwForm">
       <input class="changePw" type="password" id="nowPw" placeholder="현재 비밀번호를 입력하세요." required>
       <div style="position: relative;">
@@ -22,63 +22,83 @@
       <button class="changePw" type="submit">비밀번호 변경</button>
     </form>
   </main>
+<script>
+  const form = document.getElementById("changePwForm");
+  const newPwInput = document.getElementById("newPw");
+  const confirmPwInput = document.getElementById("confirmPw");
+  const strengthDiv = document.getElementById("pwStrength");
+  const capsLockWarning = document.getElementById("capsLockWarning");
 
-  <script>
-    const form = document.getElementById("changePwForm");
-    const newPwInput = document.getElementById("newPw");
-    const confirmPwInput = document.getElementById("confirmPw");
-    const strengthDiv = document.getElementById("pwStrength");
-    const capsLockWarning = document.getElementById("capsLockWarning");
+  // Caps Lock 감지
+  newPwInput.addEventListener("keyup", (e) => {
+    capsLockWarning.style.display = e.getModifierState("CapsLock") ? "block" : "none";
+  });
 
-    // Caps Lock 감지
-    newPwInput.addEventListener("keyup", (e) => {
-      capsLockWarning.style.display = e.getModifierState("CapsLock") ? "block" : "none";
-    });
+  // 비밀번호 안전도 검증 (실시간 표시)
+  newPwInput.addEventListener("input", () => {
+    const pwd = newPwInput.value;
+    let strength = "약함";
+    let color = "red";
 
-    // 비밀번호 안전도 검증
-    newPwInput.addEventListener("input", () => {
-      const pwd = newPwInput.value;
-      let strength = "약함";
-      let color = "red";
+    const regexStrong = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/;
+    const regexMedium = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{6,}$/;
 
-      const regexStrong = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/;
-      const regexMedium = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{6,}$/;
+    if (regexStrong.test(pwd)) {
+      strength = "강함";
+      color = "green";
+    } else if (regexMedium.test(pwd)) {
+      strength = "보통";
+      color = "orange";
+    }
 
-      if (regexStrong.test(pwd)) {
-        strength = "강함";
-        color = "green";
-      } else if (regexMedium.test(pwd)) {
-        strength = "보통";
-        color = "orange";
-      }
+    strengthDiv.textContent = `비밀번호 안전도: ${strength}`;
+    strengthDiv.style.color = color;
+  });
 
-      strengthDiv.textContent = `비밀번호 안전도: ${strength}`;
-      strengthDiv.style.color = color;
-    });
+  // 폼 제출
+  form.addEventListener("submit", function (event) {
+    event.preventDefault();
 
-    // 폼 제출
-    form.addEventListener("submit", function (event) {
-      event.preventDefault();
+    const nowPw = document.getElementById("nowPw").value;
+    const newPw = newPwInput.value;
+    const confirmPw = confirmPwInput.value;
 
-      const newPw = newPwInput.value;
-      const confirmPw = confirmPwInput.value;
+    if (newPw !== confirmPw) {
+      alert("비밀번호가 일치하지 않습니다. 다시 입력해주세요.");
+      return;
+    }
 
-      if (newPw !== confirmPw) {
-        alert("비밀번호가 일치하지 않습니다. 다시 입력해주세요.");
-        return;
-      }
+    // 추가 안전도 체크 (최종)
+    const regexStrong = /^(?=.*[a-z])(?=.*\d)(?=.*[!@#$%^&*+\-=_]).{8,}$/;
+    if (!regexStrong.test(newPw)) {
+      alert("비밀번호는 최소 8자 이상, 소문자/숫자/특수문자를 포함해야 합니다.");
+      return;
+    }
 
-      // 추가 안전도 체크
-      const regexStrong = /^(?=.*[a-z])(?=.*\d)(?=.*[!@#$%^&*+\-=_]).{8,}$/;
-      if (!regexStrong.test(newPw)) {
-        alert("비밀번호는 최소 8자 이상, 소문자/숫자/특수문자를 포함해야 합니다.");
-        return;
-      }
+    // 서버로 비밀번호 변경 요청 보내기
+    fetch("/api/change-password", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        nowPassword: nowPw,
+        newPassword: newPw
+      })
+    })
+      .then(res => res.json())
+      .then(data => {
+        if (data.success) {
+          alert("비밀번호가 정상적으로 변경되었습니다.");
+        } else {
+          alert("오류: " + data.message);
+        }
+      })
+      .catch(err => {
+        console.error(err);
+        alert("서버 오류가 발생했습니다.");
+      });
+  });
+</script>
 
-      alert("비밀번호가 정상적으로 변경되었습니다.");
-      // 👉 서버 연동이 필요하면 여기서 fetch/AJAX 추가
-    });
-  </script>
 </body>
 
 </html>

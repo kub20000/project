@@ -97,18 +97,20 @@
 
             renderPagination();
         }
-
         function renderPagination() {
             const pagination = document.getElementById("pagination");
             pagination.innerHTML = "";
             const totalPages = Math.ceil(filteredPosts.length / postsPerPage);
 
             // 이전
-            const prev = document.createElement("button");
+            const prev = document.createElement("span");
             prev.textContent = "<";
-            prev.classList.add("page-btn", "prev-btn");
-            prev.disabled = currentPage === 1;
-            prev.onclick = () => { currentPage--; renderPosts(); }
+            prev.classList.add("page-link", "prev-link");
+            if (currentPage === 1) {
+                prev.classList.add("disabled"); // CSS로 회색 처리 등
+            } else {
+                prev.onclick = () => { currentPage--; renderPosts(); }
+            }
             pagination.appendChild(prev);
 
             // 페이지 번호
@@ -126,28 +128,29 @@
             }
 
             pageNumbers.forEach(num => {
-                const btn = document.createElement("button");
-                btn.textContent = num;
+                const span = document.createElement("span");
+                span.textContent = num;
                 if (num !== "…") {
-                    btn.classList.add("page-btn");
-                    if (num === currentPage) btn.classList.add("active");
-                    btn.onclick = () => { currentPage = num; renderPosts(); }
+                    span.classList.add("page-link");
+                    if (num === currentPage) span.classList.add("active");
+                    span.onclick = () => { currentPage = num; renderPosts(); }
                 } else {
-                    btn.classList.add("ellipsis");
-                    btn.disabled = true;
+                    span.classList.add("ellipsis");
                 }
-                pagination.appendChild(btn);
+                pagination.appendChild(span);
             });
 
             // 다음
-            const next = document.createElement("button");
+            const next = document.createElement("span");
             next.textContent = ">";
-            next.classList.add("page-btn", "next-btn");
-            next.disabled = currentPage === totalPages;
-            next.onclick = () => { currentPage++; renderPosts(); }
+            next.classList.add("page-link", "next-link");
+            if (currentPage === totalPages) {
+                next.classList.add("disabled");
+            } else {
+                next.onclick = () => { currentPage++; renderPosts(); }
+            }
             pagination.appendChild(next);
         }
-
         // 상세, 수정, 삭제
         function viewPost(id) { window.location.href = `post-view.html?id=${id}`; }
         function editPost(id) { window.location.href = `addNotice.html?id=${id}`; }

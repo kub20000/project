@@ -1,21 +1,23 @@
 <!DOCTYPE html>
 <html lang="ko">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>나의 냉장고 - Vegan Delight</title>
   <link rel="stylesheet" href="img/style.css">
 </head>
+
 <body class="fridge">
   <header>
-    <h1>Vegan Delight</h1>
-  <nav id="navMenu">
+    <h1><a href="/">Vegan Delight</a></h1>
+    <nav id="navMenu">
       <a href="index.html">Home</a>
       <a href="courses.html">Courses</a>
-      <a href="myfridge.html">나의 냉장고</a>
-      <a href="login.html">Login</a>
+      <a href="myFridge.html">나의 냉장고</a>
+      <a href="login.html" id="loginBtn">Login</a>
       <a href="notice.html">게시판</a>
-      <a href="mypage.html" class="active"><img src="/vegan/123.png" alt="마이페이지" width="36"></a>
+      <a href="mypage.html" class="active"><img src="123.png" alt="마이페이지" width="36"></a>
     </nav>
   </header>
 
@@ -61,7 +63,7 @@
     <section class="recipe-panel">
       <div class="recipe-placeholder">
         <h2>요리 할 준비가 되셨나요?</h2>
-        <p>냉장고에 있는 비건 재료를 선택하여</p> 
+        <p>냉장고에 있는 비건 재료를 선택하여</p>
         <p>지금 만들 수 있는 레시피를 찾아보세요.</p>
         <div id="selectedIngredients"></div>
         <button id="getRecipeBtn">레시피 찾기</button>
@@ -71,4 +73,5 @@
 
   <script src="script.js"></script>
 </body>
+
 </html>

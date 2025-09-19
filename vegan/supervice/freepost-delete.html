@@ -9,14 +9,14 @@
 </head>
 
 <body>
-  <header>
-    <h1>Vegan Delight - 관리자 mode<img src="/vegan/supervice/img/회원관리.png" alt="마이페이지" width="36"></h1>
-    <nav id="navMenu">
-      <a href="indexmg.html">Home</a>
-      <a href="post.html">게시판</a>
-      <a href="usermng.html">회원관리</a>
-    </nav>
-  </header>
+    <header>
+        <h1>Vegan Delight - 관리자 mode<img src="./img/회원관리.png" alt="마이페이지" width="36"></h1>
+        <nav id="navMenu">
+            <a href="indexmg.html">Home</a>
+            <a href="post.html">게시판</a>
+            <a href="usermng.html">회원관리</a>
+        </nav>
+    </header>
 
     <div class="board-tabs">
         <a href="post.html">공지사항</a>
@@ -27,6 +27,7 @@
         <p>자유게시판</p>
         <div class="search-box">
             <input type="text" id="searchInput" placeholder="검색어를 입력해 주세요">
+            <button id="searchBtn"><img src="img/검색.png" alt="검색"></button>
         </div>
     </div>
 
@@ -140,6 +141,36 @@
         fetchPosts(this.value);
     });
 
+    // 검색 기능
+    document.getElementById("search").addEventListener("input", (e) => {
+        const keyword = e.target.value.toLowerCase();
+        const rows = document.querySelectorAll("#userTable tbody tr");
+        rows.forEach(row => {
+            const idCell = row.children[1].textContent.toLowerCase();
+            row.style.display = idCell.includes(keyword) ? "" : "none";
+        });
+    });
+    document.getElementById("searchBtn").addEventListener("click", function () {
+        const keyword = document.getElementById("search").value.trim();
+        if (keyword) {
+            alert("검색 실행: " + keyword);
+            // 👉 여기서 검색 함수 실행 또는 서버 요청
+        } else {
+            alert("검색어를 입력하세요.");
+        }
+    });
+    // form 제출 이벤트 처리
+    document.getElementById("searchForm").addEventListener("submit", function (e) {
+        e.preventDefault(); // 기본 form 제출 막기 (페이지 이동 방지)
+
+        const keyword = document.getElementById("search").value.trim();
+        if (keyword) {
+            alert("검색 실행: " + keyword);
+            // 👉 여기에 검색 함수나 서버 요청 코드 작성
+        } else {
+            alert("검색어를 입력하세요.");
+        }
+    });
     // 초기 로딩
     fetchPosts();
 </script>
