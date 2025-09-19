@@ -7,17 +7,18 @@
   <title>비밀번호 변경</title>
   <link rel="stylesheet" href="styleLogin.css">
 </head>
- <header>
-    <h1><a href="/">Vegan Delight</a></h1>
-    <nav id="navMenu">
-      <a href="index.html">홈</a>
-      <a href="courses.html">강의</a>
-      <a href="myFridge.html">나의 냉장고</a>
-      <a href="main.html">게시판</a>
-      <a href="login.html" id="loginBtn">로그인</a>
-      <a href="mypage.html">마이페이지</a> 
-    </nav>
-  </header>
+<header>
+  <h1><a href="/">Vegan Delight</a></h1>
+  <nav id="navMenu">
+    <a href="index.html">홈</a>
+    <a href="courses.html">강의</a>
+    <a href="myFridge.html">나의 냉장고</a>
+    <a href="main.html">게시판</a>
+    <a href="login.html" id="loginBtn">로그인</a>
+    <a href="mypage.html">마이페이지</a>
+  </nav>
+</header>
+
 <body class="changePw">
   <main class="form-container">
     <h3 style="align-self: flex-start;">비밀번호 변경</h3>
@@ -66,10 +67,34 @@
       strengthDiv.style.color = color;
     });
 
-    // 폼 제출
-    form.addEventListener("submit", function (event) {
+    // // 폼 제출 frontend
+    // form.addEventListener("submit", function (event) {
+    //   event.preventDefault();
+
+    //   const newPw = newPwInput.value;
+    //   const confirmPw = confirmPwInput.value;
+
+    //   if (newPw !== confirmPw) {
+    //     alert("비밀번호가 일치하지 않습니다. 다시 입력해주세요.");
+    //     return;
+    //   }
+
+    //   // 추가 안전도 체크
+    //   const regexStrong = /^(?=.*[a-z])(?=.*\d)(?=.*[!@#$%^&*+\-=_]).{8,}$/;
+    //   if (!regexStrong.test(newPw)) {
+    //     alert("비밀번호는 최소 8자 이상, 소문자/숫자/특수문자를 포함해야 합니다.");
+    //     return;
+    //   }
+
+    //   alert("비밀번호가 정상적으로 변경되었습니다.");
+    //   // 👉 서버 연동이 필요하면 여기서 fetch/AJAX 추가
+    // });
+
+    // 폼 제출 backend
+    form.addEventListener("submit", async function (event) {
       event.preventDefault();
 
+      const nowPw = document.getElementById("nowPw").value;
       const newPw = newPwInput.value;
       const confirmPw = confirmPwInput.value;
 
@@ -78,15 +103,23 @@
         return;
       }
 
-      // 추가 안전도 체크
-      const regexStrong = /^(?=.*[a-z])(?=.*\d)(?=.*[!@#$%^&*+\-=_]).{8,}$/;
-      if (!regexStrong.test(newPw)) {
-        alert("비밀번호는 최소 8자 이상, 소문자/숫자/특수문자를 포함해야 합니다.");
-        return;
-      }
+      try {
+        const res = await fetch("/api/change-password", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ nowPw, newPw })
+        });
 
-      alert("비밀번호가 정상적으로 변경되었습니다.");
-      // 👉 서버 연동이 필요하면 여기서 fetch/AJAX 추가
+        const data = await res.json();
+        if (res.ok) {
+          alert("비밀번호가 정상적으로 변경되었습니다.");
+        } else {
+          alert("실패: " + data.message);
+        }
+      } catch (err) {
+        console.error(err);
+        alert("서버 오류가 발생했습니다.");
+      }
     });
   </script>
 </body>
