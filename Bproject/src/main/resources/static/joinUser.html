@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>회원가입</title>
+  <link rel="stylesheet" href="styleLogin.css">
+</head>
+
+<body class="joinUser">
+  <header>
+    <h1><a href="/">Vegan Delight</a></h1>
+    <nav id="navMenu">
+      <a href="index.html">홈</a>
+      <a href="courses.html">강의</a>
+      <a href="myFridge.html">나의 냉장고</a>
+      <a href="main.html">게시판</a>
+      <a href="login.html" id="loginBtn">로그인</a>
+      <a href="mypage.html">마이페이지</a>
+    </nav>
+  </header>
+
+  <main>
+    <!-- 회원가입 폼 -->
+    <form id="entryInfo">
+      <div>
+        <label for="entryName">성명</label>
+        <input class="joinUser" type="text" id="entryName" placeholder="이름을 입력하세요." required>
+      </div>
+      <div>
+        <label for="userName">아이디</label>
+        <input class="joinUser" type="text" id="userName" placeholder="아이디를 입력하세요." required>
+        <button class="joinUser" type="button" id="checkNicknameBtn">중복 확인</button>
+        <p class="msg" id="nicknameMsg"></p>
+      </div>
+      <div>
+        <label for="nickName">닉네임</label>
+        <input class="joinUser" type="text" id="nickName" placeholder="사용하실 닉네임을 입력하세요." required>
+      </div>
+      <div>
+        <label for="entryPw">비밀번호</label>
+        <input class="joinUser" type="password" id="entryPw" placeholder="비밀번호를 입력하세요." required>
+        <input type="password" id="entryPwConfirm" placeholder="한 번 더 입력하세요." required>
+        <button class="joinUser" type="button" id="checkPwBtn">일치 여부 확인</button>
+        <p class="msg" id="pwMsg"></p>
+      </div>
+      <div>
+        <label for="newbthInfo">생년월일</label>
+        <input class="joinUser" type="date" id="newbthInfo" required>
+      </div>
+      <div>
+        <label for="newphoneNum">휴대전화 번호</label>
+        <input class="joinUser" type="tel" id="newphoneNum" placeholder="휴대전화 번호를 입력하세요." required>
+        <p class="msg" id="phoneMsg"></p>
+      </div>
+
+      <div>
+        <label for="newemailInfo">이메일 정보</label>
+        <input class="joinUser" type="email" id="newemailInfo" placeholder="example@email.com" required>
+        <p class="msg" id="emailMsg"></p>
+      </div>
+
+      <button class="joinUser" type="submit">회원가입</button>
+    </form>
+
+    <div id="successMsg">
+      <h2>회원가입이 완료되었습니다!</h2>
+      <p>Vegan delight에 가입해주셔서 감사합니다 🎉</p>
+      <button class="joinUser" onclick="location.href='login.html'">로그인 페이지로 이동</button>
+    </div>
+
+<script>
+  // 🔹 아이디(닉네임) 중복 확인
+  document.getElementById("checkNicknameBtn").addEventListener("click", async () => {
+    const username = document.getElementById("userName").value.trim();
+    const msg = document.getElementById("nicknameMsg");
+
+    if (!username) {
+      msg.textContent = "아이디를 입력하세요.";
+      msg.style.color = "red";
+      return;
+    }
+
+    try {
+      const response = await fetch(`http://localhost:8080/api/check-nickname?username=${encodeURIComponent(username)}`);
+      const data = await response.json();
+
+      if (response.ok) {
+        msg.textContent = data.message || "사용 가능한 아이디입니다.";
+        msg.style.color = "green";
+      } else {
+        msg.textContent = data.message || "이미 사용 중인 아이디입니다.";
+        msg.style.color = "red";
+      }
+    } catch (error) {
+      msg.textContent = "서버 오류가 발생했습니다.";
+      msg.style.color = "red";
+    }
+  });
+
+  // 🔹 회원가입 폼 제출
+  document.getElementById("entryInfo").addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    // 입력 값 가져오기
+    const name = document.getElementById("entryName").value.trim();
+    const username = document.getElementById("userName").value.trim();
+    const nickname = document.getElementById("nickName").value.trim();
+    const password = document.getElementById("entryPw").value.trim();
+    const confirmPassword = document.getElementById("entryPwConfirm").value.trim();
+    const birth = document.getElementById("newbthInfo").value;
+    const phone = document.getElementById("newphoneNum").value.trim();
+    const email = document.getElementById("newemailInfo").value.trim();
+
+    // 1️⃣ 기본 검증
+    if (!name || !username || !nickname || !password || !confirmPassword || !birth || !phone || !email) {
+      alert("모든 필드를 입력하세요.");
+      return;
+    }
+
+    if (password !== confirmPassword) {
+      alert("비밀번호가 일치하지 않습니다.");
+      return;
+    }
+
+    // 비밀번호, 이메일, 전화번호 간단 검증
+    const pwRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const phoneRegex = /^\d{10,11}$/;
+
+    if (!pwRegex.test(password)) {
+      alert("비밀번호는 8자 이상이며 영문과 숫자를 포함해야 합니다.");
+      return;
+    }
+    if (!emailRegex.test(email)) {
+      alert("올바른 이메일 형식을 입력하세요.");
+      return;
+    }
+    if (!phoneRegex.test(phone)) {
+      alert("휴대전화 번호는 10~11자리 숫자만 입력하세요.");
+      return;
+    }
+
+    try {
+      // 2️⃣ 서버에 회원가입 요청
+      const response = await fetch("http://localhost:8080/api/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ 
+          name, 
+          username,   // 아이디
+          nickname, // 닉네임
+          password, 
+          birth, 
+          phone, 
+          email 
+        })
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        alert("회원가입이 완료되었습니다!");
+        document.getElementById("entryInfo").style.display = "none";
+        document.getElementById("successMsg").style.display = "block";
+      } else {
+        alert(data.message || "회원가입에 실패했습니다.");
+      }
+    } catch (error) {
+      console.error(error);
+      alert("서버 오류가 발생했습니다.");
+    }
+  });
+</script>
+
+
+</body>
+
+</html>
