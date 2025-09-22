@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>게시판 관리</title>
+    <link rel="stylesheet" href="styleM.css">
+</head>
+
+<body>
+     <header>
+    <h1><a href="/">Vegan Delight</a></h1>
+    <nav id="navMenu">
+      <a href="index.html">홈</a>
+      <a href="courses.html">강의</a>
+      <a href="myFridge.html">나의 냉장고</a>
+      <a href="main.html">게시판</a>
+      <a href="login.html" id="loginBtn">로그인</a>
+      <a href="mypage.html">마이페이지</a> 
+    </nav>
+  </header>
+
+ <div class="page-wrapper">
+    <nav id="subNav">
+      <a href="">회원 정보 관리</a>
+      <a href="">게시판 관리</a>
+    </nav>
+
+ <main class="board-container">
+    <h2>게시판 관리</h2>
+    <div class="search-box">
+        <form th:action="@{/post/search}" method="get">
+            
+            <div class="board-tools">
+            <select name="searchType" class="select-control">
+                <option value="title">제목</option>
+                <option value="content">내용</option>
+                <option value="author">작성자</option>
+            </select>
+            
+            
+            <div class="searchForm">
+            <input type="text" name="keyword" placeholder="검색어를 입력해 주세요" class="search-input">
+            
+            <button type="submit"><svg width="25" height="25" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M21 21l-4.35-4.35m1.35-5.15a7 7 0 11-14 0 7 7 0 0114 0z" stroke="#6b7280" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg></button>
+            </div>
+        </div>
+        
+        </form>
+
+        <div class="writeBtn">
+        <a href="/post/add">
+            <button id="openWriteModal">글쓰기</button>
+        </a>
+       </div>
+    </div>
+
+
+<!-- 게시판 -->
+<table id="noticeTable">
+    <thead>
+    <tr>
+        <th>분류</th>
+        <th>제목</th>
+        <th>작성자</th>
+        <th>등록일</th>
+        <th>관리</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="post : ${fixedPosts}">
+        <td>
+            <span class="fixed" th:if="${post.category.name() == 'NOTICE'}">공지사항</span>
+            <span class="fixed" th:unless="${post.category.name() == 'NOTICE'}">자유</span>
+        </td>
+        <td>
+            <a th:href="@{/post/detail/{id}(id=${post.id})}" th:text="${post.title}"></a>
+        </td>
+        <td th:text="${post.author}"></td>
+        <td th:text="${#temporals.format(post.created_at, 'yyyy-MM-dd HH:mm')}"></td>
+        <td th:text>
+            <button class="edit-btn" th:onclick>
+                수정
+            </button>
+            <button class="delete-btn" th:onclick>
+               삭제
+           </button>
+
+        </td>
+    </tr>
+    <tr th:each="post : ${normalPostsPage.content}">
+        <td>
+            <span th:if="${post.category.name() == 'NOTICE'}">공지사항</span>
+            <span th:unless="${post.category.name() == 'NOTICE'}">자유</span>
+        </td>
+        <td>
+            <a th:href="@{/post/detail/{id}(id=${post.id})}" th:text="${post.title}"></a>
+        </td>
+        <td th:text="${post.author}"></td>
+        <td th:text="${#temporals.format(post.created_at, 'yyyy-MM-dd HH:mm')}"></td>
+        <td th:text></td>
+    </tr>
+    </tbody>
+</table>
+
+<div class="pagination" id="pagination">
+    <a th:if="${normalPostsPage.hasPrevious()}"
+       th:href="@{/post/list(page=${normalPostsPage.number - 1})}">이전</a>
+
+    <th:block th:each="i : ${#numbers.sequence(0, normalPostsPage.totalPages - 1)}">
+        <a th:href="@{/post/list(page=${i})}" th:text="${i + 1}"
+           th:classappend="${i == normalPostsPage.number} ? 'active' : ''"></a>
+    </th:block>
+
+    <a th:if="${normalPostsPage.hasNext()}"
+       th:href="@{/post/list(page=${normalPostsPage.number + 1})}">다음</a>
+</div>
+
+</main>
+    
+</div>
+</div>
+</body>   
+</html>

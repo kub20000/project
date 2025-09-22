@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>내 게시글 관리</title>
+<link rel="stylesheet" href="styleMy.css">
+</head>
+<body>
+<header>
+    <h1><a href="/">Vegan Delight</a></h1>
+    <nav id="navMenu">
+      <a href="index.html">홈</a>
+      <a href="courses.html">강의</a>
+      <a href="myFridge.html">나의 냉장고</a>
+      <a href="main.html">게시판</a>
+      <a href="login.html" id="loginBtn">로그인</a>
+      <a href="mypage.html">마이페이지</a> 
+    </nav>
+  </header>
+
+<div class="page-wrapper">
+    <nav id="subNav">
+      <a href="myinfo.html">내 정보 수정</a>
+      <a href="mymovies.html">최근 본 영상</a>
+      <a href="myBoard.html">내 게시글 관리</a>
+      <a href="deleteinfo.html">회원 탈퇴</a>  
+    </nav>
+
+    <main class="board-container">
+            <h2>내 게시글 관리</h2>
+            <div class="search-box">
+                <input type="text" id="searchInput" placeholder="검색어를 입력해 주세요">
+                <button type="submit"><svg width="25" height="25" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M21 21l-4.35-4.35m1.35-5.15a7 7 0 11-14 0 7 7 0 0114 0z" stroke="#6b7280" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+                 </svg></button>
+            </div>
+        
+
+        <table id="myPostTable">
+            <thead>
+                <tr>
+                    <th>분류</th>
+                    <th>제목</th>
+                    <th>등록일</th>
+                    <th>관리</th>
+                </tr>
+            </thead>
+            <tbody id="myPostList"></tbody>
+        </table>
+    </main>
+</body>
+<script>
+const currentUser = "a";
+let posts = [
+    { id: 10, title: "최신 공지사항", content: "공지사항 내용입니다.", author: "관리자", date: "2025.09.09" },
+    { id: 9, title: "공지사항 예시", content: "예시 내용입니다.", author: "a", date: "2025.09.05" },
+    { id: 8, title: "테스트 제목", content: "테스트 내용입니다.", author: "a", date: "2025.09.01" },
+    { id: 7, title: "업데이트 알림", content: "업데이트 내용입니다.", author: "a", date: "2025.08.30" }
+];
+
+let currentEditId = null;
+let searchKeyword = "";
+
+// 렌더링 함수
+function renderMyPosts() {
+    const tbody = document.getElementById("myPostList");
+    tbody.innerHTML = "";
+    const myPosts = posts
+        .filter(p => p.author === currentUser)
+        .filter(p => p.title.includes(searchKeyword) || p.content.includes(searchKeyword));
+    
+    myPosts.forEach((post, index) => {
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+            <td>${myPosts.length - index}</td>
+            <td><span class="title-link" onclick="openModal(${post.id})">${post.title}</span></td>
+            <td>${post.date}</td>
+            <td>
+                <button class="edit" onclick="openModal(${post.id})">수정</button>
+                <button class="delete" onclick="deletePost(${post.id})">삭제</button>
+            </td>
+        `;
+        tbody.appendChild(tr);
+    });
+}
+
+// 모달 열기
+function openModal(id) {
+    currentEditId = id;
+    const post = posts.find(p => p.id === id);
+    document.getElementById("modalTitle").value = post.title;
+    document.getElementById("modalContent").value = post.content;
+    document.getElementById("editModal").style.display = "flex";
+}
+
+// 모달 닫기
+document.getElementById("closeModal").onclick = () => {
+    document.getElementById("editModal").style.display = "none";
+};
+
+// 저장 버튼
+document.getElementById("saveBtn").onclick = () => {
+    const post = posts.find(p => p.id === currentEditId);
+    post.title = document.getElementById("modalTitle").value;
+    post.content = document.getElementById("modalContent").value;
+    renderMyPosts();
+    document.getElementById("editModal").style.display = "none";
+};
+
+// 삭제 버튼
+document.getElementById("deleteBtn").onclick = () => {
+    if(confirm("정말 삭제하시겠습니까?")) {
+        posts = posts.filter(p => p.id !== currentEditId);
+        renderMyPosts();
+        document.getElementById("editModal").style.display = "none";
+    }
+};
+
+function deletePost(id) {
+    if(confirm("정말 삭제하시겠습니까?")) {
+        posts = posts.filter(p => p.id !== id);
+        renderMyPosts();
+    }
+}
+
+// 검색 기능
+document.getElementById("searchInput").addEventListener("input", (e) => {
+    searchKeyword = e.target.value;
+    renderMyPosts();
+});
+
+renderMyPosts();
+</script>
+
+</body>
+</html>
