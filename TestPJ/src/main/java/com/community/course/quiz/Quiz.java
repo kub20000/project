@@ -17,7 +17,7 @@ import lombok.ToString;
 public class Quiz {
     @Id
     private long id;
-    private long courses_id;
+    private long coursesId;
     private String quiz_name;
     private String quiz_question;
     private String quiz_answer;

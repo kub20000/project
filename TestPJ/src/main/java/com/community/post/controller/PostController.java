@@ -4,7 +4,6 @@ import com.community.post.PostDTO;
 import com.community.post.comment.Comment;
 import com.community.post.comment.CommentService;
 import com.community.post.entity.Post;
-import com.community.post.repository.PostRepo;
 import com.community.post.repository.PostRepository;
 import com.community.post.service.PostService;
 import lombok.RequiredArgsConstructor;
@@ -27,7 +26,6 @@ public class PostController {
 
     private final PostService postService;
     private final CommentService commentService;
-    private final PostRepo postRepo;
     private final PostRepository postRepository;
 
     // 메인에 게시글 리스트 출력

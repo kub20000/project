@@ -98,7 +98,7 @@ function closeVideoModal(){ videoModal.classList.remove('open'); }
 grid.addEventListener('click', (e) => {
 
     const playId = e.target.getAttribute('data-play');
-    const courseId = e.target.getAttribute('data-quiz');
+    const coursesId = e.target.getAttribute('data-quiz');
 
     if (playId) {
         // 백엔드 API 호출
@@ -112,9 +112,9 @@ grid.addEventListener('click', (e) => {
     }
 
     // 퀴즈 버튼 클릭 시 페이지 연결
-    if (courseId) {
+    if (coursesId) {
         // 기존 fetch API 호출 대신 페이지를 직접 이동
-        window.location.href = `/quiz/${courseId}`;
+        window.location.href = `/quiz/${coursesId}`;
     }
 
 });
