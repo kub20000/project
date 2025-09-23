@@ -21,8 +21,10 @@
     </nav>
   </header>
 
+
 <main>
   <form id="deleteForm">
+    <button class="closeBtn">X</button>
     <div>
       <label for="userId">아이디</label>
       <input type="text" id="userId" placeholder="아이디 입력" required>
@@ -40,7 +42,7 @@
     <p id="resultMsg" class="success"></p>
   </form>
 </main>
-
+  
 <script>
 const form = document.getElementById('deleteForm');
 const password = document.getElementById('password');

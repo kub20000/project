@@ -117,6 +117,7 @@ nav a {
   padding: 2rem;
   border-radius: 10px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  position: relative;
 }
 
 .form-container.changePw {
@@ -128,6 +129,28 @@ nav a {
   display: flex;
   flex-direction: column;
   gap: 1rem;
+  position: relative;
+}
+
+
+.form-container .closeBtn {
+  all: unset; /* 다른 버튼 스타일 초기화 */
+  position: absolute;
+  top: 8px;        /* 위쪽 끝 */
+  right: 8px;      /* 오른쪽 끝 */
+  background: none; /* 배경 제거 */
+  border: none;     /* 테두리 제거 */
+  font-size: 22px;  
+  font-weight: bold;
+  color: #555;
+  cursor: pointer;
+  line-height: 1;
+  padding: 0;
+}
+
+.closeBtn:hover {
+   background: none !important;
+  color: #000;
 }
 
 input.changePw {
@@ -163,8 +186,7 @@ input:focus {
 }
 
 .form-container button,
-button {
-  width: 80%;
+button {  width: 80%;
   padding: 10px;
   border: none;
   border-radius: 6px;
@@ -175,6 +197,7 @@ button {
   margin-top: 0.5rem;
   margin-left: 45px;
 }
+
 
 .form-container button:hover,
 button:hover {
@@ -207,6 +230,7 @@ button:hover {
 #subNav a:hover {
   background: #549850;
 }
+
 
 /* 푸터 */
 .site-footer {
@@ -246,6 +270,7 @@ body.joinUser {
   margin: 0;
   padding: 0;
   background: #f9f9f9;
+  font-size: 16px;
 }
 
 .join{
@@ -253,6 +278,25 @@ body.joinUser {
   justify-content: end;
   margin: 20px;
 }
+
+#entryInfo .closeBtn {
+  all: unset;              /* 기존 버튼 스타일 초기화 */
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  font-size: 20px;
+  font-weight: bold;
+  color: #666;
+  cursor: pointer;
+  line-height: 1;
+}
+
+/* hover 효과 → 배경 없이 글자 색만 */
+#entryInfo .closeBtn:hover {
+  background: none !important;
+  color: #000;
+}
+
 
 #entryInfo {
   width: 500px;
@@ -262,7 +306,9 @@ body.joinUser {
   background-color: white;
   border-radius: 20px;
   text-align: left;
+   position: relative;
 }
+
 
 #entryInfo div {
   margin-bottom: 15px;

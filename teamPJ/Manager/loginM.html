@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>관리자 로그인</title>
+  <link rel="stylesheet" href="styleM.css">
+
+</head>
+<body>
+ <header>
+    <h1><a href="/">Vegan Delight</a></h1>
+    <nav id="navMenu">
+      <a href="index.html">홈</a>
+      <a href="courses.html">강의</a>
+      <a href="myFridge.html">나의 냉장고</a>
+      <a href="main.html">게시판</a>
+      <a href="login.html" id="loginBtn">로그인</a>
+      <a href="mypage.html">마이페이지</a> 
+    </nav>
+  </header>
+  <main class="form-container"style="color:white; border-radius:6px; text-decoration:none; text-align: center;">
+    <h2 style="align-self: flex-start; color: black; text-align: start;">
+      로그인
+    </h2>
+<form id="loginForm">
+  <input type="text" name="username" style="width: 300px;" placeholder="아이디를 입력하세요." required>
+  <input type="password" name="password" style="width: 300px;" placeholder="비밀번호를 입력하세요." required><br>
+  <button type="submit">Login</button>
+</form> 
+</main>
+<script>
+const form = document.getElementById('loginForm');
+
+form.addEventListener('submit', async (e) => {
+  e.preventDefault(); // 페이지 리로드 방지
+
+  const formData = new FormData(form);
+  const data = {
+    username: formData.get('username'),
+    password: formData.get('password')
+  };
+
+  try {
+    const response = await fetch('/api/login', { // 서버 로그인 API
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    });
+
+    const result = await response.json();
+
+    if(result.success) {
+      alert('로그인 성공!');
+      window.location.href = 'index.html'; // 메인 페이지로 이동
+    } else {
+      alert('아이디 또는 비밀번호가 올바르지 않습니다.');
+    }
+
+  } catch(err) {
+    console.error(err);
+    alert('서버 오류가 발생했습니다.');
+  }
+});
+</script>
+</html>

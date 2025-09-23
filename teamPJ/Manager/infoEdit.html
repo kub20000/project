@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+  <meta charset="UTF-8">
+  <title>회원 수정</title>
+  <link rel="stylesheet" href="styleM.css">
+</head>
+<body class="edit">
+   <header>
+    <h1><a href="/">Vegan Delight</a></h1>
+    <nav id="navMenu">
+      <a href="index.html">홈</a>
+      <a href="courses.html">강의</a>
+      <a href="myFridge.html">나의 냉장고</a>
+      <a href="main.html">게시판</a>
+      <a href="login.html" id="loginBtn">로그인</a>
+      <a href="mypage.html">마이페이지</a> 
+    </nav>
+  </header>
+  
+  <form id="editForm">
+    <h2>회원 정보 수정</h2>
+    <div class="form-group">
+      <label>아이디</label>
+      <input type="text" id="username" disabled>
+    </div>
+    <div class="form-group">
+      <label>이름</label>
+      <input type="text" id="name">
+    </div>
+    <div class="form-group">
+      <label>이메일</label>
+      <input type="email" id="email">
+    </div>
+    <div class="form-group-btns">
+    <button type="submit">저장</button>
+    <button type="submit">취소</button>
+    </div>
+  </form>
+
+   <script>
+    const API_BASE = "http://localhost:9090/api";
+
+    // 1. URL에서 id 가져오기
+    const params = new URLSearchParams(window.location.search);
+    const userId = params.get("id");
+
+    // 2. 사용자 정보 불러오기
+    async function fetchUser() {
+      try {
+        const res = await fetch(`${API_BASE}/users/${userId}`);
+        if (!res.ok) throw new Error("회원 정보 불러오기 실패");
+        const user = await res.json();
+
+        // 입력창 채우기
+        document.getElementById("id").value = user.id;
+        document.getElementById("username").value = user.username;
+        document.getElementById("name").value = user.name;
+        document.getElementById("email").value = user.email;
+        document.getElementById("role").value = user.role;
+      } catch (err) {
+        alert(err.message);
+      }
+    }
+
+    // 3. 저장 버튼 클릭 시 수정 요청 보내기
+    document.getElementById("editForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      const updatedUser = {
+        username: document.getElementById("username").value,
+        name: document.getElementById("name").value,
+        email: document.getElementById("email").value,
+        role: document.getElementById("role").value,
+      };
+
+      try {
+        const res = await fetch(`${API_BASE}/users/${userId}`, {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(updatedUser)
+        });
+        if (!res.ok) throw new Error("수정 실패");
+        alert("수정 완료!");
+        window.location.href = "user-list.html"; // 다시 목록 페이지로 이동
+      } catch (err) {
+        alert(err.message);
+      }
+    });
+
+    // 페이지 로드 시 자동 실행
+    fetchUser();
+  </script>
+</body>
+
+</html>
