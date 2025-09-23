@@ -36,7 +36,7 @@ function render(data = []) {
     grid.innerHTML = filteredData.map(course=> `
         <article class="card">
             <div class="thumb">
-                <span class="badge gray">${course.thumbnail_url}</span>
+                <img src="${course.thumbnail_url}" alt="${course.courses_name} 썸네일">
             </div>
             <div class="card-body">
                 <div class="title">${course.courses_name}</div>
@@ -88,11 +88,38 @@ function openVideo(course) {
     currentCourse = course;
     videoTitle.textContent = `${course.courses_name}`;
     videoModal.classList.add('open');
+    videoModal.removeAttribute('aria-hidden'); // 모달이 열리면 aria-hidden 제거
 
-    const videoPlayer = `<iframe width="100%" height="315" src="${course.video_url}" frameborder="0" allowfullscreen></iframe>`;
+    // 비디오 태그에 controlsList="nodownload nofullscreen" 추가
+    const videoPlayer = `<video id="videoElement" width="100%" height="315" controls controlsList="nodownload nofullscreen"><source src="${course.video_url}" type="video/mp4"></video>`;
     document.getElementById('videoBox').innerHTML = videoPlayer;
+
+    const videoElement = document.getElementById('videoElement');
+    let lastTime = 0; // 이전에 재생된 시간을 저장할 변수
+
+    // timeupdate 이벤트 리스너 정의 (메모리 누수 방지를 위해 함수를 별도로 정의)
+    const timeUpdateHandler = () => {
+        // 사용자가 타임라인을 앞으로 건너뛰려고 할 때 (0.5초 이상 점프 시)
+        if (videoElement.currentTime > lastTime + 0.5) {
+            videoElement.currentTime = lastTime; // 이전 시간으로 되돌림
+        } else {
+            lastTime = videoElement.currentTime; // 정상적인 재생은 lastTime 업데이트
+        }
+    };
+
+    // 이벤트 리스너 추가
+    videoElement.addEventListener('timeupdate', timeUpdateHandler);
+
+    // 모달이 닫힐 때 이벤트 리스너를 제거하여 메모리 누수 방지
+    closeVideo.addEventListener('click', () => {
+        videoElement.removeEventListener('timeupdate', timeUpdateHandler);
+        closeVideoModal();
+    });
 }
-function closeVideoModal(){ videoModal.classList.remove('open'); }
+function closeVideoModal(){
+    videoModal.classList.remove('open');
+    videoModal.setAttribute('aria-hidden', 'true'); // 모달이 닫히면 aria-hidden 추가
+}
 
 // --- data ---
 grid.addEventListener('click', (e) => {

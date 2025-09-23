@@ -2,9 +2,16 @@ package com.community.course.repository;
 
 import com.community.course.entity.Course;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.List;
 import java.util.Optional;
 
@@ -66,5 +73,27 @@ public class CourseRepo {
         String selectSql = "SELECT like_count FROM courses WHERE id = ?";
         return jdbc.queryForObject(selectSql, Integer.class, courseId);
     }
+
+    public void save(Course course) {
+        String sql = "INSERT INTO courses (courses_name, description, video_url, thumbnail_url, courses_category) VALUES (?, ?, ?, ?, ?)";
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+
+        jdbc.update(new PreparedStatementCreator() {
+            @Override
+            public PreparedStatement createPreparedStatement(Connection con) throws SQLException {
+                PreparedStatement ps = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+                ps.setString(1, course.getCourses_name());
+                ps.setString(2, course.getDescription());
+                ps.setString(3, course.getVideo_url());
+                ps.setString(4, course.getThumbnail_url());
+                ps.setString(5, String.valueOf(course.getCourses_category()));
+                return ps;
+            }
+        }, keyHolder);
+
+        // 생성된 ID를 Course 객체에 다시 설정 (선택 사항)
+        course.setId(keyHolder.getKey().intValue());
+    }
+
 
 }

@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vegan LMS - uploadCourse</title>
+    <link rel="stylesheet" href="/teacher/styleT.css">
+</head>
+<body>
+<header>
+    <h1><a href="/">Vegan Delight</a></h1>
+    <nav id="navMenu">
+        <a href="/">Home</a>
+        <a href="/course/main">Courses</a>
+        <a href="/myFridge/main">나의 냉장고</a>
+        <a href="login.html">Login</a>
+        <a href="/post/main">게시판</a>
+        <a href="mypage.html">my page</a>
+    </nav>
+</header>
+<div class="page-wrapper">
+    <nav id="subNavT">
+        <a href="">나의 강의 관리</a>
+        <a href="uploadCourse.html">강의 등록 / 퀴즈 출제</a>
+    </nav>
+    <main class="uploadCourse-container">
+        <h2>강의 등록</h2>
+        <form action="/course/upload" method="post" enctype="multipart/form-data">
+            <div class="uploadCourse-Control">
+                <select id="uploadCourse-Category" name="courses_category">
+                    <option value="LIFE">비건 라이프 스타일</option>
+                    <option value="RECIPE">요리 레시피</option>
+                    <option value="SKILL">조리 스킬</option>
+                </select>
+            </div>
+
+            <p style="color:#4caf50; font-weight: 600; margin-right: 6px;">
+                강의 제목 : <input type="text" name="courses_name" placeholder="제목 입력"></p>
+            <hr>
+            <div class="uploadMedia-card">
+                <div class="uploadMedia-action">
+                    <label class="upload-btn">
+                        🎬 영상 업로드
+                        <input type="file" name="videoFile" accept="video/*" style="display:none"
+                               onchange="handleFileSelect(event, 'video')">
+                    </label>
+                    <p id="videoFileName"></p>
+                </div>
+                <div class="uploadMedia-action">
+                    <label class="upload-btn">
+                        🖼️ 이미지 업로드
+                        <input type="file" name="thumbnailFile" accept="image/*" style="display:none"
+                               onchange="handleFileSelect(event, 'image')">
+                    </label>
+                    <p id="imageFileName"></p>
+                </div>
+            </div>
+            <p style="color:#4caf50; font-weight: 600; margin-right: 6px;">
+                강의 내용 </p>
+            <textarea name="description" placeholder="내용 입력" rows="12" style="font-size: 16px;"></textarea>
+            <div class="uploadBtns">
+                <button type="submit">등록</button>
+                <button type="button">닫기</button>
+            </div>
+        </form>
+    </main>
+</div>
+</body>
+<script>
+    function handleFileSelect(event, type) {
+        const file = event.target.files[0];
+        if (file) {
+            let fileNameElementId = type === 'video' ? 'videoFileName' : 'imageFileName';
+            document.getElementById(fileNameElementId).textContent = '선택된 파일: ' + file.name;
+        }
+    }
+</script>
+</html>

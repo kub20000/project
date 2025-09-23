@@ -22,4 +22,7 @@ public class HomeController {
 
     @GetMapping("/myFridge/main")
     public String myFridge() {return "/myFridge/myFridge";}
+
+    @GetMapping("/teacher/uploadCourse")
+    public String uploadCourse() {return "/teacher/uploadCourse";}
 }

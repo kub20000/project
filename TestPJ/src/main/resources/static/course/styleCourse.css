@@ -306,6 +306,10 @@ main.quiz-container {
   padding: 0 1rem;
 }
 
+form#quizForm {
+    margin-bottom: 30px; /* 문제들 사이의 간격을 넓힘 */
+}
+
 .quiz-card-head {
   display: flex;
   justify-content: space-between; 
@@ -358,14 +362,16 @@ main.quiz-container {
   width: 100%;
   min-height: 300px;
   border: 1px solid #ccc;
-  border-radius: 20px;   
+  border-radius: 20px;
+    padding: 1rem;
 }
 
 .question-input{
   width: 100%;
   min-height: 250px;
   border: none;
-  border-radius: 20px
+  border-radius: 20px;
+    padding: 1rem;
 }
 
 .question-input textarea {
