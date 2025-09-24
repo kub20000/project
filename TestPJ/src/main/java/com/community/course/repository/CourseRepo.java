@@ -75,7 +75,7 @@ public class CourseRepo {
     }
 
     public void save(Course course) {
-        String sql = "INSERT INTO courses (courses_name, description, video_url, thumbnail_url, courses_category) VALUES (?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO courses (courses_name, description, video_url, thumbnail_url, courses_category, total_sec) VALUES (?, ?, ?, ?, ?, ?)";
         KeyHolder keyHolder = new GeneratedKeyHolder();
 
         jdbc.update(new PreparedStatementCreator() {
@@ -87,6 +87,7 @@ public class CourseRepo {
                 ps.setString(3, course.getVideo_url());
                 ps.setString(4, course.getThumbnail_url());
                 ps.setString(5, String.valueOf(course.getCourses_category()));
+                ps.setInt(6, course.getTotal_sec());
                 return ps;
             }
         }, keyHolder);

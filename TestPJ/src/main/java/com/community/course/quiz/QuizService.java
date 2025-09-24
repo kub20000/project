@@ -1,13 +1,14 @@
 package com.community.course.quiz;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class QuizService {
 
+    @Autowired
     private final QuizRepo quizRepo;
 
     public QuizService(QuizRepo quizRepo) {
@@ -16,9 +17,5 @@ public class QuizService {
 
     public List<Quiz> findAllByCoursesId(long coursesId) {
         return quizRepo.findByCoursesId(coursesId);
-    }
-
-    public Optional<Quiz> findOneByCoursesId(long coursesId) {
-        return quizRepo.findOneByCoursesId(coursesId);
     }
 }

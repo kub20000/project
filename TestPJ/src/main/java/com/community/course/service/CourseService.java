@@ -2,8 +2,11 @@ package com.community.course.service;
 
 import com.community.course.entity.Course;
 import com.community.course.repository.CourseRepo;
+import org.jcodec.api.JCodecException;
+import org.jcodec.common.DemuxerTrack;
 import org.jcodec.common.io.FileChannelWrapper;
 import org.jcodec.common.io.NIOUtils;
+import org.jcodec.containers.mp4.boxes.MovieBox;
 import org.jcodec.containers.mp4.demuxer.MP4Demuxer;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -51,18 +54,40 @@ public class CourseService {
                              MultipartFile videoFile, MultipartFile thumbnailFile, Course.CourseCategory courses_category) throws IOException {
 
         // 1. 파일 저장
-        String videoPath = saveFile(videoFile, "videos");
+        File videoTempFile = saveFileAndGetFile(videoFile, "videos"); // saveFile 메서드 수정
+        String videoPath = "/uploads/videos/" + videoTempFile.getName(); // URL 경로 생성
+
+        // 2. 썸네일 파일 저장
         String thumbnailPath = saveFile(thumbnailFile, "thumbnails");
 
-        // 2. Course 엔티티 생성 및 데이터베이스 저장
+        // 3. 동영상 길이 측정 (저장된 파일을 인자로 전달)
+        int totalSeconds = getVideoDurationInSeconds(videoTempFile);
+
+        // 4. Course 엔티티 생성 및 데이터베이스 저장
         Course course = new Course();
         course.setCourses_name(coursesName);
         course.setDescription(description);
         course.setVideo_url(videoPath);
         course.setThumbnail_url(thumbnailPath);
         course.setCourses_category(courses_category);
+        course.setTotal_sec(totalSeconds);
 
         courseRepo.save(course);
+    }
+
+    public File saveFileAndGetFile(MultipartFile file, String subDir) throws IOException {
+        Path directory = Paths.get(uploadPath, subDir);
+        File destDir = directory.toFile();
+        if (!destDir.exists()) {
+            destDir.mkdirs();
+        }
+
+        String storedFileName = UUID.randomUUID().toString() + "_" + file.getOriginalFilename();
+        File destFile = new File(destDir, storedFileName);
+
+        file.transferTo(destFile);
+
+        return destFile;
     }
 
     public String saveFile(MultipartFile file, String subDir) throws IOException {
@@ -80,6 +105,29 @@ public class CourseService {
         return "/uploads/" + subDir + "/" + storedFileName;
     }
 
+    public int getVideoDurationInSeconds(File videoFile) {
+        FileChannelWrapper ch = null;
+        try {
+            ch = NIOUtils.readableFileChannel(videoFile.getAbsolutePath());
+            MP4Demuxer demuxer = MP4Demuxer.createMP4Demuxer(ch);
+
+            MovieBox moov = demuxer.getMovie();
+
+            if (moov != null) {
+                long duration = moov.getDuration();
+                long timeScale = moov.getTimescale();
+
+                if (timeScale > 0) {
+                    return (int) (duration / timeScale);
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            NIOUtils.closeQuietly(ch);
+        }
+        return 0;
+    }
+
 
 }
-

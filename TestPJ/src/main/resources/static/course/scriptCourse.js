@@ -121,6 +121,7 @@ function closeVideoModal(){
     videoModal.setAttribute('aria-hidden', 'true'); // 모달이 닫히면 aria-hidden 추가
 }
 
+
 // --- data ---
 grid.addEventListener('click', (e) => {
 

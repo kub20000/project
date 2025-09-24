@@ -20,7 +20,4 @@ public class QuizController {
         return "course/quiz";
     }
 
-
-
-
 }

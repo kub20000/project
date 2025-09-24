@@ -34,13 +34,13 @@ public class CommentController {
     }
 
     // 댓글 수정
-    @PostMapping("/comment/edit")
-    public String userEdit(@ModelAttribute Comment comment, RedirectAttributes redirectAttributes, @RequestParam int postId){
-        comment.setPosts_id(postId);
-        commentService.update(comment);
-        redirectAttributes.addAttribute("id", comment.getId());
-        return "redirect:/post/detail/"+postId;
-    }
+//    @PostMapping("/comment/edit")
+//    public String userEdit(@ModelAttribute Comment comment, RedirectAttributes redirectAttributes, @RequestParam int postId){
+//        comment.setPosts_id(postId);
+//        commentService.update(comment);
+//        redirectAttributes.addAttribute("id", comment.getId());
+//        return "redirect:/post/detail/"+postId;
+//    }
 
 
 

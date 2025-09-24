@@ -1,6 +1,5 @@
 package com.community.course.quiz;
 
-import com.community.post.entity.Post;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
@@ -8,7 +7,6 @@ import org.springframework.stereotype.Repository;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
-import java.util.Optional;
 
 @Repository
 public class QuizRepo {
@@ -19,6 +17,7 @@ public class QuizRepo {
         this.jdbc = jdbc;
     }
 
+
     private static final class QuizRowMapper implements RowMapper<Quiz> {
         @Override
         public Quiz mapRow(ResultSet rs, int rowNum) throws SQLException {
@@ -28,6 +27,7 @@ public class QuizRepo {
             quiz.setQuiz_name(rs.getString("quiz_name"));
             quiz.setQuiz_question(rs.getString("quiz_question"));
             quiz.setQuiz_answer(rs.getString("quiz_answer"));
+            quiz.setQuiz_result(rs.getString("quiz_result"));
             return quiz;
         }
     }
@@ -37,9 +37,6 @@ public class QuizRepo {
         return jdbc.query(sql, new QuizRowMapper(), coursesId);
     }
 
-    public Optional<Quiz> findOneByCoursesId(long coursesId) {
-        String sql = "SELECT * FROM quiz WHERE coursesId = ?";
-        Quiz quiz = jdbc.queryForObject(sql, new QuizRowMapper(), coursesId);
-        return Optional.ofNullable(quiz);
-    }
+
+
 }
