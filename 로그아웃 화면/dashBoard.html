@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>대시보드</title>
+  <link rel="stylesheet" href="styleMy.css">
+   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+</head>
+<body class="deleteInfo">
+
+<header>
+    <h1><a href="/">Vegan Delight</a></h1>
+    <nav id="navMenu">
+      <a href="index.html">홈</a>
+      <a href="courses.html">강의</a>
+      <a href="myFridge.html">나의 냉장고</a>
+      <a href="main.html">게시판</a>
+      <a href="login.html" id="loginBtn">로그인</a>
+      <a href="mypage.html">마이페이지</a> 
+    </nav>
+  </header>
+
+  <div class="page-wrapper">
+    <nav id="subNav">
+      <a href="myinfo.html">내 정보 수정</a>
+      <a href="myStudy.html">내 학습 기록</a>
+      <a href="myRecipe.html">나의 레시피</a>
+      <a href="myBoard.html">내 게시글 관리</a>
+      <a href="deleteinfo.html">회원 탈퇴</a>  
+    </nav>
+
+    <main class="board-container">
+      <div class="profile">
+        <div class="profile-avatar"><i class="fas fa-user"></i></div>
+        <p><strong>사용자 ID</strong></p>
+        <button class="logout-btn">Logout</button>
+      </div>
+
+<div class="dash-section">
+   <div class="progress-section">
+  <h3>카테고리별 학습 진도율</h3>
+  <div class="progress-grid">
+
+    <div class="progress-card">
+      <div class="card-header">
+        <span class="icon">🌱</span>
+        <span class="title">비건 라이프 스타일</span>
+      </div>
+      <div class="progress-bar">
+        <div class="progress" style="width: 70%;"><span>70%</span></div>
+      </div>
+    </div>
+
+    <div class="progress-card">
+      <div class="card-header">
+        <span class="icon">🍳</span>
+        <span class="title">요리 레시피</span>
+      </div>
+      <div class="progress-bar">
+        <div class="progress" style="width: 45%;"><span>45%</span></div>
+      </div>
+    </div>
+
+    <div class="progress-card">
+      <div class="card-header">
+        <span class="icon">🔪</span>
+        <span class="title">조리 스킬</span>
+      </div>
+      <div class="progress-bar">
+        <div class="progress" style="width: 85%;"><span>85%</span></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+</div>
+   
+
+        
+<div class="dash-section">
+        <h3 style="margin-top:40px;">
+            나의 레시피
+        </h3>
+        <div class="recipe-grid">
+          <a href="detailRecipe.html" class="recipe-card-link">
+    <div class="recipe-header">레시피 제목</div>
+    <div class="recipe-card">
+      <div class="recipe-info">
+        <p>레시피 내용</p>
+      </div>
+    </div>
+  </a>
+  
+
+          <a href="detailRecipe.html" class="recipe-card-link">
+    <div class="recipe-header">레시피 제목</div>
+    <div class="recipe-card">
+      <div class="recipe-info">
+        <p>레시피 내용</p>
+      </div>
+    </div>
+  </a>
+
+         <a href="detailRecipe.html" class="recipe-card-link">
+    <div class="recipe-header">레시피 제목</div>
+    <div class="recipe-card">
+      <div class="recipe-info">
+        <p>레시피 내용</p>
+      </div>
+    </div>
+  </a>  
+  
+  </div>
+                
+    </div>
+    </main>
+</body>
+</html>
+
