@@ -31,59 +31,21 @@
     </nav>
 
     <main class="board-container">
-      <div class="profile">
-        <div class="profile-avatar"><i class="fas fa-user"></i></div>
-        <p><strong>사용자 ID</strong></p>
-        <button class="logout-btn">Logout</button>
-      </div>
-
-<div class="dash-section">
-   <div class="progress-section">
-  <h3>카테고리별 학습 진도율</h3>
-  <div class="progress-grid">
-
-    <div class="progress-card">
-      <div class="card-header">
-        <span class="icon">🌱</span>
-        <span class="title">비건 라이프 스타일</span>
-      </div>
-      <div class="progress-bar">
-        <div class="progress" style="width: 70%;"><span>70%</span></div>
-      </div>
-    </div>
-
-    <div class="progress-card">
-      <div class="card-header">
-        <span class="icon">🍳</span>
-        <span class="title">요리 레시피</span>
-      </div>
-      <div class="progress-bar">
-        <div class="progress" style="width: 45%;"><span>45%</span></div>
-      </div>
-    </div>
-
-    <div class="progress-card">
-      <div class="card-header">
-        <span class="icon">🔪</span>
-        <span class="title">조리 스킬</span>
-      </div>
-      <div class="progress-bar">
-        <div class="progress" style="width: 85%;"><span>85%</span></div>
-      </div>
-    </div>
-
-  </div>
-</div>
-</div>
-   
-
         
-<div class="dash-section">
-        <h3 style="margin-top:40px;">
+        <h2 style="margin-bottom: 80px;" id="recipeSection">
             나의 레시피
-        </h3>
-        <div class="recipe-grid">
-          <a href="detailRecipe.html" class="recipe-card-link">
+        </h2>
+           
+        <div class="recipe-search" style="justify-content: end;">
+                <input type="text" id="recipe-searchInput" placeholder="검색어를 입력해 주세요">
+                <button type="submit"><svg width="25" height="25" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M21 21l-4.35-4.35m1.35-5.15a7 7 0 11-14 0 7 7 0 0114 0z" stroke="#6b7280" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+                 </svg></button>
+            </div>
+
+
+       <div class="recipe-grid">
+  <a href="detailRecipe.html" class="recipe-card-link">
     <div class="recipe-header">레시피 제목</div>
     <div class="recipe-card">
       <div class="recipe-info">
@@ -91,9 +53,10 @@
       </div>
     </div>
   </a>
-  
 
-          <a href="detailRecipe.html" class="recipe-card-link">
+
+                
+  <a href="detailRecipe.html" class="recipe-card-link">
     <div class="recipe-header">레시피 제목</div>
     <div class="recipe-card">
       <div class="recipe-info">
@@ -102,16 +65,51 @@
     </div>
   </a>
 
-         <a href="detailRecipe.html" class="recipe-card-link">
+
+
+    <a href="detailRecipe.html" class="recipe-card-link">
     <div class="recipe-header">레시피 제목</div>
     <div class="recipe-card">
       <div class="recipe-info">
         <p>레시피 내용</p>
       </div>
     </div>
-  </a>  
-  
-  </div>
+  </a>
+
+          
+   <a href="detailRecipe.html" class="recipe-card-link">
+    <div class="recipe-header">레시피 제목</div>
+    <div class="recipe-card">
+      <div class="recipe-info">
+        <p>레시피 내용</p>
+      </div>
+    </div>
+  </a>
+
+               <a href="detailRecipe.html" class="recipe-card-link">
+    <div class="recipe-header">레시피 제목</div>
+    <div class="recipe-card">
+      <div class="recipe-info">
+        <p>레시피 내용</p>
+      </div>
+    </div>
+  </a>
+
+
+
+                <a href="detailRecipe.html" class="recipe-card-link">
+    <div class="recipe-header">레시피 제목</div>
+    <div class="recipe-card">
+      <div class="recipe-info">
+        <p>레시피 내용</p>
+      </div>
+    </div>
+  </a>
+
+
+
+
+                  
                 
     </div>
     </main>

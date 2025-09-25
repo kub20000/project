@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>레시피 상세보기</title>
+  <link rel="stylesheet" href="styleMy.css">
+   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+</head>
+<body class="deleteInfo">
+
+<header>
+    <h1><a href="/">Vegan Delight</a></h1>
+    <nav id="navMenu">
+      <a href="index.html">홈</a>
+      <a href="courses.html">강의</a>
+      <a href="myFridge.html">나의 냉장고</a>
+      <a href="main.html">게시판</a>
+      <a href="login.html" id="loginBtn">로그인</a>
+      <a href="mypage.html">마이페이지</a> 
+    </nav>
+  </header>
+
+  <div class="page-wrapper">
+    <nav id="subNav">
+      <a href="myinfo.html">내 정보 수정</a>
+      <a href="myStudy.html">내 학습 기록</a>
+      <a href="myRecipe.html">나의 레시피</a>
+      <a href="myBoard.html">내 게시글 관리</a>
+      <a href="deleteinfo.html">회원 탈퇴</a>  
+    </nav>
+       
+    <main class="board-container">
+        <div class="recipe-card-wrapper">
+                <div class="recipe-detail-header">레시피 제목</div>
+                <div class="recipe-card-detail">
+                <div class="recipe-detail-info">
+                 <p>레시피 내용</p>
+                </div>
+            
+            
+                  <div class="recipe-cardBtns">
+                   <button class="recipeList-btn" onclick="location.href='dashBoard.html#recipeSection'">
+                    목록
+                    </button>
+                   <button class="recipeDelete-btn" onclick="location.href='dashBoard.html#recipeSection'">
+                   삭제
+                  </button>
+                  </div>
+               </div>
+            </div>
+    </main>
+    </div>
+</body>
+<script>
+  const deleteBtn = document.querySelector('.recipeDelete-btn');
+
+  deleteBtn.addEventListener('click', function() {
+    const confirmed = confirm("삭제하시겠습니까?");
+    if (confirmed) {
+      alert("삭제되었습니다."); 
+    } else {
+      return;
+    }
+  });
+</script>
+</html>

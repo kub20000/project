@@ -792,7 +792,7 @@ tr:hover {
 .search-box {
   display: flex; 
   align-items: center;
-  justify-content: flex-end; /* 오른쪽 끝 정렬 */
+  justify-content: flex-end !important; /* 오른쪽 끝 정렬 */
   margin: 10px 0;
   width: 100%; /* 상위 컨테이너 전체 폭 사용 */
   gap: 10px;
@@ -1247,38 +1247,269 @@ tr:hover {
   background: #45a049 !important;
 }
 
-/* 대시보드 박스 */
-.dashboard-box {
-  display: flex;
-  justify-content: space-around;
-  gap: 1.5rem;
-  padding: 2rem;
-  background: #fff;
-  border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-}
-.dashboard-item {
-  flex: 1;
-  text-align: center;
-  padding: 1.5rem;
-  border-radius: 10px;
-  text-decoration: none; /* 링크 밑줄 제거 */
-  color: #333; /* 글자 색 */
-  background: #f9f9f9;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-  display: block; /* 클릭 영역을 전체로 */
-}
-.dashboard-item:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-  background: #f9fdf9;
-}
-.dashboard-item i {
-  font-size: 2.5rem;
-  color: #2c3e50;
-  margin-bottom: 0.5rem;
-}
-.dashboard-item p {
-  margin: 0;
+.dash-section h3{
+    margin-bottom: 1rem;
+  font-size: 1.3rem;
   font-weight: bold;
+}
+
+
+.recipe-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: flex-start;
+}
+
+.recipe-card {
+    background: #fff8e1; ;
+    border-radius: 10px;
+    overflow: hidden;
+    transition: transform 0.3s ease; 
+    flex-basis: calc(33.333% - 14px);
+    min-height: 400px; 
+    display: flex; 
+    flex-direction: column; 
+    width: 100%;
+
+    background-image: 
+    linear-gradient(to bottom, #e6e6e6 1px, transparent 1px);
+    background-size: 100% 28px; /* 줄 간격 */
+    position: relative;
+    padding: 1rem 1rem 1rem 40px;
+ 
+}
+
+/* 초록색 상단 헤더 */
+.recipe-header {
+  background-color: #8cd66a;   /* 연한 초록 */
+  padding: 16px;
+  font-size: 1.1rem;
+  font-weight: bold;
+  text-align: left;
+  border-radius: 12px 12px 0 0;
+
+}
+
+/* 왼쪽 빨간 줄 */
+.recipe-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 30px; /* 줄 위치 */
+  width: 2px;
+  background: #f0b0b0;
+}
+
+.recipe-card h3 {
+  margin: 0 0 0.5rem 0;
+  font-size: 1.2rem;
+  color: #333;
+}
+.recipe-card p {
+  margin: 0;
+  font-size: 0.95rem;
+  color: #555;
+}
+
+.recipe-card-link {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+    /* 3개의 열을 만들고 20px의 간격을 고려한 너비 계산 */
+    flex-basis: calc((100% - 40px) / 3);
+  }
+
+
+.recipe-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+    cursor: pointer;
+}
+
+
+
+
+
+.recipe-info {
+ 
+  margin-top:-26px ;
+ padding: 1rem;
+display: flex;
+ flex-direction: column;
+flex-grow: 1; 
+justify-content: flex-start;
+    font-size: 1.2rem; 
+    line-height: 1.8;
+    color: #444;
+}
+
+.recipe-info h3 {
+  padding-top: 25px;
+    font-size: 1.2rem;
+    margin: 0 0 10px 0;
+    line-height: 1.4;
+}
+
+
+.recipe-info p {
+    font-size: 1rem;
+    line-height: 1.5;
+    flex-grow: 1; 
+     margin-top: 20px;
+    
+}
+
+.recipe-card-wrapper {
+  width: 85%;          
+  max-width: 800px;   
+  margin: 0 auto;      
+  overflow: hidden;    
+  box-sizing: border-box;
+}
+
+
+.recipe-card-detail {
+    width: 85%;
+    max-width: 700px; 
+    display: flex;
+    flex-direction: column;
+    min-height: 80vh; 
+    margin: 0 auto;
+    background: #fff8e1; 
+    background-image:
+    linear-gradient(to bottom, #e6e6e6 1px, transparent 1px);
+    background-size: 100% 28px;
+    position: relative;
+    padding: 1rem 1rem 1rem 40px;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+ 
+}
+
+/* 왼쪽 빨간 줄 */
+.recipe-card-detail::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 30px; /* 줄 위치 */
+  width: 2px;
+  background: #f0b0b0;
+}
+
+.recipe-detail-header h1 {
+    font-size: 1.8rem; 
+    line-height: 1.4;
+    margin-top: 30px;
+    padding-bottom: 10px; 
+    margin-bottom: 20px; 
+}
+.recipe-card-detail p {
+  margin: 0;
+  font-size: 0.95rem;
+  color: #555;
+}
+
+.recipe-card-detail-link {
+text-decoration: none; 
+ color: inherit; 
+display: block; 
+ flex-basis: calc(33.333% - 14px); 
+}
+
+.recipe-detail-info p{
+  font-size: 18px;
+  font-weight: 500;
+  
+}
+
+.recipe-cardBtns {
+    display: flex;
+    justify-content: flex-end; 
+    gap: 10px;
+    margin-top: auto;
+  
+}
+
+/* 버튼 스타일 */
+.recipe-cardBtns button {
+    width: 30%;          
+    max-width: 80px;    
+    padding: 8px 0;      
+    font-size: 0.95rem;
+    font-weight: 600;
+    border-radius: 6px;
+    border: none;
+    cursor: pointer;
+    transition: transform 0.2s ease, background-color 0.2s ease;
+    color: #fff;;
+}
+
+/* 버튼 호버 */
+.recipeList-btn button:hover {
+    background-color: #45a049 !important; 
+}
+
+/* 삭제 버튼은 빨간색으로 구분 */
+.recipeDelete-btn{
+    background-color: #e74c3c !important;
+}
+
+.recipeDelete-btn:hover {
+    background-color: #c0392b !important;
+}
+
+  .recipe-search {
+  background: none !important;     
+  border: none;         
+  cursor: pointer;      
+  padding: 0 4px;       
+  display: flex;
+  justify-self:end;
+  width: 70px;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+
+.recipe-search input[type="text"] {
+  flex: 1;             
+  min-width: 350px;    
+  padding: 8px 12px;
+  border: 1px solid #ccc;
+  border-radius: 6px 0 0 6px;
+  outline: none;
+}
+
+#recipe-searchInput{
+  border-radius: 20px;
+  width: 400px;
+}
+
+  .recipe-search button {
+  background: none !important;     
+  border: none;         
+  cursor: pointer;      
+  padding: 0 4px;       
+  display: flex;
+  align-items: center;
+  width: 50px;
+  
+}
+
+
+.recipe-detail-header {
+  background-color: #8cd66a;   /* 연한 초록 */
+  padding: 16px;
+  font-size: 1.1rem;
+  font-weight: bold;
+  text-align: left;
+  border-radius: 12px 12px 0 0;
+
+   width: 85%;       /* 내용 카드와 동일 */
+  margin: 0 auto;   /* 가운데 정렬 */
+  box-sizing: border-box;
+
 }
