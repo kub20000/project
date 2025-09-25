@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>내 정보 수정</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body class="myInfo">
+  <header>
+    <h1>Vegan delight</h1>
+    <!-- 메인 내비게이션 -->
+    <nav id="mainNav">
+        <a th:href="@{/user/index}">Home</a>
+        <a th:href="@{/courses}">Courses</a>
+        <a th:href="@{/myFridge}">나의 냉장고</a>
+        <a th:href="@{/user/login}" id="loginBtn">Login</a>
+        <a th:href="@{/notice}">게시판</a>
+        <a th:href="@{/user/mypage}" class="active"><img th:src="@{/images/123.png}" alt="마이페이지" width="36"></a>
+    </nav>
+  </header>
+
+  <main>
+    <!-- 마이페이지 서브 내비게이션 -->
+    <nav id="subNav">
+        <a th:href="@{/user/myinfo}">내 정보 수정</a>
+      <a href="mymovies.html">최근 본 영상</a>
+        <a th:href="@{/user/delete}">회원탈퇴</a>
+    </nav>
+    </section>
+    <form id="fixInfo" th:action="@{/user/myinfo}" method="post">
+    <div>
+      <label for="fixName">성명</label>
+      <input class="fixInfo" type="text" id="fixName" name="username" placeholder="이름을 입력하세요" required>
+    </div>
+    <div>
+      <label for="nickName">닉네임</label>
+      <input class="fixInfo" type="text" id="nickName" name="nickname" placeholder="닉네임을 입력하세요" required>
+    </div>
+    <div>
+      <label for="newPassward">비밀번호</label>
+        <input class="fixInfo" type="text" id="newPassward" name="password" placeholder="닉네임을 입력하세요" required>
+        <button type="button" class="fixInfo" id="changePwBtn">변경</button>
+    </div>
+    <div>
+      <label for="bthInfo">생년월일</label>
+      <input class="fixInfo" type="date" name="birthdate" id="bthInfo" required>
+    </div>
+    <div>
+      <label for="phoneNum">휴대전화 번호</label>
+      <input class="fixInfo" type="tel" id="phoneNum" name="phone" placeholder="010-1234-5678" required>
+    </div>
+    <div>
+      <label for="emailInfo">이메일 정보</label>
+      <input class="fixInfo" type="email" id="emailInfo" name="email" placeholder="example@email.com" required>
+    </div>
+    <button type="submit" class="fixInfo">정보 수정</button>
+  </form>
+  </main>
+</body>
+<script>
+    document.getElementById('changePwBtn').addEventListener('click', () => {
+        window.location.href = '/user/changePw'; // GET 요청
+    });
+</script>
+</html>
