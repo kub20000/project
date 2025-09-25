@@ -775,3 +775,11 @@ main.quizResult-container {
     font-weight: 600;
     transition: all 0.2s ease;
 }
+
+.score-label {
+    text-align: center;
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #4caf50;
+    margin-top: 0.5rem;
+}

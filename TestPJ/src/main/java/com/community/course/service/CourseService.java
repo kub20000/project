@@ -2,8 +2,6 @@ package com.community.course.service;
 
 import com.community.course.entity.Course;
 import com.community.course.repository.CourseRepo;
-import org.jcodec.api.JCodecException;
-import org.jcodec.common.DemuxerTrack;
 import org.jcodec.common.io.FileChannelWrapper;
 import org.jcodec.common.io.NIOUtils;
 import org.jcodec.containers.mp4.boxes.MovieBox;
@@ -13,7 +11,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
@@ -50,20 +47,19 @@ public class CourseService {
 
     private final String uploadPath = "C:/kkh/webDev/workspace/TestPJ/build/resources/main/static/uploads";
 
-    public void uploadCourse(String coursesName, String description,
-                             MultipartFile videoFile, MultipartFile thumbnailFile, Course.CourseCategory courses_category) throws IOException {
+    public Course uploadCourse(String coursesName, String description,
+                               MultipartFile videoFile, MultipartFile thumbnailFile,
+                               Course.CourseCategory courses_category) throws IOException {
 
         // 1. 파일 저장
-        File videoTempFile = saveFileAndGetFile(videoFile, "videos"); // saveFile 메서드 수정
-        String videoPath = "/uploads/videos/" + videoTempFile.getName(); // URL 경로 생성
-
-        // 2. 썸네일 파일 저장
+        File videoTempFile = saveFileAndGetFile(videoFile, "videos");
+        String videoPath = "/uploads/videos/" + videoTempFile.getName();
         String thumbnailPath = saveFile(thumbnailFile, "thumbnails");
 
-        // 3. 동영상 길이 측정 (저장된 파일을 인자로 전달)
+        // 2. 동영상 길이 측정
         int totalSeconds = getVideoDurationInSeconds(videoTempFile);
 
-        // 4. Course 엔티티 생성 및 데이터베이스 저장
+        // 3. Course 엔티티 생성 및 데이터베이스 저장
         Course course = new Course();
         course.setCourses_name(coursesName);
         course.setDescription(description);
@@ -72,7 +68,10 @@ public class CourseService {
         course.setCourses_category(courses_category);
         course.setTotal_sec(totalSeconds);
 
+        // courseRepo.save() 메서드는 저장 후 id가 설정된 Course 객체를 반환해야 함
         courseRepo.save(course);
+
+        return course; // ⭐️ 저장 후 ID가 설정된 Course 객체 반환 ⭐️
     }
 
     public File saveFileAndGetFile(MultipartFile file, String subDir) throws IOException {
@@ -129,5 +128,37 @@ public class CourseService {
         return 0;
     }
 
+    //강의 수정
+    public void updateCourse(int id, String coursesName, String description,
+                             MultipartFile videoFile, MultipartFile thumbnailFile, Course.CourseCategory courses_category,
+                             String existingVideoUrl, String existingThumbnailUrl) throws IOException {
+
+        Course existingCourse = courseRepo.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid course id: " + id));
+
+        // 파일 업로드 처리
+        String videoUrl = existingVideoUrl;
+        int totalSeconds = existingCourse.getTotal_sec();
+        if (videoFile != null && !videoFile.isEmpty()) {
+            File tempFile = saveFileAndGetFile(videoFile, "videos");
+            videoUrl = "/uploads/videos/" + tempFile.getName();
+            totalSeconds = getVideoDurationInSeconds(tempFile);
+        }
+
+        String thumbnailUrl = existingThumbnailUrl;
+        if (thumbnailFile != null && !thumbnailFile.isEmpty()) {
+            thumbnailUrl = saveFile(thumbnailFile, "thumbnails");
+        }
+
+        // Course 객체 업데이트
+        existingCourse.setCourses_name(coursesName);
+        existingCourse.setDescription(description);
+        existingCourse.setCourses_category(courses_category);
+        existingCourse.setVideo_url(videoUrl);
+        existingCourse.setThumbnail_url(thumbnailUrl);
+        existingCourse.setTotal_sec(totalSeconds);
+
+        courseRepo.update(existingCourse);
+    }
 
 }

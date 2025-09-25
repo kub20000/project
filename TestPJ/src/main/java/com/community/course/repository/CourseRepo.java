@@ -97,4 +97,17 @@ public class CourseRepo {
     }
 
 
+    // 강의 수정
+    public void update(Course course) {
+        String sql = "UPDATE courses SET courses_name = ?, courses_category = ?, description = ?, video_url = ?, total_sec = ?, thumbnail_url = ? WHERE id = ?";
+        jdbc.update(sql,
+                course.getCourses_name(),
+                course.getCourses_category().name().toUpperCase(),
+                course.getDescription(),
+                course.getVideo_url(),
+                course.getTotal_sec(),
+                course.getThumbnail_url(),
+                course.getId()
+        );
+    }
 }

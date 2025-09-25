@@ -93,6 +93,8 @@ function openVideo(course) {
     // 비디오 태그에 controlsList="nodownload nofullscreen" 추가
     const videoPlayer = `<video id="videoElement" width="100%" height="315" controls controlsList="nodownload nofullscreen"><source src="${course.video_url}" type="video/mp4"></video>`;
     document.getElementById('videoBox').innerHTML = videoPlayer;
+    document.getElementById('courseDesc').textContent = course.description;
+
 
     const videoElement = document.getElementById('videoElement');
     let lastTime = 0; // 이전에 재생된 시간을 저장할 변수

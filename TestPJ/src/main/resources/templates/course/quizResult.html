@@ -1,72 +1,64 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Courses - Vegan quizResult</title>
-  <link rel="stylesheet" href="/course/styleCourse.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Courses - Vegan quizResult</title>
+    <link rel="stylesheet" href="/course/styleCourse.css">
 </head>
 
 <body>
-  <header>
+<header>
     <h1><a href="/">Vegan Delight</a></h1>
     <nav id="navMenu">
-      <a href="/">Home</a>
-      <a href="/course/main">Courses</a>
-      <a href="/myFridge/main">나의 냉장고</a>
-      <a href="login.html">Login</a>
-      <a href="/post/main">게시판</a>
-      <a href="mypage.html">my page</a>
+        <a href="/">Home</a>
+        <a href="/course/main">Courses</a>
+        <a href="/myFridge/main">나의 냉장고</a>
+        <a href="login.html">Login</a>
+        <a href="/post/main">게시판</a>
+        <a href="mypage.html">my page</a>
     </nav>
-  </header>
-  <main class="quizResult-container">
+</header>
+<main class="quizResult-container">
+    <div class="quizResult-card">
+        <div class="quizResult-card-head">
+            <h2>퀴즈 결과</h2>
+            <button id="closeQuiz">X</button>
+        </div>
 
-<div class="quizResult-card">
-  <div class="quizResult-card-head">
-    <h2>퀴즈 결과</h2>
-    <button id="closeQuiz">X</button>
-  </div>
-  
+        <div class="score-display">
+            <span class="correct" th:text="${correctCount}">3</span>
+            <span class="slash">/</span>
+            <span class="total" th:text="${totalCount}">5</span>
+        </div>
+        <p class="score-label">정답 수</p>
 
-  <div class="score-display">
-  <span class="correct">3</span>
-  <span class="slash">/</span>
-  <span class="total">5</span>
-  </div>
-  <p class="score-label">정답 수</p>
+        <h3 th:if="${not #lists.isEmpty(incorrectQuizzes)}">오답 목록</h3>
+        <div class="wrong-questions" th:each="quiz, stat : ${incorrectQuizzes}">
+      <span style="color:#b91c1c; font-weight: 600; font-size: large;">
+        Q.</span>
+            <div class="wrong-questionsBox">
+       <span th:text="${quiz.quiz_question}">
+        퀴즈 문제 내용
+       </span>
+            </div>
+            <p style="color:#b91c1c; font-weight: 500;">
+                정답: <span th:text="${quiz.quiz_result}"></span>
+            </p>
+        </div>
 
-
-  <h3>오답 목록</h3>
-  <div class="wrong-questions">
-    <span style="color:#b91c1c; font-weight: 600; margin-right: 6px; font-size: large;">
-      Q2.</span>
-    <div class="wrong-questionsBox">
-     <span>
-      퀴즈 문제 내용
-     </span>
-    </div>
-    <p style="color:#b91c1c; font-weight: 500; margin-right: 6px;">
-      정답:</p>
-  </div>
-
-     <div class="retake">
-          <button type="submit" onclick="location.href='/quizResult.html'" >
-            재응시</button>
-    </div>
-
+        <div class="retake">
+            <button type="submit" onclick="history.back()">
+                재응시
+            </button>
+        </div>
     </div>
 </main>
 </body>
- <script>
-  document.getElementById("closeQuiz").addEventListener("click", function(event) {
-    alert("학습 결과를 저장 합니다.");
-    location.href = 'courses.html'; 
-  });
-
-  document.querySelector(".retake").addEventListener("click", function() {
-    alert("1번 문제로 이동합니다.");
-    location.href = 'quiz.html'; 
-  });
-  
-  </script>
+<script>
+    document.getElementById("closeQuiz").addEventListener("click", function (event) {
+        alert("학습 결과를 저장 합니다.");
+        location.href = '/course/main';
+    });
+</script>
 </html>
