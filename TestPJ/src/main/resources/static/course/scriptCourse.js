@@ -186,6 +186,7 @@ markCompleteBtn.addEventListener('click', () => {
     currentCourse.progress = Math.min(100, currentCourse.progress + 100);
     render();
     alert('강의 진도가 100% 증가했습니다.');
+    window.location.href = `/course/main`;
 });
 
 // 하트 클릭 + 좋아요 수 변동
