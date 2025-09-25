@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Map;
 import java.util.Optional;
 
+import static org.springframework.data.jpa.domain.AbstractPersistable_.id;
+
 @RestController
 @RequestMapping("/api") // API 전용 경로
 public class LoginApiController {
@@ -55,6 +57,7 @@ public class LoginApiController {
     // 👉 회원탈퇴 API
     @PostMapping("/delete")
     public ResponseEntity<Map<String, Object>> deleteUser(@RequestBody DeleteRequest request) {
+        System.out.println("delete"+id);
         Optional<User> userOpt = userService.findByUsername(request.getUsername());
 
         if (userOpt.isEmpty() || !userOpt.get().getPassword().equals(request.getPassword())) {

@@ -114,7 +114,11 @@ public class UserRepository {
         String sql = "DELETE FROM users WHERE id = ?";
         return jdbc.update(sql, id); // 삭제된 행 수 반환
     }
-}
+
+
+    }
+
+
 
 
 

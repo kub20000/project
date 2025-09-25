@@ -56,12 +56,6 @@ public class UserService {
         userRepo.updateUser(user);
     }
 
-    // 👉 비밀번호 변경
-    public void updatePassword(int id, String newPassword) {
-        int result = userRepo.updatePassword(id, newPassword);
-        if (result == 0) throw new IllegalArgumentException("비밀번호 변경 실패: 사용자 없음");
-    }
-
     // 👉 회원탈퇴
     public void deleteUser(String username) {
         userRepo.deleteByUsername(username);
@@ -72,7 +66,21 @@ public class UserService {
         return result > 0; // 1 이상이면 삭제 성공
 
     }
+
+    // 👉 Optional 풀어서 User로 반환
+    public User findById(int id) {
+        return userRepo.findById(id).orElse(null);
+    }
+   //비밀번호 변경
+    public void updatePassword(int id, String newPassword) {
+        int rows = userRepo.updatePassword(id, newPassword);
+        if (rows == 0) {
+            throw new RuntimeException("비밀번호 변경 실패: 사용자 없음 id=" + id);
+        }
+    }
 }
+
+
 
 
 

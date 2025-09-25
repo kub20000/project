@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>공지사항 수정</title>
-    <link rel="stylesheet" href="style.css">
+    <link th:href="@{/css/style.css}" rel="stylesheet">
 </head>
 
 <body>
@@ -17,19 +17,10 @@
             <a th:href="@{/admin/usermng}">회원관리</a>
         </nav>
     </header>
-    <header>
-        <h1>Vegan Delight - 관리자 mode</h1>
-        <nav>
-            <a th:href="@{/admin/indexmg}">Home</a>
-            <a th:href="@{/admin/post}">게시판</a>
-            <a th:href="@{/admin/usermng}">회원관리</a>
-        </nav>
-    </header>
-
     <main class="form-container">
-        <form th:action="@{/admin/post-edit}" th:object="${post}" method="post" id="post-editForm">
             <h2>공지사항 수정</h2>
-
+        <form id="post-editForm"  th:action="@{/admin/post-edit}" th:object="${post}" method="post">>
+            <input type="hidden" th:field="*{id}">
             <div class="form-row">
                 <label for="title">제목</label>
                 <input type="text" id="title" th:field="*{title}" required>
@@ -62,16 +53,26 @@
         }
 
         // form id 맞춤
-        document.getElementById("post-editForm").addEventListener("submit", function (e) {
+        document.getElementById("post-editForm").addEventListener("submit", async function(e){
             e.preventDefault();
+            const postData = {
+                id: id,
+                title: document.getElementById("title").value,
+                content: document.getElementById("content").value
+            };
 
-            post.title = document.getElementById("title").value;
-            post.content = document.getElementById("content").value;
+            const res = await fetch(`/api/posts/${id}`, {
+                method: "PUT",
+                headers: {"Content-Type":"application/json"},
+                body: JSON.stringify(postData)
+            });
 
-            // 로컬 저장 → 나중에는 fetch PUT 요청으로 대체 가능
-            localStorage.setItem("posts", JSON.stringify(posts));
-            alert("수정이 완료되었습니다.");
-            window.location.href = `post-view.html?id=${id}`;
+            if(res.ok){
+                alert("수정이 완료되었습니다.");
+                window.location.href = `/admin/post-view?id=${id}`;
+            } else {
+                alert("수정 실패!");
+            }
         });
     </script>
 </body>

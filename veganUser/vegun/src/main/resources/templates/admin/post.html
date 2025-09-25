@@ -4,12 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>공지사항</title>
-    <link rel="stylesheet" href="/style.css">
+    <link th:href="@{/style.css}" rel="stylesheet">
 </head>
 
 <body>
 <header>
-    <h1>Vegan Delight - 관리자 mode<img src="./img/회원관리.png" alt="마이페이지" width="36"></h1>
+    <h1>Vegan Delight - 관리자 mode <img th:src="@{/img/회원관리.png}" alt="마이페이지" width="36"></h1>
     <nav id="navMenu">
         <a th:href="@{/admin/indexmg}">Home</a>
         <a th:href="@{/admin/addNotice}">게시판</a>>
@@ -18,7 +18,7 @@
 </header>
 
 <div class="board-tabs">
-    <a href="post.html" class="active">공지사항</a>
+    <a th:href="@{/admin/post}">공지사항</a>
     <a href="freepost-delete.html">자유 게시판</a>
 </div>
 <div class="board-header">
@@ -26,7 +26,7 @@
     <div class="search-box">
         <input type="text" id="searchInput" placeholder="검색어를 입력해 주세요">
         <button id="searchBtn">
-            <img src="img/검색.png" alt="검색">
+            <img th:src="@{/img/검색.png}" alt="검색">
         </button>
     </div>
 </div>
@@ -42,12 +42,23 @@
     </tr>
     </thead>
     <tbody>
-    <!-- JS로 렌더링 -->
+    <tr th:each="post : ${posts}">
+        <td th:text="${post.id}">1</td>
+        <td>
+            <a th:href="@{|/admin/post-edit?id=${post.id}|}" th:text="${post.title}"></a>
+        </td>
+        <td th:text="${post.author}"></td>
+        <td th:text="${#dates.format(post.created_at, 'yyyy.MM.dd')}"></td>
+        <td>
+            <a th:href="@{|/admin/post-edit?id=${post.id}|}">수정</a> |
+            <a th:href="@{|/admin/post-delete?id=${post.id}|}" onclick="return confirm('삭제하시겠습니까?');">삭제</a>
+        </td>
+    </tr>
     </tbody>
 </table>
 <div>
     <div class="plusNotice">
-        <button id="addNoticeBtn" style=" margin-left:1760px; width: 60px;">+공지</button>
+        <button id="addNoticeBtn" style="margin: 20px; width: 80px;">+공지</button>
     </div>
 </div>
 
@@ -164,7 +175,7 @@
     }
 
     // 공지 추가 버튼
-    document.getElementById("addNoticeBtn").addEventListener("click", () => { window.location.href = "addNotice.html"; })
+    document.getElementById("addNoticeBtn").addEventListener("click", () => { window.location.href = "/admin/addNotice";});
 
     // 검색 기능 (제목 + ID)
     const searchInput = document.getElementById("searchInput");

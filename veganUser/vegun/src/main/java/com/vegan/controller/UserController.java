@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.time.LocalDate;
 
@@ -59,9 +60,47 @@ public class UserController {
         return "redirect:/user/login"; // 로그아웃 후 로그인 페이지로 이동
     }
 
+    // 👉 비밀번호 변경 페이지 열기
+    @GetMapping("/changePw")
+    public String changePwPage() {
+        return "user/changePw";
+    }
 
+    // 👉 비밀번호 변경 처리
+    // 비밀번호 변경 처리
+    @PostMapping("/changePw")
+    public String changePassword(
+            @RequestParam String nowPw,
+            @RequestParam String password,
+            @RequestParam String confirmPw,
+            HttpSession session,
+            RedirectAttributes redirectAttributes) { // RedirectAttributes 사용
 
+        User loginUser = (User) session.getAttribute("loginUser");
+        if (loginUser == null) return "redirect:/user/login";
 
+        if (!password.equals(confirmPw)) {
+            redirectAttributes.addFlashAttribute("error", "새 비밀번호와 확인이 일치하지 않습니다.");
+            return "redirect:/user/changePw";
+        }
+
+        if (!loginUser.getPassword().equals(nowPw)) {
+            redirectAttributes.addFlashAttribute("error", "현재 비밀번호가 일치하지 않습니다.");
+            return "redirect:/user/changePw";
+        }
+
+        try {
+            userService.updatePassword(loginUser.getId(), password);
+            User updatedUser = userService.findById(loginUser.getId());
+            session.setAttribute("loginUser", updatedUser);
+
+            redirectAttributes.addFlashAttribute("success", "비밀번호가 성공적으로 변경되었습니다!");
+            return "redirect:/user/myinfo"; // GET 요청으로 이동
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("error", "비밀번호 변경 실패: " + e.getMessage());
+            return "redirect:/user/changePw";
+        }
+    }
     // 👉 마이페이지 보기 (로그인 상태에서만 접근 가능)
     @GetMapping("/mypage")
     public String mypage(HttpSession session, Model model) {
@@ -74,6 +113,7 @@ public class UserController {
     // 👉 내 정보 보기
     @GetMapping("/myinfo")
     public String myinfo(HttpSession session, Model model) {
+        System.out.println("myinfo");
         User loginUser = (User) session.getAttribute("loginUser");
         if (loginUser == null) return "redirect:/user/login";
         model.addAttribute("user", loginUser);
@@ -82,59 +122,23 @@ public class UserController {
 
     // 👉 내 정보 수정하기
     @PostMapping("/myinfo")
-    public String updateUser(User user, HttpSession session, Model model) {
+    public String updateUser(User user, HttpSession session, RedirectAttributes redirectAttributes) {
         User loginUser = (User) session.getAttribute("loginUser");
         if (loginUser == null) return "redirect:/user/login";
 
-        user.setId(loginUser.getId()); // 내 정보 수정 시 id 유지
+        user.setId(loginUser.getId()); // id 유지
 
         try {
             userService.updateUser(user); // DB 업데이트
-            session.setAttribute("loginUser", user); // 세션도 업데이트
-            return "redirect:/user/myinfo";
+            session.setAttribute("loginUser", user); // 세션 갱신
+
+            // ✅ 성공 메시지 추가
+            redirectAttributes.addFlashAttribute("success", "내 정보가 성공적으로 수정되었습니다!");
+
+            return "redirect:/user/myinfo"; // GET 요청으로 이동
         } catch (IllegalArgumentException e) {
-            model.addAttribute("error", e.getMessage());
-            model.addAttribute("user", loginUser);
-            return "user/myinfo";
-        }
-    }
-
-    // 👉 비밀번호 변경 페이지 열기
-    @GetMapping("/changePw")
-    public String changePwPage() {
-        return "user/changePw";
-    }
-
-    // 👉 비밀번호 변경 처리
-    @PostMapping("/changePw")
-    public String changePassword(@RequestParam String nowPw,
-                                 @RequestParam String password,
-                                 @RequestParam String confirmPw,
-                                 HttpSession session,
-                                 Model model) {
-        User loginUser = (User) session.getAttribute("loginUser");
-        if (loginUser == null) return "redirect:/user/login";
-
-        // 새 비밀번호 확인
-        if (!password.equals(confirmPw)) {
-            model.addAttribute("error", "새 비밀번호와 확인이 일치하지 않습니다.");
-            return "user/changePw";
-        }
-
-        // 현재 비밀번호 확인
-        if (!loginUser.getPassword().equals(nowPw)) {
-            model.addAttribute("error", "현재 비밀번호가 일치하지 않습니다.");
-            return "user/changePw";
-        }
-
-        try {
-            userService.updatePassword(loginUser.getId(), password); // DB 업데이트
-            loginUser.setPassword(password); // 세션도 변경
-            session.setAttribute("loginUser", loginUser);
+            redirectAttributes.addFlashAttribute("error", e.getMessage());
             return "redirect:/user/myinfo";
-        } catch (Exception e) {
-            model.addAttribute("error", "비밀번호 변경 실패: " + e.getMessage());
-            return "user/changePw";
         }
     }
 
@@ -182,7 +186,7 @@ public class UserController {
     @GetMapping("/delete")
     public String deleteUser() {
         System.out.println("deleteUser");
-        return "/user/index";
+        return "/user/delete";
     }
 }
 
