@@ -1,0 +1,7 @@
+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
+
+$env:OPENAI_API_KEY = "여기에_발급받은_API_KEY값"
+
+echo $env:OPENAI_API_KEY    
+
+(키확인)
