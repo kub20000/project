@@ -22,7 +22,7 @@
   <main class="form-container" style="text-align: center;">
     <h2 style="align-self: flex-start; color: black; text-align: start;">로그인<img src="./img/새싹.png" alt="새싹"
         width="20px"></h2>
-    <form id="loginForm" th:action="@{/user/login}" method="get">
+    <form id="loginForm" >
       <input type="text" name="username" style="width: 80%;" placeholder="아이디를 입력하세요." required>
       <input type="password" name="password" style="width: 80%;" placeholder="비밀번호를 입력하세요." required><br>
         <a th:href="@{/user/joinUser}">회원가입</a>
@@ -34,7 +34,7 @@
         const form = document.getElementById('loginForm');
 
         form.addEventListener('submit', async (e) => {
-            e.preventDefault(); // 페이지 리로드 방지
+            e.preventDefault();
 
             const formData = new FormData(form);
             const data = {
@@ -43,19 +43,20 @@
             };
 
             try {
-                const response = await fetch('/api/login', {
+                const response = await fetch('/api/login', { // 유저 로그인 API
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(data) // data 객체 사용
+                    body: JSON.stringify(data)
                 });
 
                 const result = await response.json();
+                console.log(result);
 
                 if(result.success){
                     alert('로그인 성공!');
-                    window.location.href = '/user/index'; // 페이지 이동
+                    window.location.href = result.redirect; // 서버에서 전달된 URL 사용
                 } else {
-                    alert(result.message || '아이디 또는 비밀번호가 올바르지 않습니다.');
+                    alert(result.message || '아이디 또는 비밀번호가 올바르지 않습니다.*****');
                 }
 
             } catch (err) {
