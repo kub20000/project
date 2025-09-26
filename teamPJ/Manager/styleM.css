@@ -201,7 +201,7 @@ button:hover {
 
 
     #userTable {
-      border: 1px solid #ccc;
+      border: none;
     }
 
     table {

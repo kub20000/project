@@ -40,13 +40,14 @@
     
     </div>
  
-    <table id="userTable">
+    <table id="userTableuserTable">
       <thead>
         <tr>
           <th>id</th>
           <th>아이디</th>
           <th>이름</th>
           <th>이메일</th>
+          <th>상태</th>
           <th>관리</th>
         </tr>
       </thead>
@@ -60,6 +61,7 @@
         </td>
         <td ></td>
         <td th:text="${#temporals.format(.created_at, 'yyyy-MM-dd HH:mm')}"></td>
+        <td></td>
         <td th:text>
             <button class="edit-btn" th:onclick>
                 수정
