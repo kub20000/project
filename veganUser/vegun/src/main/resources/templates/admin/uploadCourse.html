@@ -8,6 +8,7 @@
 </head>
 <body>
   <header>
+      <form id="uploadCourse" th:action="@{/admin/uploadCourse}" method="post">
     <h1><a href="/">Vegan Delight</a></h1>
     <nav id="navMenu">
         <a th:href="@{/admin/indexmg}">Home</a>
@@ -17,6 +18,7 @@
         <a th:href="@{admin/addNotice}">게시판</a>>
         <a th:href="@{user/mypage}">마이페이지</a>>
     </nav>
+      </form>
   </header>
    
   

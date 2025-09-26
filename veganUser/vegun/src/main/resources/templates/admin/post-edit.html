@@ -19,7 +19,7 @@
     </header>
     <main class="form-container">
             <h2>공지사항 수정</h2>
-        <form id="post-editForm"  th:action="@{/admin/post-edit}" th:object="${post}" method="post">>
+        <form id="post-editForm"  th:action="@{/admin/post-edit}" th:object="${post}" method="post">
             <input type="hidden" th:field="*{id}">
             <div class="form-row">
                 <label for="title">제목</label>
@@ -61,15 +61,15 @@
                 content: document.getElementById("content").value
             };
 
-            const res = await fetch(`/api/posts/${id}`, {
+            const res = await fetch(`/api/post/${id}`, {
                 method: "PUT",
                 headers: {"Content-Type":"application/json"},
                 body: JSON.stringify(postData)
             });
-
+            console.log("post"+id);
             if(res.ok){
                 alert("수정이 완료되었습니다.");
-                window.location.href = `/admin/post-view?id=${id}`;
+                window.location.href = `/admin/post-edit?id=${id}`;
             } else {
                 alert("수정 실패!");
             }

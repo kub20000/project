@@ -37,10 +37,14 @@ public class Post {
     }
 
     public Object isFixed() {
+
         return this.fixed;
     }
 
     public Object getCreatedAt() {
+
         return this.created_at;
     }
+
+
 }
