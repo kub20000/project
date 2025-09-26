@@ -29,15 +29,18 @@ public class QuizController {
         return "course/quiz";
     }
 
+    // 퀴즈
     @PostMapping("/submit")
     public String submitQuiz(@ModelAttribute QuizListWrapper quizListWrapper, Model model) {
+        // 퀴즈 제출 로직을 서비스 레이어로 분리하고, 띄어쓰기 제거 로직을 서비스 단에서 처리하도록 합니다.
+        // QuizListWrapper 객체의 퀴즈 리스트를 서비스로 전달
         QuizResult result = quizService.processQuizSubmission(quizListWrapper.getQuizzes());
 
         model.addAttribute("correctCount", result.getCorrectCount());
         model.addAttribute("totalCount", result.getTotalCount());
         model.addAttribute("incorrectQuizzes", result.getIncorrectQuizzes());
 
-        return "/course/quizResult"; // quizResult.html 템플릿 반환
+        return "/course/quizResult";
     }
 
     @GetMapping("/upload/{courseId}")

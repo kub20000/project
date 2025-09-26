@@ -6,6 +6,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class QuizService {
@@ -23,41 +24,37 @@ public class QuizService {
 
     @Transactional
     public QuizResult processQuizSubmission(List<Quiz> submittedQuizzes) {
-        // 1. 사용자 답안 DB에 저장
         quizRepo.saveUserAnswers(submittedQuizzes);
 
-        // 2. 제출된 퀴즈 ID 목록 추출
-        List<Long> quizIds = new ArrayList<>();
-        for (Quiz quiz : submittedQuizzes) {
-            quizIds.add(quiz.getId());
-        }
+        List<Long> quizIds = submittedQuizzes.stream()
+                .map(Quiz::getId)
+                .collect(Collectors.toList());
 
-        // 3. 정답 데이터 DB에서 불러오기
         List<Quiz> correctAnswers = quizRepo.findQuizzesByIds(quizIds);
 
-        // 4. 채점 로직
         int correctCount = 0;
         List<Quiz> incorrectQuizzes = new ArrayList<>();
+        List<String> userIncorrectAnswers = new ArrayList<>(); // 추가된 부분
 
         for (Quiz submitted : submittedQuizzes) {
-            // 제출된 퀴즈와 일치하는 정답 찾기
             Quiz correct = correctAnswers.stream()
                     .filter(q -> q.getId() == submitted.getId())
                     .findFirst()
                     .orElse(null);
 
             if (correct != null) {
-                if (submitted.getQuiz_answer().equalsIgnoreCase(correct.getQuiz_result())) {
+                String cleanedSubmittedAnswer = submitted.getQuiz_answer() != null ? submitted.getQuiz_answer().replaceAll("\\s", "") : "";
+                String cleanedCorrectAnswer = correct.getQuiz_result() != null ? correct.getQuiz_result().replaceAll("\\s", "") : "";
+
+                if (cleanedSubmittedAnswer.equalsIgnoreCase(cleanedCorrectAnswer)) {
                     correctCount++;
                 } else {
-                    // 오답인 경우, 오답 목록에 추가
                     incorrectQuizzes.add(correct);
+                    userIncorrectAnswers.add(submitted.getQuiz_answer()); // 추가된 부분: 사용자의 오답 답안 저장
                 }
             }
         }
-
-        // 5. 결과 객체 반환
-        return new QuizResult(correctCount, submittedQuizzes.size(), incorrectQuizzes);
+        return new QuizResult(correctCount, submittedQuizzes.size(), incorrectQuizzes, userIncorrectAnswers); // 수정된 부분
     }
 
     public long uploadQuiz(long coursesId, String quizName, String quizQuestion, String quizResult) {

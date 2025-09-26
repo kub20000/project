@@ -42,13 +42,13 @@ nav a {
   font-weight: 500;
 }
 
- textarea {
-      width: 100%;
-      height: 400px;
-      resize: vertical;
-      font-family: inherit;
-      font-family: 'Malgun Gothic', '맑은 고딕', sans-serif;
-    }
+textarea {
+  width: 100%;
+  height: 400px;
+  resize: vertical;
+  font-family: inherit;
+  font-family: 'Malgun Gothic', '맑은 고딕', sans-serif;
+}
 
 /* 메인 컨텐츠 영역: 사이드바 + 오른쪽 컨텐츠 */
 .page-wrapper {
@@ -90,7 +90,7 @@ nav a {
 /*uploadCourse*/
 /* 오른쪽 컨텐츠 */
 main.uploadCourse-container {
-  flex: 1; 
+  flex: 1;
   padding: 24px;
   box-sizing: border-box;
   background: #fff;
@@ -99,83 +99,83 @@ main.uploadCourse-container {
 
 /* 업로드 컨트롤 기본 스타일 */
 .uploadCourse-Control {
-  background: var(--card, #f9f9f9); 
+  background: var(--card, #f9f9f9);
   border: 1px solid #e5e7eb;
   border-radius: 12px;
-  display: flex; 
-  align-items: center; 
-  gap: 8px; 
+  display: flex;
+  align-items: center;
+  gap: 8px;
   padding: 10px 12px;
-  width: 150px;        
+  width: 150px;
   max-width: 100%;
 }
 
 .uploadCourse-container p input[type="text"] {
   width: 80%;
-  padding: 10px 14px;      
-  border: 1px solid #ccc;  
-  border-radius: 20px;     
-  font-size: 16px;         
-  outline: none;           
+  padding: 10px 14px;
+  border: 1px solid #ccc;
+  border-radius: 20px;
+  font-size: 16px;
+  outline: none;
   transition: 0.3s;          /* 입력란 길이 조절 */
 }
 
 .uploadCourse-Control input,
 .uploadCourse-Control select {
-  border: none; 
-  outline: none; 
-  width: 100%; 
-  font-size: 14px; 
-  background: transparent; 
-  color: var(--text, #333); 
+  border: none;
+  outline: none;
+  width: 100%;
+  font-size: 14px;
+  background: transparent;
+  color: var(--text, #333);
 }
 
 /* 버튼 스타일 */
-.cta { 
+.cta {
   border-radius: 12px;
-  border: none; 
-  background: var(--primary, #4caf50); 
-  color: white; 
-  font-weight: 700; 
-  cursor: pointer; 
+  border: none;
+  background: var(--primary, #4caf50);
+  color: white;
+  font-weight: 700;
+  cursor: pointer;
 }
-.cta:hover { 
-  background: var(--primary-600, #45a049); 
+.cta:hover {
+  background: var(--primary-600, #45a049);
 }
 
 .uploadMedia-card {
-  
+
   padding: 10px;
   margin-bottom: 10px;
-  display: flex;          
-  gap: 16px;              
-  justify-content: flex-start; 
-  align-items: center; 
-  
+  display: flex;
+  gap: 16px;
+  justify-content: flex-start;
+  align-items: center;
+
 }
 
 .uploadMedia-action {
   display: flex;
   align-items: center;
-  gap: 8px;               
-  margin-bottom: 0;  
+  gap: 8px;
+  margin-bottom: 0;
 }
 
 .upload-btn {
   display: inline-block;
-  padding: 8px 16px;      
+  padding: 8px 16px;
   background: #ffffff;
   color: #000000;
-  font-weight: 400;       
-  font-size: 14px;        
+  font-weight: 400;
+  font-size: 14px;
   border-radius: 8px;
   cursor: pointer;
-  border: 1px solid #ccc; 
+  border: 1px solid #ccc;
   transition: all 0.3s;
 }
 
 .upload-btn:hover {
-  background: #f0f0f0;  
+  background: #f0f0f0;
 }
 
 .uploadBtns button{
@@ -193,9 +193,9 @@ main.uploadCourse-container {
 }
 
 .uploadBtns{
- display: flex;
-  justify-content: flex-end; 
-  gap: 10px; 
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
   margin-top: 16px;
 }
 
@@ -206,7 +206,7 @@ main.uploadCourse-container {
 
 /*uploadQuiz*/
 .uploadQuiz-container{
-flex: 1; 
+  flex: 1;
   padding: 24px;
   box-sizing: border-box;
   background: #fff;
@@ -215,60 +215,60 @@ flex: 1;
 
 .uploadQuiz-container p input[type="text"][readonly] {
   width: 80%;
-  padding: 10px 14px;      
+  padding: 10px 14px;
   border: 1px solid #ccc;
-  border-radius: 20px;     
-  font-size: 16px;         
-  outline: none;           
-  transition: 0.3s; 
-  background-color: #f0f0f0;           
+  border-radius: 20px;
+  font-size: 16px;
+  outline: none;
+  transition: 0.3s;
+  background-color: #f0f0f0;
 }
 
- .quiz-card {
-      border: 1px solid #ddd;
-      border-radius: 10px;
-      padding: 1rem;
-      margin-bottom: 1.5rem;
-      background: #fafafa;
-      font-size: 16px;
-      
-    }
-    .quiz-card h3 {
-      margin-top: 0;
-      color: #333;
-    }
+.quiz-card {
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  padding: 1rem;
+  margin-bottom: 1.5rem;
+  background: #fafafa;
+  font-size: 16px;
 
-  .quizCard-area {
-    max-height: 100px;        
-   resize: vertical;    
-   font-size: 16px;
-   margin: auto;
+}
+.quiz-card h3 {
+  margin-top: 0;
+  color: #333;
 }
 
-    
-  .quizCard-area {
-      width: 97%;
-      padding: 10px;
-      margin-top: 8px;
-      border: 1px solid #ccc;
-      border-radius: 6px;
-      font-size: 16px;
-    }
+.quizCard-area {
+  max-height: 100px;
+  resize: vertical;
+  font-size: 16px;
+  margin: auto;
+}
 
-    .quiz-card input[type="text"]{
-      width: 50%;
-      padding: 10px;
-      margin-top: 8px;
-      border: 1px solid #ccc;
-      border-radius: 6px;
-      font-size: 16px;
-    }
 
-  .quiz-card textarea::placeholder,
-  .quiz-card input[type="text"]::placeholder {
+.quizCard-area {
+  width: 97%;
+  padding: 10px;
+  margin-top: 8px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 16px;
+}
+
+.quiz-card input[type="text"]{
+  width: 50%;
+  padding: 10px;
+  margin-top: 8px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 16px;
+}
+
+.quiz-card textarea::placeholder,
+.quiz-card input[type="text"]::placeholder {
   font-size: 16px;
   color: #999;
-  }
+}
 
 
 
@@ -276,12 +276,12 @@ flex: 1;
 
 .myCourse-topBar {
   display: flex;
-   justify-content: flex-end; 
+  justify-content: flex-end;
   align-items: center;
   margin-bottom: 20px;
 }
 .myCourse-container {
-  flex: 1; 
+  flex: 1;
   padding: 24px;
   box-sizing: border-box;
   background: #fff;
@@ -290,32 +290,32 @@ flex: 1;
 }
 
 .myCourse-Control {
-  background: var(--card, #f9f9f9); 
+  background: var(--card, #f9f9f9);
   border: 1px solid #e5e7eb;
   border-radius: 12px;
-  display: flex; 
-  align-items: center; 
-  gap: 8px; 
+  display: flex;
+  align-items: center;
+  gap: 8px;
   padding: 10px 12px;
-  width: 150px;        
+  width: 150px;
   max-width: 100%;
 }
 
 .myCourse-Control input,
 .myCourse-Control select {
-  border: none; 
-  outline: none; 
-  width: 100%; 
-  font-size: 14px; 
-  background: transparent; 
-  color: var(--text, #333); 
+  border: none;
+  outline: none;
+  width: 100%;
+  font-size: 14px;
+  background: transparent;
+  color: var(--text, #333);
 }
 
 /* 검색창 */
 .myCourse-searchBox {
-  width: 400px; 
+  width: 400px;
   display: flex;
-  justify-content: flex-end; 
+  justify-content: flex-end;
   align-items: center;
   margin: 20px;
 }
@@ -385,19 +385,19 @@ flex: 1;
   padding: 5px;
 }
 
-.myCourse-badge { 
-      font-size: 12px; 
-      color: #065f46; 
-      background: #d1fae5; 
-      padding: 4px 8px; 
-      border-radius: 999px; 
-      border:1px solid #a7f3d0;
-      margin-left: 10px;
-     }
+.myCourse-badge {
+  font-size: 12px;
+  color: #065f46;
+  background: #d1fae5;
+  padding: 4px 8px;
+  border-radius: 999px;
+  border:1px solid #a7f3d0;
+  margin-left: 10px;
+}
 
 .myCourse-info {
   flex: 1;
-  margin-left: 20px;
+  margin-left: 50px;
 }
 .myCourse-info h3 {
   margin: 0;
@@ -412,27 +412,41 @@ flex: 1;
 .courseExplain {
   margin: 0;
   font-size: 0.95rem;
-  height: 150px;
+  height: 180px;
   max-width: 900px;
   border-radius: 6px;
-  border:solid 1px #000000 ;          
-  white-space: pre-line; /* 줄바꿈 반영 */
-  
+  border: solid 1px #ccc;
+  background: #ffffff;     /* 연한 배경으로 구분 */
+  padding: 12px;
+  white-space: pre-line;   /* 줄바꿈 반영 */
+  overflow-y: auto;        /* 내용 많으면 스크롤 */
+  max-height: 250px;
+
 }
 
 .course-createdAt {
   font-size: 0.9rem;
- 
+
 }
 
 /* 액션 버튼 */
 .myCourse-actions {
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 10px;
+  margin-right: 30px;
 }
-.courseEdit-btn,.quizEdit-btn,.courseDelete-btn{
+.courseEdit-btn,.quizEdit-btn{
   background: #4caf50;
+  color:white;
+  border: none;
+  padding: 14px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+.courseDelete-btn{
+  background: #e37070;
   color:white;
   border: none;
   padding: 14px 20px;
@@ -447,7 +461,7 @@ flex: 1;
   background:  #388e3c;
 }
 .courseDelete-btn:hover {
-  background: #e57373;
+  background: #e45a5a;
 }
 
 /* 다음글 이전글*/
@@ -456,19 +470,20 @@ flex: 1;
   text-align: center; /* 가운데 정렬 */
 }
 
-.myCourse-navigation a {
+.myCourse-navigation button {
+  background: none;       /* 버튼 배경 제거 */
+  border: none;           /* 버튼 테두리 제거 */
   margin: 0 12px;
   font-size: 15px;
   color: #4caf50;
-  text-decoration: none;
   font-weight: 600;
   transition: color 0.2s;
+  cursor: pointer;
 }
 
-.myCourse-navigation a:hover {
+.myCourse-navigation button:hover {
   color: #388e3c;
   text-decoration: underline;
-  cursor: pointer;
 }
 
 
@@ -478,7 +493,7 @@ flex: 1;
 /* 업로드 컨트롤 기본 스타일 */
 
 main.editCourse-container {
-  flex: 1; 
+  flex: 1;
   padding: 24px;
   box-sizing: border-box;
   background: #fff;
@@ -486,83 +501,83 @@ main.editCourse-container {
 }
 
 .editCourse-Control {
-  background: var(--card, #f9f9f9); 
+  background: var(--card, #f9f9f9);
   border: 1px solid #e5e7eb;
   border-radius: 12px;
-  display: flex; 
-  align-items: center; 
-  gap: 8px; 
+  display: flex;
+  align-items: center;
+  gap: 8px;
   padding: 10px 12px;
-  width: 150px;        
+  width: 150px;
   max-width: 100%;
 }
 
 .editCourse-container p input[type="text"] {
   width: 80%;
-  padding: 10px 14px;      
-  border: 1px solid #ccc;  
-  border-radius: 20px;     
-  font-size: 16px;         
-  outline: none;           
+  padding: 10px 14px;
+  border: 1px solid #ccc;
+  border-radius: 20px;
+  font-size: 16px;
+  outline: none;
   transition: 0.3s;          /* 입력란 길이 조절 */
 }
 
 .editCourse-Control input,
 .editCourse-Control select {
-  border: none; 
-  outline: none; 
-  width: 100%; 
-  font-size: 14px; 
-  background: transparent; 
-  color: var(--text, #333); 
+  border: none;
+  outline: none;
+  width: 100%;
+  font-size: 14px;
+  background: transparent;
+  color: var(--text, #333);
 }
 
 /* 버튼 스타일 */
-.cta { 
+.cta {
   border-radius: 12px;
-  border: none; 
-  background: var(--primary, #4caf50); 
-  color: white; 
-  font-weight: 700; 
-  cursor: pointer; 
+  border: none;
+  background: var(--primary, #4caf50);
+  color: white;
+  font-weight: 700;
+  cursor: pointer;
 }
-.cta:hover { 
-  background: var(--primary-600, #45a049); 
+.cta:hover {
+  background: var(--primary-600, #45a049);
 }
 
 .editMedia-card {
-  
+
   padding: 10px;
   margin-bottom: 10px;
-  display: flex;          
-  gap: 16px;              
-  justify-content: flex-start; 
-  align-items: center; 
-  
+  display: flex;
+  gap: 16px;
+  justify-content: flex-start;
+  align-items: center;
+
 }
 
 .editMedia-action {
   display: flex;
   align-items: center;
-  gap: 8px;               
-  margin-bottom: 0;  
+  gap: 8px;
+  margin-bottom: 0;
 }
 
 .edit-btn {
   display: inline-block;
-  padding: 8px 16px;      
+  padding: 8px 16px;
   background: #ffffff;
   color: #000000;
-  font-weight: 400;       
-  font-size: 14px;        
+  font-weight: 400;
+  font-size: 14px;
   border-radius: 8px;
   cursor: pointer;
-  border: 1px solid #ccc; 
+  border: 1px solid #ccc;
   transition: all 0.3s;
 }
 
 .edit-btn:hover {
-  background: #f0f0f0;  
+  background: #f0f0f0;
 }
 
 .editBtns button{
@@ -580,16 +595,16 @@ main.editCourse-container {
 }
 
 .editBtns{
- display: flex;
-  justify-content: flex-end; 
-  gap: 10px; 
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
   margin-top: 16px;
 }
 
 
 /*editQuiz*/
 .editQuiz-container{
-flex: 1; 
+  flex: 1;
   padding: 24px;
   box-sizing: border-box;
   background: #fff;
@@ -598,57 +613,57 @@ flex: 1;
 
 .editQuiz-container p input[type="text"][readonly] {
   width: 80%;
-  padding: 10px 14px;      
+  padding: 10px 14px;
   border: 1px solid #ccc;
-  border-radius: 20px;     
-  font-size: 16px;         
-  outline: none;           
-  transition: 0.3s; 
-  background-color: #f0f0f0;           
+  border-radius: 20px;
+  font-size: 16px;
+  outline: none;
+  transition: 0.3s;
+  background-color: #f0f0f0;
 }
 
- .quiz-card {
-      border: 1px solid #ddd;
-      border-radius: 10px;
-      padding: 1rem;
-      margin-bottom: 1.5rem;
-      background: #fafafa;
-      font-size: 16px;
-      
-    }
-    .quiz-card h3 {
-      margin-top: 0;
-      color: #333;
-    }
+.quiz-card {
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  padding: 1rem;
+  margin-bottom: 1.5rem;
+  background: #fafafa;
+  font-size: 16px;
 
-  .quizCard-area {
-    max-height: 100px;        
-   resize: vertical;    
-   font-size: 16px;
-   margin: auto;
+}
+.quiz-card h3 {
+  margin-top: 0;
+  color: #333;
 }
 
-    
-  .quizCard-area {
-      width: 97%;
-      padding: 10px;
-      margin-top: 8px;
-      border: 1px solid #ccc;
-      border-radius: 6px;
-      font-size: 16px;
-    }
+.quizCard-area {
+  max-height: 100px;
+  resize: vertical;
+  font-size: 16px;
+  margin: auto;
+}
 
-    .quiz-card input[type="text"]{
-      width: 50%;
-      padding: 10px;
-      margin-top: 8px;
-      border: 1px solid #ccc;
-      border-radius: 6px;
-      font-size: 16px;
-    }
 
-  .quiz-card textarea::placeholder,
-  .quiz-card input[type="text"]::placeholder {
+.quizCard-area {
+  width: 97%;
+  padding: 10px;
+  margin-top: 8px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 16px;
+}
+
+.quiz-card input[type="text"]{
+  width: 50%;
+  padding: 10px;
+  margin-top: 8px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 16px;
+}
+
+.quiz-card textarea::placeholder,
+.quiz-card input[type="text"]::placeholder {
   font-size: 16px;
   color: #999;
-  }
+}

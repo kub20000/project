@@ -13,4 +13,5 @@ public class QuizResult {
     private int correctCount;
     private int totalCount;
     private List<Quiz> incorrectQuizzes;
+    private List<String> userIncorrectAnswers;
 }

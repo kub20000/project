@@ -35,15 +35,18 @@
 
         <h3 th:if="${not #lists.isEmpty(incorrectQuizzes)}">오답 목록</h3>
         <div class="wrong-questions" th:each="quiz, stat : ${incorrectQuizzes}">
-      <span style="color:#b91c1c; font-weight: 600; font-size: large;">
-        Q.</span>
+  <span style="color:#b91c1c; font-weight: 600; font-size: large;">
+    Q.</span>
             <div class="wrong-questionsBox">
-       <span th:text="${quiz.quiz_question}">
+    <span th:text="${quiz.quiz_question}">
         퀴즈 문제 내용
-       </span>
+    </span>
             </div>
             <p style="color:#b91c1c; font-weight: 500;">
                 정답: <span th:text="${quiz.quiz_result}"></span>
+            </p>
+            <p style="color:#4caf50; font-weight: 500;">
+                <span style="color: #666;">제출 답안:</span> <span th:text="${incorrectQuizzes.get(stat.index).quiz_answer}"></span>
             </p>
         </div>
 
