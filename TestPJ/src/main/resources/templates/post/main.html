@@ -66,8 +66,9 @@
     <tbody>
     <tr th:each="post : ${fixedPosts}">
         <td>
-            <span class="fixed" th:if="${post.category.name() == 'NOTICE'}">공지사항&nbsp📌</span>
-            <span class="fixed" th:unless="${post.category.name() == 'NOTICE'}">자유&nbsp📌</span>
+            <span class="fixed" th:if="${post.category != null and post.category.name() == 'NOTICE'}">공지사항&nbsp📌</span>
+            <span class="fixed" th:unless="${post.category != null and post.category.name() == 'NOTICE'}">자유&nbsp📌</span>
+
         </td>
         <td>
             <a th:href="@{/post/detail/{id}(id=${post.id})}" th:text="${post.title}"></a>
@@ -77,8 +78,8 @@
     </tr>
     <tr th:each="post : ${normalPostsPage.content}">
         <td>
-            <span th:if="${post.category.name() == 'NOTICE'}">공지사항</span>
-            <span th:unless="${post.category.name() == 'NOTICE'}">자유</span>
+            <span th:if="${post.category != null and post.category.name() == 'NOTICE'}">공지사항</span>
+            <span th:unless="${post.category != null and post.category.name() == 'NOTICE'}">자유</span>
         </td>
         <td>
             <a th:href="@{/post/detail/{id}(id=${post.id})}" th:text="${post.title}"></a>

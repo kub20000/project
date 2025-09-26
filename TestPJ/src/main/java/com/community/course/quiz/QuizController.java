@@ -74,4 +74,37 @@ public class QuizController {
         }
     }
 
+    //퀴즈 수정 페이지 연결
+    @GetMapping("/edit/{coursesId}")
+    public String showEditQuizForm(@PathVariable long coursesId, Model model) {
+        Course course = courseService.findById((int) coursesId)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid course ID"));
+        model.addAttribute("course", course);
+        return "teacher/editQuiz";
+    }
+
+    // 퀴즈 목록을 JSON으로 반환 (HTML의 fetch 요청용)
+    @GetMapping("/list/{coursesId}")
+    @ResponseBody
+    public List<Quiz> getQuizzesByCoursesId(@PathVariable long coursesId) {
+        return quizService.findAllByCoursesId(coursesId);
+    }
+
+    // 퀴즈 수정
+    @PostMapping("/edit")
+    @ResponseBody
+    public ResponseEntity<Map<String, String>> editQuiz(@RequestBody List<Quiz> quizzes) {
+        try {
+            quizService.updateQuizzes(quizzes);
+            Map<String, String> response = new HashMap<>();
+            response.put("message", "퀴즈가 성공적으로 수정되었습니다.");
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            e.printStackTrace();
+            Map<String, String> errorResponse = new HashMap<>();
+            errorResponse.put("message", "퀴즈 수정에 실패했습니다.");
+            return ResponseEntity.badRequest().body(errorResponse);
+        }
+    }
+
 }

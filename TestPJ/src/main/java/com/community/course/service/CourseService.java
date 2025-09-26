@@ -1,16 +1,20 @@
 package com.community.course.service;
 
+import com.community.course.CoursePageDto;
 import com.community.course.entity.Course;
 import com.community.course.repository.CourseRepo;
 import org.jcodec.common.io.FileChannelWrapper;
 import org.jcodec.common.io.NIOUtils;
 import org.jcodec.containers.mp4.boxes.MovieBox;
 import org.jcodec.containers.mp4.demuxer.MP4Demuxer;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
@@ -22,44 +26,40 @@ public class CourseService {
 
     private final CourseRepo courseRepo;
 
+    // @Value 어노테이션은 필드에 직접 주입할 수 있도록 변경
+    @Value("${file.upload-path}")
+    private String uploadPath;
+
     public CourseService(CourseRepo courseRepo) {
         this.courseRepo = courseRepo;
     }
 
     public Optional<Course> findById(int courseId) {
-        // .get()을 사용하여 Optional 객체에서 Course 객체를 직접 가져옴
         return courseRepo.findById(courseId);
     }
 
     public List<Course> findAll() {
-        return courseRepo.findAll(); // 모든 강의 목록을 가져오는 메서드
+        return courseRepo.findAll();
     }
 
-    // 좋아요 수 증가 및 업데이트된 값 반환
     public int increaseLikeCount(int courseId) {
         return courseRepo.increaseLikeCount(courseId);
     }
 
-    // 좋아요 수 감소 및 업데이트된 값 반환
     public int decreaseLikeCount(int courseId) {
         return courseRepo.decreaseLikeCount(courseId);
     }
-
-    private final String uploadPath = "C:/kkh/webDev/workspace/TestPJ/build/resources/main/static/uploads";
 
     public Course uploadCourse(String coursesName, String description,
                                MultipartFile videoFile, MultipartFile thumbnailFile,
                                Course.CourseCategory courses_category) throws IOException {
 
-        // 1. 파일 저장
         File videoTempFile = saveFileAndGetFile(videoFile, "videos");
         String videoPath = "/uploads/videos/" + videoTempFile.getName();
         String thumbnailPath = saveFile(thumbnailFile, "thumbnails");
 
-        // 2. 동영상 길이 측정
         int totalSeconds = getVideoDurationInSeconds(videoTempFile);
 
-        // 3. Course 엔티티 생성 및 데이터베이스 저장
         Course course = new Course();
         course.setCourses_name(coursesName);
         course.setDescription(description);
@@ -68,10 +68,9 @@ public class CourseService {
         course.setCourses_category(courses_category);
         course.setTotal_sec(totalSeconds);
 
-        // courseRepo.save() 메서드는 저장 후 id가 설정된 Course 객체를 반환해야 함
         courseRepo.save(course);
 
-        return course; // ⭐️ 저장 후 ID가 설정된 Course 객체 반환 ⭐️
+        return course;
     }
 
     public File saveFileAndGetFile(MultipartFile file, String subDir) throws IOException {
@@ -93,13 +92,13 @@ public class CourseService {
         Path directory = Paths.get(uploadPath, subDir);
         File destDir = directory.toFile();
         if (!destDir.exists()) {
-            destDir.mkdirs(); // 디렉터리가 없으면 생성
+            destDir.mkdirs();
         }
 
         String storedFileName = UUID.randomUUID().toString() + "_" + file.getOriginalFilename();
         File destFile = new File(destDir, storedFileName);
 
-        file.transferTo(destFile); // 파일 저장
+        file.transferTo(destFile);
 
         return "/uploads/" + subDir + "/" + storedFileName;
     }
@@ -136,6 +135,15 @@ public class CourseService {
         Course existingCourse = courseRepo.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid course id: " + id));
 
+        // 기존 파일을 삭제하는 로직을 업데이트된 경로에 맞게 수정
+        if (videoFile != null && !videoFile.isEmpty()) {
+            deleteExistingFile(existingCourse.getVideo_url());
+        }
+        if (thumbnailFile != null && !thumbnailFile.isEmpty()) {
+            deleteExistingFile(existingCourse.getThumbnail_url());
+        }
+
+
         // 파일 업로드 처리
         String videoUrl = existingVideoUrl;
         int totalSeconds = existingCourse.getTotal_sec();
@@ -160,5 +168,55 @@ public class CourseService {
 
         courseRepo.update(existingCourse);
     }
+
+    private void deleteExistingFile(String filePath) {
+        if (filePath != null && !filePath.isEmpty()) {
+            // application.properties에 설정된 uploadPath와 동일한 기준 경로 사용
+            String fullPath = uploadPath + filePath.replace("/uploads", "");
+
+            // 로그를 추가하여 실제 삭제를 시도하는 경로를 확인
+            System.out.println("삭제를 시도하는 파일 경로: " + fullPath);
+
+            try {
+                File file = new File(fullPath);
+                if (file.exists()) {
+                    Files.delete(Paths.get(fullPath));
+                    System.out.println("기존 파일 삭제 성공: " + fullPath);
+                } else {
+                    System.out.println("삭제할 파일이 존재하지 않습니다: " + fullPath);
+                }
+            } catch (IOException e) {
+                System.err.println("기존 파일 삭제 실패: " + fullPath);
+                e.printStackTrace();
+                // 파일 삭제 실패 시, 예외를 던져 트랜잭션 롤백을 유도할 수 있습니다.
+                throw new RuntimeException("파일 삭제 실패", e);
+            }
+        }
+    }
+
+    // 강의 삭제
+    @Transactional
+    public void deleteCourse(int courseId) {
+        Course courseToDelete = courseRepo.findById(courseId)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid course ID: " + courseId));
+
+        // 파일 삭제
+        deleteExistingFile(courseToDelete.getVideo_url());
+        deleteExistingFile(courseToDelete.getThumbnail_url());
+
+        // DB 레코드 삭제
+        courseRepo.deleteById(courseId);
+    }
+
+    // 내 강의 페이지네이션
+    public CoursePageDto findCoursesWithFilterAndPagination(int page, int size, String search, String category) {
+        int offset = page * size;
+        List<Course> courses = courseRepo.findWithFilterAndPagination(size, offset, search, category);
+        long totalItems = courseRepo.countWithFilterAndSearch(search, category);
+        int totalPages = (int) Math.ceil((double) totalItems / size);
+
+        return new CoursePageDto(courses, page, totalPages, totalItems);
+    }
+
 
 }

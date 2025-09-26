@@ -12,6 +12,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -110,4 +111,57 @@ public class CourseRepo {
                 course.getId()
         );
     }
+
+    // 내 강의 페이지네이션
+    public List<Course> findWithFilterAndPagination(int limit, int offset, String search, String category) {
+        StringBuilder sqlBuilder = new StringBuilder("SELECT * FROM courses");
+        List<Object> params = new ArrayList<>();
+
+        // 동적 WHERE 절 구성
+        if (search != null && !search.isEmpty() && !category.equals("전체")) {
+            sqlBuilder.append(" WHERE courses_name LIKE ? AND courses_category = ?");
+            params.add("%" + search + "%");
+            params.add(category);
+        } else if (search != null && !search.isEmpty()) {
+            sqlBuilder.append(" WHERE courses_name LIKE ?");
+            params.add("%" + search + "%");
+        } else if (!category.equals("전체")) {
+            sqlBuilder.append(" WHERE courses_category = ?");
+            params.add(category);
+        }
+
+        sqlBuilder.append(" LIMIT ? OFFSET ?");
+        params.add(limit);
+        params.add(offset);
+
+        return jdbc.query(sqlBuilder.toString(), courseRowMapper(), params.toArray());
+    }
+
+    // 내 강의 검색
+    public long countWithFilterAndSearch(String search, String category) {
+        StringBuilder sqlBuilder = new StringBuilder("SELECT COUNT(*) FROM courses");
+        List<Object> params = new ArrayList<>();
+
+        if (search != null && !search.isEmpty() && !category.equals("전체")) {
+            sqlBuilder.append(" WHERE courses_name LIKE ? AND courses_category = ?");
+            params.add("%" + search + "%");
+            params.add(category);
+        } else if (search != null && !search.isEmpty()) {
+            sqlBuilder.append(" WHERE courses_name LIKE ?");
+            params.add("%" + search + "%");
+        } else if (!category.equals("전체")) {
+            sqlBuilder.append(" WHERE courses_category = ?");
+            params.add(category);
+        }
+
+        return jdbc.queryForObject(sqlBuilder.toString(), Long.class, params.toArray());
+    }
+
+    // 강의 삭제
+    public void deleteById(int id) {
+        String sql = "DELETE FROM courses WHERE id = ?";
+        jdbc.update(sql, id);
+    }
+
+
 }

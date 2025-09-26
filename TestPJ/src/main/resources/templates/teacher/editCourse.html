@@ -34,9 +34,9 @@
 
             <div class="editCourse-Control">
                 <select name="courses_category" id="editCourse-Category">
-                    <option value="LIFE" th:selected="${course.courses_category == T(com.community.course.entity.Course.CourseCategory).LIFE}">비건 라이프 스타일</option>
-                    <option value="RECIPE" th:selected="${course.courses_category == T(com.community.course.entity.Course.CourseCategory).RECIPE}">요리 레시피</option>
-                    <option value="SKILL" th:selected="${course.courses_category == T(com.community.course.entity.Course.CourseCategory).SKILL}">조리 스킬</option>
+                    <option value="LIFE" th:selected="${course.courses_category.name() == 'LIFE'}">비건 라이프 스타일</option>
+                    <option value="RECIPE" th:selected="${course.courses_category.name() == 'RECIPE'}">요리 레시피</option>
+                    <option value="SKILL" th:selected="${course.courses_category.name() == 'SKILL'}">조리 스킬</option>
                 </select>
             </div>
 
@@ -49,18 +49,20 @@
                 <div class="editMedia-action">
                     <label class="edit-btn">
                         🎬 영상 업로드
-                        <input name="videoFile" type="file" accept="video/*" style="display:none">
+                        <input name="videoFile" id="videoFile" type="file" accept="video/*" style="display:none">
                     </label>
-                    <span th:if="${course.video_url}" th:text="'현재 영상: ' + ${course.video_url}"></span>
+                    <span id="videoFileName" th:if="${course.video_url}" th:text="'현재 영상: ' + ${course.video_url}"></span>
+                    <span id="videoFileNameEmpty" th:unless="${course.video_url}">현재 등록된 영상 없음</span>
                     <input type="hidden" name="existingVideoUrl" th:value="${course.video_url}">
                 </div>
 
                 <div class="editMedia-action">
                     <label class="edit-btn">
                         🖼️ 이미지 업로드
-                        <input name="thumbnailFile" type="file" accept="image/*" style="display:none">
+                        <input name="thumbnailFile" id="thumbnailFile" type="file" accept="image/*" style="display:none">
                     </label>
-                    <span th:if="${course.thumbnail_url}" th:text="'현재 이미지: ' + ${course.thumbnail_url}"></span>
+                    <span id="thumbnailFileName" th:if="${course.thumbnail_url}" th:text="'현재 이미지: ' + ${course.thumbnail_url}"></span>
+                    <span id="thumbnailFileNameEmpty" th:unless="${course.thumbnail_url}">현재 등록된 이미지 없음</span>
                     <input type="hidden" name="existingThumbnailUrl" th:value="${course.thumbnail_url}">
                 </div>
             </div>
@@ -81,8 +83,46 @@
 </div>
 </body>
 <script>
-    document.getElementById("editCourse-btn").addEventListener("click", function (event) {
-        alert("수정 완료 되었습니다.");
+    document.addEventListener('DOMContentLoaded', function() {
+        const videoInput = document.getElementById('videoFile');
+        const videoFileNameSpan = document.getElementById('videoFileName');
+        const videoFileNameEmptySpan = document.getElementById('videoFileNameEmpty');
+
+        const thumbnailInput = document.getElementById('thumbnailFile');
+        const thumbnailFileNameSpan = document.getElementById('thumbnailFileName');
+        const thumbnailFileNameEmptySpan = document.getElementById('thumbnailFileNameEmpty');
+
+        // 영상 파일 업로드 시 파일명 표시
+        videoInput.addEventListener('change', function() {
+            if (this.files.length > 0) {
+                // 기존 파일명 숨기고 새로운 파일명 표시
+                if (videoFileNameSpan) videoFileNameSpan.style.display = 'none';
+                if (videoFileNameEmptySpan) videoFileNameEmptySpan.style.display = 'none';
+
+                // 새로운 <span> 태그를 생성하여 파일명 표시
+                const newSpan = document.createElement('span');
+                newSpan.textContent = '새로운 영상: ' + this.files[0].name;
+                videoInput.closest('.editMedia-action').appendChild(newSpan);
+            }
+        });
+
+        // 썸네일 파일 업로드 시 파일명 표시
+        thumbnailInput.addEventListener('change', function() {
+            if (this.files.length > 0) {
+                // 기존 파일명 숨기고 새로운 파일명 표시
+                if (thumbnailFileNameSpan) thumbnailFileNameSpan.style.display = 'none';
+                if (thumbnailFileNameEmptySpan) thumbnailFileNameEmptySpan.style.display = 'none';
+
+                // 새로운 <span> 태그를 생성하여 파일명 표시
+                const newSpan = document.createElement('span');
+                newSpan.textContent = '새로운 이미지: ' + this.files[0].name;
+                thumbnailInput.closest('.editMedia-action').appendChild(newSpan);
+            }
+        });
+
+        document.getElementById("editCourse-btn").addEventListener("click", function (event) {
+            alert("수정 완료 되었습니다.");
+        });
     });
 </script>
 </html>

@@ -28,4 +28,7 @@ public class HomeController {
 
     @GetMapping("/teacher/port")
     public String port() {return "/teacher/port";}
+
+    @GetMapping("/teacher/myCourse")
+    public String myCourse() {return "/teacher/myCourse";}
 }

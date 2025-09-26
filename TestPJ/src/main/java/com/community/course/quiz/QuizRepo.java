@@ -85,5 +85,17 @@ public class QuizRepo {
         return keyHolder.getKey() != null ? keyHolder.getKey().longValue() : -1;
     }
 
+    // 퀴즈 수정
+    public void updateQuizzes(List<Quiz> quizzes) {
+        String sql = "UPDATE quiz SET quiz_question = ?, quiz_result = ? WHERE id = ?";
+        jdbc.batchUpdate(sql, quizzes, quizzes.size(),
+                (ps, quiz) -> {
+                    ps.setString(1, quiz.getQuiz_question());
+                    ps.setString(2, quiz.getQuiz_result());
+                    ps.setLong(3, quiz.getId());
+                });
+    }
+
+
 
 }

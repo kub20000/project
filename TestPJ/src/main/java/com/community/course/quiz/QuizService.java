@@ -72,4 +72,12 @@ public class QuizService {
         return quizRepo.save(quiz);
     }
 
+    //퀴즈 수정
+    @Transactional
+    public void updateQuizzes(List<Quiz> quizzes) {
+        quizRepo.updateQuizzes(quizzes);
+    }
+
+
+
 }

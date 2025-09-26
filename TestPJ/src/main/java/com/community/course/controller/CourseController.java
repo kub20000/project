@@ -56,6 +56,7 @@ public class CourseController {
         return "teacher/editCourse";
     }
 
+    //강의 수정
     @PostMapping("/edit")
     public String updateCourse(@RequestParam("id") int id,
                                @RequestParam("courses_name") String coursesName,
@@ -77,6 +78,8 @@ public class CourseController {
             return "redirect:/course/edit/" + id;
         }
     }
+
+
 
 
 }

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -22,13 +22,13 @@
 <div class="page-wrapper">
     <nav id="subNavT">
         <a href="">나의 강의 관리</a>
-        <a href="uploadCourse.html">강의 등록 / 퀴즈 출제</a>
+        <a href="/teacher/uploadCourse">강의 등록 / 퀴즈 출제</a>
     </nav>
 
     <main class="uploadQuiz-container">
         <h2>퀴즈 출제</h2>
         <p style="color:#4caf50; font-weight: 600; margin-right: 6px;">
-            강의 제목 :<input type="text" th:value="${course.courses_name}" readonly>
+            강의 제목 :<input type="text" th:value="${course.courses_name}" readonly id="coursesName">
         </p>
         <hr>
 
@@ -51,13 +51,9 @@
             </div>
         </form>
     </main>
-
-
 </div>
 </body>
-
-<script>
-
+<script th:inline="javascript">
     const quizWrapper = document.getElementById("quizWrapper");
     const addQuizBtn = document.getElementById("addQuiz-btn");
     const quizUploadForm = document.getElementById("quizUploadForm");
@@ -67,6 +63,9 @@
     const pathArray = window.location.pathname.split('/');
     const coursesId = pathArray[pathArray.length - 1];
     document.getElementById('coursesId').value = coursesId;
+
+    // 강의 제목 가져오기
+    const coursesName = document.getElementById("coursesName").value;
 
     // 동적으로 퀴즈 카드 추가
     addQuizBtn.addEventListener("click", () => {
@@ -88,18 +87,17 @@
 
     // 폼 제출(출제 완료) 이벤트 처리
     quizUploadForm.addEventListener("submit", function (event) {
-        event.preventDefault(); // 기본 폼 제출 동작 방지
+        event.preventDefault();
 
         const formData = new FormData(quizUploadForm);
         const quizzes = [];
         const questions = formData.getAll('quiz_question');
         const results = formData.getAll('quiz_result');
 
-        // 폼 데이터를 배열로 변환
         for (let i = 0; i < questions.length; i++) {
             quizzes.push({
-                coursesId: coursesId, // URL에서 가져온 강의 ID
-                quiz_name: `Quiz ${i + 1}`, // 문제 이름 (자동 생성)
+                coursesId: coursesId,
+                quiz_name: coursesName,
                 quiz_question: questions[i],
                 quiz_result: results[i]
             });

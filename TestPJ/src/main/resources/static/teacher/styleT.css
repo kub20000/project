@@ -363,7 +363,16 @@ flex: 1;
   justify-content: center;
   font-size: 0.9rem;
   color: #555;
+  overflow: hidden;
 }
+
+.myCourse-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* **새로 추가** - 비율을 유지하며 박스를 꽉 채움 */
+  object-position: center; /* **새로 추가** - 이미지를 중앙에 정렬 */
+}
+
 .course-row {
   display: flex;
   align-items: flex-start;
