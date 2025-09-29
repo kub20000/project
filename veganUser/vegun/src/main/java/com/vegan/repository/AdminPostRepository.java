@@ -138,6 +138,8 @@ public class AdminPostRepository {
         String sql = "DELETE FROM posts WHERE id = ?";
         jdbc.update(sql, id);
     }
+
+
 }
 
 

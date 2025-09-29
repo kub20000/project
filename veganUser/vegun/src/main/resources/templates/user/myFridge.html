@@ -10,16 +10,17 @@
   <header>
     <h1>Vegan Delight</h1>
   <nav id="navMenu">
-      <a href="index.html">Home</a>
-      <a href="courses.html">Courses</a>
-      <a href="myfridge.html">나의 냉장고</a>
-      <a href="login.html">Login</a>
-      <a href="notice.html">게시판</a>
-      <a href="mypage.html" class="active"><img src="/vegan/123.png" alt="마이페이지" width="36"></a>
+      <a th:href="@{/user/index}">Home</a>
+      <a th:href="@{/user/courses}">강의</a>
+      <a th:href="@{/user/myFridge}">나의 냉장고</a>
+      <a th:href="@{/user/login}">login</a>
+      <a th:href="@{/user/notice}">게시판</a>
+      <a th:href="@{/user/mypage}" class="active"><img th:src="@{/images/123.png}" alt="마이페이지" width="36"></a>
     </nav>
   </header>
 
   <main class="fridge-container">
+      <form id="myFridgeForm" th:action="@{/user/myFridge}" method="get"></form>
     <aside class="ingredients-panel">
       <h3>냉장고 속 재료를 선택해주세요</h3>
       <input type="text" id="ingredientSearch" placeholder="추가 재료 검색">

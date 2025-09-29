@@ -21,8 +21,8 @@
     </header>
 
     <div class="board-tabs">
-        <a th:href="@{admin/post}">공지사항</a>>
-        <a th:href="@{admin/freepost-delete}">자유 게시판</a>
+        <a th:href="@{admin/post}">공지사항</a>
+        <a th:href="@{/freepost-delete}">자유게시판</a>
     </div>
 
     <div class="board-header">
@@ -126,8 +126,8 @@
     }
 
     // 4. 상세 / 수정 / 삭제
-    function viewPost(id) { window.location.href = `post-view.html?id=${id}`; }
-    function editPost(id) { window.location.href = `post-edit.html?id=${id}`; }
+    function viewPost(id) {  window.location.href = `/admin/post-view?id=${id}`; }
+    function editPost(id) {  window.location.href = `/admin/post-edit?id=${id}`; }
 
     async function deletePost(id) {
         if (!confirm("정말 삭제하시겠습니까?")) return;

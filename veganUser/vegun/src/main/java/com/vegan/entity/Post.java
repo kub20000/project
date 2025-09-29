@@ -1,5 +1,7 @@
 package com.vegan.entity;
 
+import com.vegan.repository.AdminPostRepository;
+import com.vegan.service.AdminPostService;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -12,39 +14,33 @@ import java.util.Locale;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-@Table(name = "post")
+@Entity
+@Table(name = "posts") // DB 테이블 이름과 일치
 public class Post {
 
-
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY) // auto_increment
-    private long id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
     private String author;
     private String title;
     private String content;
 
-    private LocalDateTime created_at; // 작성일
+    @Column(name = "created_at")
+    private LocalDateTime createdAt;
 
-    @Enumerated(EnumType.STRING) // enum 저장 시 문자열로 DB에 저장
+    @Column(name = "updated_at")
+    private LocalDateTime updatedAt;
+
+    @Enumerated(EnumType.STRING)
     private Locale.Category category;
 
-    private Boolean fixed; // 공지 고정 여부
-    private Object updatedAt;
+    private Boolean fixed;
 
-    public void setCreatedAt(LocalDateTime now) {
-
-        this.updatedAt = updatedAt;
+    public void setCreated_at(LocalDateTime now) {
+        this.createdAt = now;
     }
-
-    public Object isFixed() {
-
-        return this.fixed;
-    }
-
-    public Object getCreatedAt() {
-
-        return this.created_at;
-    }
-
 
 }
+
+

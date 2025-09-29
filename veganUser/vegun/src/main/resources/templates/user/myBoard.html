@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns="http://www.w3.org/1999/html">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,23 +10,23 @@
 <header>
     <h1>Vegan delight</h1>
      <nav id="mainNav">
-      <a href="index.html">Home</a>
-      <a href="courses.html">Courses</a>
-      <a href="myFridge.html">나의 냉장고</a>
-      <a href="login.html" id="loginBtn">Login</a>
-      <a href="notice.html">게시판</a>
-      <a href="mypage.html" class="active"><img src="/vegan/123.png" alt="마이페이지" width="36"></a>
+         <a th:href="@{/user/index}">Home</a>
+         <a th:href="@{/user/courses}">강의</a>
+         <a th:href="@{/user/myFridge}">나의 냉장고</a>
+         <a th:href="@{/user/login}">login</a>
+         <a th:href="@{/user/notice}">게시판</a>
+         <a th:href="@{/user/mypage}" class="active"><img th:src="@{/images/123.png}" alt="마이페이지" width="36"></a>
     </nav>
 </header>
 
 <div class="container">
     <nav id="subNav">
-      <a href="myinfo.html">내 정보 수정</a>
-      <a href="mymovies.html">최근 본 영상</a>
-      <a href="myBoard.html">내 게시글 관리</a>
-      <a href="delete.html">회원 탈퇴</a>
+        <a th:href="@{/user/myinfo}">내정보 수정</a>
+        <a th:href="@{/user/mymovies}">Home</a>
+        <a th:href="@{/user/myBoard}">내 게시글 관리</a>
+        <a th:href="@{/user/delete}">회원탈퇴</a>
     </nav>
-
+    <form id="logoutForm" th:action="@{/user/myBoard}" method="post"></form>
     <div class="board-area">
         <div class="board-header">
             <p>내 게시글 관리</p>
@@ -34,6 +34,7 @@
                 <input type="text" id="searchInput" placeholder="검색어를 입력해 주세요">
             </div>
         </div>
+
 
         <table id="myPostTable">
             <thead>

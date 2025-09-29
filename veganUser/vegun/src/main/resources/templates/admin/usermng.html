@@ -60,14 +60,14 @@
   </main>
 </body>
   <script>
-      const API_BASE = "http://localhost:9090/api"; // 실제 백엔드 주소
+      const API_BASE = "http://localhost:8080/api/admin"; // 백엔드 API 경로
       let currentUserId = null;
       let users = []; // 전역 변수 선언
 
       // 회원 목록 불러오기
       async function fetchUsers() {
           try {
-              const res = await fetch(`${API_BASE}/users`);
+              const res = await fetch(`${API_BASE}/usermng`);
               if (!res.ok) throw new Error("회원 목록 불러오기 실패");
               users = await res.json(); // 전역 users에 저장
               renderUsers(users);
@@ -82,12 +82,11 @@
           tbody.innerHTML = ""; // 기존 내용 초기화
 
           usersList.forEach(user => {
-              const tr = document.createElement("tr");
-
               const answerBtn = user.inquiry && user.inquiry.trim() !== ""
                   ? `<button onclick="openAnswerModal(${user.id})">1:1 문의 답변</button>`
                   : `<button disabled>1:1 문의 답변</button>`;
 
+              const tr = document.createElement("tr");
               tr.innerHTML = `
             <td>${user.id}</td>
             <td>${user.username}</td>
@@ -105,14 +104,14 @@
 
       // 수정 버튼: 서버에서 제공하는 edit 페이지로 이동
       function editUser(id) {
-          window.location.href = `/admin/edit/${id}`; // GET 매핑 경로와 일치
+          window.location.href = `/admin/edit/${id}`;
       }
 
       // 삭제 버튼: 서버 DELETE 요청
       async function deleteUser(id) {
           if (!confirm("정말 삭제하시겠습니까?")) return;
           try {
-              const res = await fetch(`http://localhost:9090/api/users/${id}`, { method: "DELETE" });
+              const res = await fetch(`${API_BASE}/usermng/${id}`, { method: "DELETE" });
               if (!res.ok) throw new Error("삭제 실패");
               alert("삭제 완료");
               fetchUsers(); // 삭제 후 목록 갱신
@@ -125,8 +124,7 @@
       async function openAnswerModal(userId) {
           currentUserId = userId;
           try {
-              const API_BASE = "http://localhost:9090/api";
-              const res = await fetch(`${API_BASE}/users/${id}`, { method: "DELETE" });
+              const res = await fetch(`${API_BASE}/usermng/${userId}`); // GET 요청으로 수정
               if (!res.ok) throw new Error("문의 내용 불러오기 실패");
               const data = await res.json();
               document.getElementById("inquiryText").textContent = data.inquiry || "문의 내용이 없습니다.";
@@ -147,7 +145,7 @@
           const answer = document.getElementById("answerText").value.trim();
           if (!answer) return alert("답변 내용을 입력해주세요.");
           try {
-              const res = await fetch(`${API_BASE}/users/${currentUserId}/answer`, {
+              const res = await fetch(`${API_BASE}/usermng/${currentUserId}/answer`, {
                   method: "POST",
                   headers: { "Content-Type": "application/json" },
                   body: JSON.stringify({ answer })
@@ -168,7 +166,6 @@
       document.getElementById("searchBtn").addEventListener("click", function () {
           const keyword = document.getElementById("search").value.trim().toLowerCase();
           if (!keyword) return alert("검색어를 입력하세요.");
-
           const filtered = users.filter(user => user.username.toLowerCase().includes(keyword));
           renderUsers(filtered);
       });

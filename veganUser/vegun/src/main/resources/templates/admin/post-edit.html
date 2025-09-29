@@ -19,7 +19,7 @@
     </header>
     <main class="form-container">
             <h2>공지사항 수정</h2>
-        <form id="post-editForm"  th:action="@{/admin/post-edit}" th:object="${post}" method="post">
+        <form th:action="@{/admin/post-edit}" th:object="${post}" method="post">
             <input type="hidden" th:field="*{id}">
             <div class="form-row">
                 <label for="title">제목</label>

@@ -12,7 +12,7 @@
     <h1>Vegan Delight - 관리자 mode <img th:src="@{/img/회원관리.png}" alt="마이페이지" width="36"></h1>
     <nav id="navMenu">
         <a th:href="@{/admin/indexmg}">Home</a>
-        <a th:href="@{/admin/addNotice}">게시판</a>>
+        <a th:href="@{/admin/addNotice}">게시판</a>
         <a th:href="@{/admin/usermng}">회원관리</a>
     </nav>
 </header>
@@ -50,7 +50,7 @@
         <td th:text="${post.author}"></td>
         <td th:text="${#dates.format(post.created_at, 'yyyy.MM.dd')}"></td>
         <td>
-            <a th:href="@{|/admin/post-edit?id=${post.id}|}">수정</a> |
+            <button th:onclick="'window.location.href=\'@{/admin/post-edit(id=${post.id})}\' '">수정</button>
             <a th:href="@{|/admin/post-delete?id=${post.id}|}" onclick="return confirm('삭제하시겠습니까?');">삭제</a>
         </td>
     </tr>
@@ -164,7 +164,7 @@
 
     // 상세, 수정, 삭제
     function viewPost(id) {  window.location.href = `/admin/post-view?id=${id}`; }
-    function editPost(id) { window.location.href = `post-edit?id=${id}`; }
+    function editPost(id) { window.location.href = `/admin/post-edit?id=${id}`;}
     function deletePost(id) {
         if (!confirm("정말 삭제하시겠습니까?")) return;
         const indexAll = allPosts.findIndex(p => p.id === id);

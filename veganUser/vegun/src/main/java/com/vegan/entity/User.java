@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
@@ -23,5 +24,8 @@ public class User {
     private String phone;
     private Role role;
     private LocalDateTime createdAt; // 생성일
+
+
+
 
 }

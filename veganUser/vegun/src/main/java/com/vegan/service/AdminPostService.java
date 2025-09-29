@@ -26,12 +26,13 @@ public class AdminPostService {
     }
 
     // 단일 게시글 조회
+    // PostService.java
     public Post findById(Long id) {
-        return postRepo.findById(id); // null 가능
+        return postRepo.findById(id);
     }
 
     // 전체 게시글 조회
-    public List<Post> findAll() {
+    public List<Post> getAllPosts() {
         return postRepo.findAll();
     }
 
@@ -44,4 +45,9 @@ public class AdminPostService {
         post.setCreated_at(LocalDateTime.now());
         return postRepo.save(post,loginUser);
     }
+    // 자유게시판 게시글 삭제
+    public void deletePost(Long id) {
+        postRepo.deleteById(id);
+    }
+
 }

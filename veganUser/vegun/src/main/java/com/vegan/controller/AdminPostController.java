@@ -7,9 +7,17 @@ import com.vegan.service.AdminPostService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import static org.springframework.data.jpa.domain.AbstractPersistable_.id;
 
 @RequiredArgsConstructor
 @Controller
@@ -45,14 +53,30 @@ public class AdminPostController {
         postService.add(post, loginUser);  //서비스에 포스트,유저 보내기
         return "redirect:/admin/post";   // 등록 후 공지사항 목록 페이지로 이동
     }
-    //공지 사항 추가
+
+    // 1️⃣ 공지사항 수정 화면 (GET)
     @GetMapping("/post-edit")
     public String editPostForm(@RequestParam Long id, Model model) {
-        System.out.println("post-edit"+id);
+        System.out.println("post-edit " + id);
+
         Post post = postService.findById(id);
-        model.addAttribute("post", post);
-        return "admin/post-edit";
+        if (post == null) {
+            System.out.println("해당 ID의 공지사항이 존재하지 않습니다: " + id);
+            return "redirect:/admin/post"; // 목록 페이지로 이동
+        }
+
+        model.addAttribute("post", post); // post-edit.html에서 th:object="${post}"로 접근
+        return "admin/post-edit"; // 수정 화면 반환
     }
+
+    // 2️⃣ 공지사항 수정 처리 (POST)
+    @PostMapping("/post-edit")
+    public String updatePost(@ModelAttribute Post post) {
+        System.out.println("post-edit POST 호출");
+        postService.update(post); // DB 업데이트
+        return "redirect:/admin/post"; // 수정 후 목록 페이지로 이동
+    }
+
 
     // 6️⃣ 게시글 화면 열기
     @GetMapping("/post-view")
@@ -63,15 +87,58 @@ public class AdminPostController {
         model.addAttribute("post", post);          // 모델에 담아 뷰로 전달
         return "admin/post-view";                  // templates/admin/post-view.html 렌더링
     }
+
     @GetMapping("/uploadCourse")
     public String uploadCourseForm() {
         System.out.println("uploadCourseForm");
         return "admin/uploadCourse";
 
     }
+
+    // 자유게시판 전체 조회 (검색 + 페이징)
+    @GetMapping("/posts")
+    public ResponseEntity<Map<String, Object>> getPosts(
+            @RequestParam(defaultValue = "") String search,
+            @RequestParam(defaultValue = "1") int page,
+            @RequestParam(defaultValue = "5") int limit) {
+
+        List<Post> allPosts = postService.getAllPosts();
+
+        // 검색 필터링
+        List<Post> filtered = allPosts.stream()
+                .filter(p -> p.getTitle().toLowerCase().contains(search.toLowerCase()))
+                .toList();
+
+        // 페이징 처리
+        int total = filtered.size();
+        int totalPages = (int) Math.ceil((double) total / limit);
+        int start = (page - 1) * limit;
+        int end = Math.min(start + limit, total);
+
+        List<Post> pagePosts = filtered.subList(start, end);
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("posts", pagePosts);
+        response.put("totalPages", totalPages);
+
+        return ResponseEntity.ok(response);
+    }
+
+
+    //자유게시판
     @GetMapping("/freepost-delete")
-    public String freepostDeleteForm() {
-        System.out.println("freepostDeleteForm");
+    public String freepost(@RequestParam(required = false) Long id, Model model) {
+        System.out.println("freepost-delete");
+
+        if (id != null) {
+            Post post = postService.findById(id);
+            if (post == null) throw new RuntimeException("게시글 불러오기 실패");
+            model.addAttribute("post", post);
+        }
+
+        List<Post> posts = postService.getAllPosts(); // 자유게시판 전체 목록
+        model.addAttribute("posts", posts);
+
         return "admin/freepost-delete";
     }
 
@@ -79,8 +146,14 @@ public class AdminPostController {
 
 
 
-
-
-
-
 }
+
+
+
+
+
+
+
+
+
+

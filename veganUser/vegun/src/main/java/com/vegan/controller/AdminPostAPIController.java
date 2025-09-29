@@ -2,18 +2,29 @@ package com.vegan.controller;
 
 
 import com.vegan.entity.Post;
+import com.vegan.entity.User;
+import com.vegan.repository.UserRepository;
 import com.vegan.service.AdminPostService;
+import com.vegan.service.UserService;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.http.ResponseEntity;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api") // API 전용 경로
 public class AdminPostAPIController {
     private final AdminPostService postService;
+    private final UserService userService;
 
-    public AdminPostAPIController(AdminPostService postService) {
+    public AdminPostAPIController(AdminPostService postService, UserService userService) {
         this.postService = postService;
+        this.userService = userService;
     }
 
     // 게시글 단일 조회 (REST API)
@@ -46,10 +57,51 @@ public class AdminPostAPIController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         }
     }
+    @GetMapping("/posts")
+    public ResponseEntity<Map<String, Object>> getPosts(
+            @RequestParam(defaultValue = "") String search,
+            @RequestParam(defaultValue = "1") int page,
+            @RequestParam(defaultValue = "5") int limit) {
+
+        List<Post> allPosts = postService.getAllPosts();
+
+        // 검색 필터링
+        List<Post> filtered = allPosts.stream()
+                .filter(p -> p.getTitle().toLowerCase().contains(search.toLowerCase()))
+                .toList();
+
+        // 페이징 처리
+        int total = filtered.size();
+        int totalPages = (int) Math.ceil((double) total / limit);
+        int start = (page - 1) * limit;
+        int end = Math.min(start + limit, total);
+
+        List<Post> pagePosts = filtered.subList(start, end);
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("posts", pagePosts); // 필수
+        response.put("totalPages", totalPages);
+
+        return ResponseEntity.ok(response);
+    }
+    // 자유게시판 삭제
+    @DeleteMapping("/posts/{id}")
+    public ResponseEntity<String> deletePost(@PathVariable Long id) {
+        System.out.println("deletePost" + id);
+        try {
+            postService.deletePost(id);
+            return ResponseEntity.ok("success");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("error");
+        }
+    }
+
+    }
 
 
 
-}
+
+
 
 
 
