@@ -52,13 +52,20 @@ public class PostRepo {
         return (rs, rowNum) -> {
             java.sql.Timestamp timestamp = rs.getTimestamp("created_at");
             LocalDateTime createdAt = (timestamp != null) ? timestamp.toLocalDateTime() : null;
+
+            // category 값 처리: null 값 체크 및 기본값 지정
+            String categoryString = rs.getString("category");
+            Post.Category categoryEnum = (categoryString != null)
+                    ? Post.Category.valueOf(categoryString.toUpperCase())
+                    : Post.Category.FREEBOARD;
+
             Post p = new Post();
                     p.setId(rs.getInt("id"));
                     p.setAuthor(rs.getString("author"));
                     p.setTitle(rs.getString("title"));
                     p.setContent(rs.getString("content"));
                     p.setCreated_at(createdAt);
-                    p.setCategory(Post.Category.valueOf(rs.getString("category").toUpperCase()));
+                    p.setCategory(categoryEnum);
                     p.setFixed(rs.getBoolean("fixed"));
             return p;
         };
