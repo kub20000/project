@@ -97,6 +97,18 @@ courseListContainer.addEventListener('click', async (e) => {
 
     if (!courseId) return;
 
+    // 강의 수정 버튼 클릭 시
+    if (target.classList.contains('courseEdit-btn')) {
+        // CourseController의 @GetMapping("/edit/{id}")로 이동
+        window.location.href = `/course/edit/${courseId}`;
+    }
+
+    //  퀴즈 수정 버튼 클릭 시
+    if (target.classList.contains('quizEdit-btn')) {
+        // QuizController의 @GetMapping("/edit/{coursesId}")로 이동
+        window.location.href = `/quiz/edit/${courseId}`;
+    }
+
     if (target.classList.contains('courseDelete-btn')) {
         if (confirm('정말로 이 강의를 삭제하시겠습니까?')) {
             try {

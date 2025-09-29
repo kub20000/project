@@ -42,7 +42,7 @@ function render(data = []) {
                 <div class="title">${course.courses_name}</div>
                 <div class="meta">
                     <span class="badge">${course.courses_category}</span>
-                    <span class="badge gray">진도: ${((course.duration_sec / course.total_sec) * 100).toFixed(0) || 0}%</span>
+                    <span class="badge gray" data-course-id="${course.id}">진도: ${((course.duration_sec / course.total_sec) * 100).toFixed(0) || 0}%</span>
                 </div>
                 <div class="actions">
                     <button class="btn primary" data-play="${course.id}">강의 재생</button>
@@ -151,12 +151,12 @@ function updateVideoProgress(courseId, durationSec) {
             if (!response.ok) {
                 console.error('진도율 저장 실패');
             } else {
-                //  성공 시, 화면의 진도율을 업데이트
+                // ⭐ 성공 시, 화면의 진도율을 업데이트
                 const totalSec = currentCourse.total_sec;
                 const progressPercentage = ((durationSec / totalSec) * 100).toFixed(0) || 0;
 
-                // 진도율을 표시하는 UI 요소를 찾아 업데이트
-                const progressSpan = document.querySelector(`.badge.gray`);
+                // ⭐ data-course-id 속성을 이용해 해당 강의 카드만 정확히 선택
+                const progressSpan = document.querySelector(`.badge.gray[data-course-id="${courseId}"]`);
                 if (progressSpan) {
                     progressSpan.textContent = `진도: ${progressPercentage}%`;
                 }
@@ -164,6 +164,7 @@ function updateVideoProgress(courseId, durationSec) {
         })
         .catch(error => console.error('Error saving progress:', error));
 }
+
 function closeVideoModal(){
     videoModal.classList.remove('open');
     videoModal.setAttribute('aria-hidden', 'true'); // 모달이 닫히면 aria-hidden 추가
