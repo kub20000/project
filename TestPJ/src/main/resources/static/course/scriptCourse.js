@@ -42,7 +42,7 @@ function render(data = []) {
                 <div class="title">${course.courses_name}</div>
                 <div class="meta">
                     <span class="badge">${course.courses_category}</span>
-                    <span class="badge gray">진도: ${course.duration_sec  || 0}%</span>
+                    <span class="badge gray">진도: ${((course.duration_sec / course.total_sec) * 100).toFixed(0) || 0}%</span>
                 </div>
                 <div class="actions">
                     <button class="btn primary" data-play="${course.id}">강의 재생</button>
@@ -88,35 +88,81 @@ function openVideo(course) {
     currentCourse = course;
     videoTitle.textContent = `${course.courses_name}`;
     videoModal.classList.add('open');
-    videoModal.removeAttribute('aria-hidden'); // 모달이 열리면 aria-hidden 제거
+    videoModal.removeAttribute('aria-hidden');
 
-    // 비디오 태그에 controlsList="nodownload nofullscreen" 추가
     const videoPlayer = `<video id="videoElement" width="100%" height="315" controls controlsList="nodownload nofullscreen"><source src="${course.video_url}" type="video/mp4"></video>`;
     document.getElementById('videoBox').innerHTML = videoPlayer;
     document.getElementById('courseDesc').textContent = course.description;
 
-
     const videoElement = document.getElementById('videoElement');
-    let lastTime = 0; // 이전에 재생된 시간을 저장할 변수
 
-    // timeupdate 이벤트 리스너 정의 (메모리 누수 방지를 위해 함수를 별도로 정의)
+    // 비디오 현재 진도율 설정
+    if (course.duration_sec > 0) {
+        videoElement.currentTime = course.duration_sec;
+    }
+
+    //  진도율 저장: 5초마다 서버에 업데이트
+    let lastSavedTime = course.duration_sec;
+    const saveProgressInterval = setInterval(() => {
+        if (!videoElement.paused && videoElement.currentTime > 0) {
+            const currentTime = Math.floor(videoElement.currentTime);
+            // 5초 이상 진도 변화가 있을 때만 API 호출
+            if (currentTime - lastSavedTime >= 5) {
+                updateVideoProgress(currentCourse.id, currentTime);
+                lastSavedTime = currentTime;
+            }
+        }
+    }, 1000);
+
+    //  타임라인 앞 건너뛰기 방지 로직 복구
+    let lastTime = course.duration_sec;
     const timeUpdateHandler = () => {
-        // 사용자가 타임라인을 앞으로 건너뛰려고 할 때 (0.5초 이상 점프 시)
         if (videoElement.currentTime > lastTime + 0.5) {
-            videoElement.currentTime = lastTime; // 이전 시간으로 되돌림
+            videoElement.currentTime = lastTime;
         } else {
-            lastTime = videoElement.currentTime; // 정상적인 재생은 lastTime 업데이트
+            lastTime = videoElement.currentTime;
         }
     };
-
-    // 이벤트 리스너 추가
     videoElement.addEventListener('timeupdate', timeUpdateHandler);
 
-    // 모달이 닫힐 때 이벤트 리스너를 제거하여 메모리 누수 방지
-    closeVideo.addEventListener('click', () => {
-        videoElement.removeEventListener('timeupdate', timeUpdateHandler);
+    //  비디오가 끝나거나 모달이 닫힐 때 최종 진도율 저장
+    const onVideoEndOrClose = () => {
+        clearInterval(saveProgressInterval);
+        // 마지막 진도율을 서버에 저장
+        updateVideoProgress(currentCourse.id, Math.floor(videoElement.currentTime));
+        // 모달 닫기
         closeVideoModal();
-    });
+    };
+
+    videoElement.addEventListener('ended', onVideoEndOrClose);
+    closeVideo.addEventListener('click', onVideoEndOrClose); // closeVideo 클릭 시 이벤트 추가
+}
+
+// API 엔드포인트와 데이터 키 수정
+function updateVideoProgress(courseId, durationSec) {
+    fetch(`/api/courses/${courseId}/progress`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ duration_sec: durationSec }),
+    })
+        .then(response => {
+            if (!response.ok) {
+                console.error('진도율 저장 실패');
+            } else {
+                //  성공 시, 화면의 진도율을 업데이트
+                const totalSec = currentCourse.total_sec;
+                const progressPercentage = ((durationSec / totalSec) * 100).toFixed(0) || 0;
+
+                // 진도율을 표시하는 UI 요소를 찾아 업데이트
+                const progressSpan = document.querySelector(`.badge.gray`);
+                if (progressSpan) {
+                    progressSpan.textContent = `진도: ${progressPercentage}%`;
+                }
+            }
+        })
+        .catch(error => console.error('Error saving progress:', error));
 }
 function closeVideoModal(){
     videoModal.classList.remove('open');
@@ -126,38 +172,42 @@ function closeVideoModal(){
 
 // --- data ---
 grid.addEventListener('click', (e) => {
-
     const playId = e.target.getAttribute('data-play');
     const coursesId = e.target.getAttribute('data-quiz');
 
     if (playId) {
-        // 백엔드 API 호출
+        // 강의 재생 버튼
         fetch(`/api/courses/${playId}`)
             .then(response => response.json())
             .then(course => {
-                // 받은 데이터로 동영상 모달 열기
                 openVideo(course);
             })
             .catch(error => console.error('Error fetching course:', error));
     }
 
-    // 퀴즈 버튼 클릭 시 페이지 연결
     if (coursesId) {
-        // 기존 fetch API 호출 대신 페이지를 직접 이동
-        window.location.href = `/quiz/${coursesId}`;
+        // 퀴즈 풀기 버튼
+        // 먼저 해당 코스 정보를 가져와서 openQuiz 함수에 전달
+        fetch(`/api/courses/${coursesId}`)
+            .then(response => response.json())
+            .then(course => {
+                // 진도율 체크 로직이 포함된 openQuiz 함수 호출
+                openQuiz(course);
+            })
+            .catch(error => console.error('Error fetching course:', error));
     }
 
 });
 
 // --- Quiz ---
 function openQuiz(course) {
-    if (course.progress < 100) {
+    // 진도율이 100% 미만일 때 경고창 표시
+    if (course.duration_sec < course.total_sec) {
         alert("⚠️ 수강 완료 후 퀴즈를 풀 수 있습니다.");
         return;
     }
-    currentCourse = course;
-    quizTitle.textContent = `퀴즈 · ${course.title}`;
-    quizModal.classList.add('open');
+    // 진도율이 100% 이상이면 퀴즈 페이지로 바로 이동
+    window.location.href = `/quiz/${course.id}`;
 }
 function closeQuizModal(){ quizModal.classList.remove('open'); }
 
@@ -183,10 +233,21 @@ document.addEventListener('keydown', (e)=>{
 
 markCompleteBtn.addEventListener('click', () => {
     if (!currentCourse) return;
-    currentCourse.progress = Math.min(100, currentCourse.progress + 100);
-    render();
-    alert('강의 진도가 100% 증가했습니다.');
-    window.location.href = `/course/main`;
+
+    // 현재 진도율 계산
+    const totalSec = currentCourse.total_sec;
+    const durationSec = currentCourse.duration_sec;
+    const progressPercentage = (durationSec / totalSec) * 100;
+
+    if (progressPercentage >= 100) {
+        // 진도율이 100% 이상일 때
+        alert('🎉 수강을 완료하였습니다.');
+        closeVideoModal(); // 창 닫기
+    } else {
+        // 진도율이 100% 미만일 때
+        alert(`⚠️ 현재 수강률은 ${progressPercentage.toFixed(0)}% 입니다. 100%를 채워야 수강이 완료됩니다.`);
+        // 창은 닫히지 않음
+    }
 });
 
 // 하트 클릭 + 좋아요 수 변동

@@ -49,6 +49,13 @@ public class CourseAPIController {
         return ResponseEntity.ok(response);
     }
 
+    // 진도율 업데이트 API 추가
+    @PostMapping("/{courseId}/progress")
+    public ResponseEntity<Void> updateProgress(@PathVariable int courseId, @RequestBody Map<String, Integer> payload) {
+        int durationSec = payload.get("duration_sec");
+        courseService.updateProgress(courseId, durationSec);
+        return ResponseEntity.ok().build();
+    }
 
 
 }

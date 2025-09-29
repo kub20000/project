@@ -218,5 +218,9 @@ public class CourseService {
         return new CoursePageDto(courses, page, totalPages, totalItems);
     }
 
+    @Transactional
+    public void updateProgress(int courseId, int durationSec) {
+        courseRepo.updateProgress(courseId, durationSec);
+    }
 
 }

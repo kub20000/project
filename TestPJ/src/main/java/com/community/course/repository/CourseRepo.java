@@ -163,5 +163,11 @@ public class CourseRepo {
         jdbc.update(sql, id);
     }
 
+    // 진도율
+    public void updateProgress(int id, int progressSec) {
+        String sql = "UPDATE courses SET duration_sec = ? WHERE id = ?";
+        jdbc.update(sql, progressSec, id);
+    }
+
 
 }
