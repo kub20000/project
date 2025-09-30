@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>공지 등록</title>
+    <link rel="stylesheet" href="/img/style.css">
+</head>
+
+<body>
+    <header>
+        <h1>Vegan Delight - 관리자 mode <img th:src="@{/img/회원관리.png}" alt="마이페이지" width="36"></h1>
+        <nav id="navMenu">
+            <a th:href="@{/admin/indexmg}">홈</a>
+            <a th:href="@{admin/post}">게시판</a>
+            <a th:href="@{admin/usermng}">회원관리</a>
+        </nav>
+    </header>
+
+    <main class="addPost-detail-container">
+
+        <div class="addPost-card">
+            <h2>공지사항 추가</h2>
+
+            <form th:action="@{/admin/addNotice}" th:object="${post}" method="post">
+                <div class="control">
+                    <select th:field="*{fixed}">
+                        <option value="0">일반 게시</option>
+                        <option value="1">고정 게시</option>
+                    </select>
+                </div>
+
+                <p style="color:#4caf50; font-weight: 600; margin-right: 6px;">
+                    제목 : <input type="text" id="addTitle" th:field="*{title}" />
+                </p>
+
+                <hr>
+
+                <p style="color:#4caf50; font-weight: 600; margin-right: 6px;">
+                    내용 :
+                </p>
+                <textarea th:field="*{content}" rows="12"></textarea>
+
+                <div class="addPostBtn">
+                    <button type="submit">등록</button>
+                    <button type="button" onclick="location.href='/admin/post'">취소</button>
+                </div>
+            </form>
+        </div>
+
+    </main>
+</body>
+
+</html>

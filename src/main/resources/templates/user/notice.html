@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vegan LMS - Home</title>
+  <link rel="stylesheet" href="img/style.css">
+</head>
+
+<body>
+  <header>
+      <form th:action="@{/user/notice}" method="get">
+    <h1>Vegan delight</h1>
+    <nav>
+        <a th:href="@{/user/index}">홈</a>
+        <a th:href="@{/user/courses}">강의</a>
+        <a th:href="@{/user/myFridge}">나의 냉장고</a>
+        <a th:href="@{/user/login}">login</a>
+        <a th:href="@{/user/notice}">게시판</a>
+        <a th:href="@{/user/mypage}" class="active"><img th:src="@{/imgs/123.png}" alt="마이페이지" width="36"></a>
+    </nav>
+      </form>
+  </header>
+
+  <form id="noticeForm" th:action="@{/user/notice}" method="get"></form>
+  <!-- 카테고리 탭 -->
+  <div class="board-tabs">
+      <a th:href="@{/user/notice}">공지사항</a>
+    <a th:href="@{/user/freeBoard}">자유 게시판</a>
+    <a th:href="@{/user/faq}">FAQ</a>
+  </div>
+
+  <!-- 제목 + 검색창 + 글쓰기 버튼 -->
+  <div class="board-header">
+    <p>공지사항</p>
+    <div class="search-box">
+      <input type="text" id="searchInput" placeholder="검색어를 입력해 주세요">
+      <button id="openWriteModal">글쓰기</button>
+    </div>
+  </div>
+
+  <!-- 게시판 -->
+  <table id="boardTable">
+    <thead>
+      <tr>
+        <th>번호</th>
+        <th>제목</th>
+        <th>작성자</th>
+        <th>등록일</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- JS에서 채움 -->
+    </tbody>
+  </table>
+
+  <!-- 페이지네이션 -->
+  <div class="pagination" id="pagination"></div>
+
+  <script th:src="@{/js/script.js}"></script>
+</body>
+
+</html>

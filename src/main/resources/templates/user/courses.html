@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Courses - Vegan LMS</title>
+    <link rel="stylesheet" href="/img/style.css">
+</head>
+
+<body>
+  <header>
+    <h1>Vegan delight</h1>
+  <nav id="navMenu">
+      <a th:href="@{/user/index}">홈</a>
+      <a th:href="@{/user/courses}">강의</a>
+      <a th:href="@{/user/myFridge}">나의 냉장고</a>
+      <a th:href="@{/user/login}">login</a>
+      <a th:href="@{/user/notice}">게시판</a>
+      <a th:href="@{/user/mypage}" class="active"><img th:src="@{/imgs/123.png}" alt="마이페이지" width="36"></a>
+    </nav>
+  </header>
+  <form id="coursesForm" th:action="@{/user/courses}" method="get"></form>
+  <!-- Search / Sort / Filter -->
+  <section class="controls">
+    <div class="control">
+      <select id="category">
+        <option value="전체">분야 (전체)</option>
+        <option value="비건 라이프 스타일">비건 라이프 스타일</option>
+        <option value="요리 레시피">요리 레시피</option>
+        <option value="조리 스킬">조리 스킬</option>
+      </select>
+    </div>
+        <div class="control" title="강의 검색">
+      <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24"><path d="M21 21l-4.35-4.35m1.35-5.15a7 7 0 11-14 0 7 7 0 0114 0z" stroke="#6b7280" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <input id="q" placeholder="검색: 강의명" />
+    </div>
+    <button class="cta" id="reset">초기화</button>
+  </section>
+
+  <div class="chips" id="chips">
+  </div>
+
+  <main class="grid" id="grid"></main>
+
+  <!-- Video Modal -->
+  <div class="modal" id="videoModal" aria-hidden="true">
+    <div class="modal-card">
+      <div class="modal-head">
+        <div class="modal-title" id="videoTitle">강의 재생</div>
+        <button class="btn" id="closeVideo">닫기</button>
+      </div>
+      <div class="modal-body">
+        <div class="video" id="videoBox">VIDEO PLAYER</div>
+        <div style="margin-top:12px; display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
+          <button class="btn primary" id="markComplete">수강 완료</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Quiz Modal -->
+  <div class="modal" id="quizModal" aria-hidden="true">
+    <div class="modal-card">
+      <div class="modal-head">
+        <div class="modal-title" id="quizTitle">퀴즈</div>
+        <button class="btn" id="closeQuiz">닫기</button>
+      </div>
+      <div class="modal-body">
+        <p>문제1</p>
+        <button class="btn primary">정답 제출</button>
+      </div>
+    </div>
+  </div>
+
+<script>
+  // --- Demo dataset ---
+  const courses = [
+    { id: 'L1', title: '비건 라이프 스타일 101: 기본 개념', category: '비건 라이프 스타일', progress: 0 },
+    { id: 'L2', title: '영양 기초와 식단 구성', category: '비건 라이프 스타일', progress: 0 },
+    { id: 'S1', title: '조리 스킬: 칼질/팬 컨트롤', category: '조리 스킬', progress: 0 },
+    { id: 'R1', title: '레시피: 고단백 샐러드 & 볼', category: '요리 레시피', progress: 0 },
+    { id: 'R2', title: '레시피: 베이킹(글루텐프리)', category: '요리 레시피', progress: 0 },
+    { id: 'L3', title: '비건 외식 문화', category: '비건 라이프 스타일', progress: 0 },
+    { id: 'S2', title: '식재료 보관·라벨 읽기', category: '조리 스킬', progress: 0 },
+  ];
+
+  // UI refs
+  const grid = document.getElementById('grid');
+  const q = document.getElementById('q');
+  const category = document.getElementById('category');
+  const resetBtn = document.getElementById('reset');
+  const chips = document.getElementById('chips');
+
+  const videoModal = document.getElementById('videoModal');
+  const videoTitle = document.getElementById('videoTitle');
+  const closeVideo = document.getElementById('closeVideo');
+  const markCompleteBtn = document.getElementById('markComplete');
+
+  const quizModal = document.getElementById('quizModal');
+  const quizTitle = document.getElementById('quizTitle');
+  const closeQuiz = document.getElementById('closeQuiz');
+
+  let currentCourse = null; 
+  let state = { q: '', category: '전체' }; 
+
+  function renderChips() {
+    const items = [];
+    if (state.q) items.push(`검색: "${state.q}"`);
+    if (state.category !== '전체') items.push(`분야: ${state.category}`);
+    chips.innerHTML = items.map(t => `<span class="chip">${t}</span>`).join('');
+  }
+
+  function render() {
+    let data = courses.filter(c => {
+      const k = (c.title).toLowerCase();
+      const okQ = !state.q || k.includes(state.q.toLowerCase());
+      const okC = state.category === '전체' || c.category === state.category;
+      return okQ && okC;
+    });
+
+    grid.innerHTML = data.map(c => `
+      <article class="card">
+        <div class="thumb">
+          <span class="badge gray">${c.category}</span>
+        </div>
+        <div class="card-body">
+          <div class="title">${c.title}</div>
+          <div class="meta">
+            <span class="badge">${c.category}</span>
+            <span class="badge gray">진도: ${c.progress || 0}%</span>
+          </div>
+          <div class="actions">
+            <button class="btn primary" data-play="${c.id}">강의 재생</button>
+            <button class="btn" data-quiz="${c.id}">퀴즈 풀기</button>
+            <button class="like-btn" data-like="${c.id}">♡</button>
+          </div>
+        </div>
+      </article>
+    `).join('');
+
+    renderChips();
+  }
+
+  // --- Video ---
+  function openVideo(course) {
+    currentCourse = course;
+    videoTitle.textContent = `${course.title}`;
+    videoModal.classList.add('open');
+  }
+  function closeVideoModal(){ videoModal.classList.remove('open'); }
+
+  // --- Quiz ---
+  function openQuiz(course) {
+    if (course.progress < 100) {
+      alert("⚠️ 수강 완료 후 퀴즈를 풀 수 있습니다.");
+      return;
+    }
+    currentCourse = course;
+    quizTitle.textContent = `퀴즈 · ${course.title}`;
+    quizModal.classList.add('open');
+  }
+  function closeQuizModal(){ quizModal.classList.remove('open'); }
+
+  // Event wiring
+  q.addEventListener('input', e => { state.q = e.target.value.trim(); render(); });
+  category.addEventListener('change', e => { state.category = e.target.value; render(); });
+  resetBtn.addEventListener('click', () => {
+    state = { q: '', category: '전체' };
+    q.value = '';
+    category.value = '전체';
+    render();
+  });
+
+  grid.addEventListener('click', (e) => {
+    const playId = e.target.getAttribute('data-play');
+    const quizId = e.target.getAttribute('data-quiz');
+    if (playId){
+      const course = courses.find(c=>c.id===playId);
+      openVideo(course);
+    }
+    if (quizId){
+      const course = courses.find(c=>c.id===quizId);
+      openQuiz(course);
+    }
+  });
+
+  closeVideo.addEventListener('click', closeVideoModal);
+  videoModal.addEventListener('click', (e)=>{ if(e.target===videoModal) closeVideoModal(); });
+
+  closeQuiz.addEventListener('click', closeQuizModal);
+  quizModal.addEventListener('click', (e)=>{ if(e.target===quizModal) closeQuizModal(); });
+
+  document.addEventListener('keydown', (e)=>{ 
+    if(e.key==='Escape'){ closeVideoModal(); closeQuizModal(); } 
+  });
+
+  markCompleteBtn.addEventListener('click', () => {
+    if (!currentCourse) return;
+    currentCourse.progress = Math.min(100, currentCourse.progress + 100);
+    render();
+    alert('강의 진도가 100% 증가했습니다.');
+  });
+
+  // 추천 상태 저장 (간단 예제용, 실제론 서버 DB 필요)
+const likes = {}; // { "L1": true, "R2": false }
+
+grid.addEventListener('click', (e) => {
+  const likeId = e.target.getAttribute('data-like');
+  if(likeId){
+    // 토글
+    if(!likes[likeId]) {
+      likes[likeId] = true;
+      e.target.classList.add('liked');
+      e.target.textContent = '♥';
+      
+    } else {
+      likes[likeId] = false;
+      e.target.classList.remove('liked');
+      e.target.textContent = '♡';
+      
+    }
+  }
+});
+
+  // initial paint
+  render();
+</script>
+</body>
+</html>
