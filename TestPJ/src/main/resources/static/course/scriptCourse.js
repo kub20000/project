@@ -15,7 +15,7 @@ const quizTitle = document.getElementById('quizTitle');
 const closeQuiz = document.getElementById('closeQuiz');
 
 let currentCourse = null;
-let state = { q: '', category: '전체' };
+let state = { q: '', category: '전체' }; // 검색 상태 초기화
 
 function renderChips() {
     const items = [];
@@ -28,6 +28,7 @@ function render(data = []) {
     // 필터링/검색 로직
     const filteredData = data.filter(c => {
         const k = (c.courses_name).toLowerCase();
+        // state.q가 비어있지 않고, 강의명에 포함되는지 확인하여 필터링
         const okQ = !state.q || k.includes(state.q.toLowerCase());
         const okC = state.category === '전체' || c.courses_category === state.category;
         return okQ && okC;
@@ -59,29 +60,64 @@ function render(data = []) {
     renderChips();
 }
 
-// 초기 로딩 시 백엔드 API 호출
-fetch('/api/courses')
-    .then(response => response.json())
-    .then(coursesFromApi => {
-        // 백엔드에서 가져온 데이터로 화면을 렌더링
-        render(coursesFromApi);
 
-        // 검색/필터링 이벤트 리스너를 API 데이터에 연결
-        q.addEventListener('input', e => { state.q = e.target.value.trim(); render(coursesFromApi); });
-        category.addEventListener('change', e => { state.category = e.target.value; render(coursesFromApi); });
-        resetBtn.addEventListener('click', () => {
-            state = { q: '', category: '전체' };
-            q.value = '';
-            category.value = '전체';
+// =========================================================================
+// **수정 및 통합된 초기 로딩 및 검색어 처리 로직**
+// =========================================================================
+document.addEventListener('DOMContentLoaded', function() {
+
+    // **1. 초기 검색어 상태 설정:**
+    // Thymeleaf가 설정한 q.value (input 요소의 value)를 state.q에 반영합니다.
+    if (q.value) {
+        state.q = q.value.trim();
+    }
+
+    // **2. API 호출 및 이벤트 리스너 설정**
+    fetch('/api/courses')
+        .then(response => response.json())
+        .then(coursesFromApi => {
+
+            // 데이터 로드 후, 현재 state.q (초기 검색어)를 사용하여 강의 목록을 렌더링합니다.
             render(coursesFromApi);
+
+            // 초기 검색이 실행되었을 경우, 사용자 편의를 위해 포커스를 줍니다.
+            if (state.q) {
+                q.focus();
+            }
+
+            // **3. 검색/필터링 이벤트 리스너 설정 (API 데이터 기반)**
+            q.addEventListener('input', e => {
+                state.q = e.target.value.trim();
+                render(coursesFromApi);
+            });
+            category.addEventListener('change', e => {
+                state.category = e.target.value;
+                render(coursesFromApi);
+            });
+            resetBtn.addEventListener('click', () => {
+                state = { q: '', category: '전체' };
+                q.value = '';
+                category.value = '전체';
+                render(coursesFromApi);
+            });
+        })
+        .catch(error => {
+            console.error('Error fetching courses:', error);
+            alert('강의 목록을 불러오는 데 실패했습니다.');
         });
 
-        // 나머지 이벤트 리스너들은 기존과 동일하게 유지
-    })
-    .catch(error => {
-        console.error('Error fetching courses:', error);
-        alert('강의 목록을 불러오는 데 실패했습니다.');
+    // --- Video Modal Events (API 데이터와 무관) ---
+    closeVideo.addEventListener('click', closeVideoModal);
+    videoModal.addEventListener('click', (e)=>{ if(e.target===videoModal) closeVideoModal(); });
+
+    closeQuiz.addEventListener('click', closeQuizModal);
+    quizModal.addEventListener('click', (e)=>{ if(e.target===quizModal) closeQuizModal(); });
+
+    document.addEventListener('keydown', (e)=>{
+        if(e.key==='Escape'){ closeVideoModal(); closeQuizModal(); }
     });
+});
+
 
 // --- Video ---
 function openVideo(course) {
@@ -212,26 +248,6 @@ function openQuiz(course) {
 }
 function closeQuizModal(){ quizModal.classList.remove('open'); }
 
-// Event wiring
-q.addEventListener('input', e => { state.q = e.target.value.trim(); render(); });
-category.addEventListener('change', e => { state.category = e.target.value; render(); });
-resetBtn.addEventListener('click', () => {
-    state = { q: '', category: '전체' };
-    q.value = '';
-    category.value = '전체';
-    render();
-});
-
-closeVideo.addEventListener('click', closeVideoModal);
-videoModal.addEventListener('click', (e)=>{ if(e.target===videoModal) closeVideoModal(); });
-
-closeQuiz.addEventListener('click', closeQuizModal);
-quizModal.addEventListener('click', (e)=>{ if(e.target===quizModal) closeQuizModal(); });
-
-document.addEventListener('keydown', (e)=>{
-    if(e.key==='Escape'){ closeVideoModal(); closeQuizModal(); }
-});
-
 markCompleteBtn.addEventListener('click', () => {
     if (!currentCourse) return;
 
@@ -289,6 +305,3 @@ grid.addEventListener('click', (e) => {
             });
     }
 });
-
-// initial paint
-render();

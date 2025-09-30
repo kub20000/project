@@ -140,6 +140,137 @@ nav a {
     box-shadow: 0 12px 24px rgba(0,0,0,0.15);
 }
 
+/* 인기 강의 섹션 */
+.courses {
+    padding: 3rem 1.5rem;
+    background: #f9fafb;
+}
+
+/* 가로 스크롤 영역 */
+.course-scroll {
+    display: flex;
+    gap: 1.5rem;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    padding-bottom: 1rem;
+}
+.course-scroll::-webkit-scrollbar {
+    height: 10px;
+}
+.course-scroll::-webkit-scrollbar-thumb {
+    background: #ccc;
+    border-radius: 10px;
+}
+.course-scroll::-webkit-scrollbar-track {
+    background: #f0f0f0;
+}
+
+/* 카드 */
+.course-card {
+    flex: 0 0 350px;
+    border-radius: 16px;
+    box-shadow: 0 6px 16px rgba(0,0,0,0.08);
+    overflow: hidden;
+    scroll-snap-align: start;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+}
+.course-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 12px 24px rgba(0,0,0,0.15);
+}
+
+.course-card .course-body {
+    background-color: #f0f9f4;
+    padding: 1rem;
+    border-radius: 0 0 16px 16px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+
+/* 썸네일 */
+.course-card .thumb {
+    width: 100%;
+    /* 16:9 비율 유지를 위한 패딩 (레이아웃 안정화) */
+    padding-bottom: 56.25%;
+    position: relative;
+    overflow: hidden; /* 이미지 튀어나오는 것 방지 */
+    margin-bottom: 10px;
+    border-radius: 8px; /* 모서리 둥글게 */
+}
+
+/* 새로운 이미지 포지셔닝 CSS */
+.course-card .thumb img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform .4s ease;
+}
+.course-card:hover .thumb img {
+    transform: scale(1.08);
+}
+
+.course-body {
+    padding: 1rem;
+    text-align: left;
+}
+
+.course-body a {
+    color: #000 !important;
+    text-decoration: none !important;
+    font-weight: bold;
+    display: inline-block;
+}
+
+.course-body a h3 {
+    color: #000;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+/* 하트 + 좋아요 숫자 */
+.badge.like-count {
+    color: #4caf50; /* 초록색 */
+    font-size: 1.1rem; /* 숫자 크기 키움 */
+    font-weight: 600;
+}
+
+.actions .fa-heart {
+    color: #4caf50; /* 초록 하트 */
+    font-size: 1.5rem; /* 조금 더 크게 */
+}
+
+/* 썸네일 크기 줄이기 */
+.course-card .thumb {
+    width: 100%;
+    height: 120px;
+    overflow: hidden;
+    border-radius: 8px;
+    position: relative;
+}
+.course-card .thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.badge.category {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.3rem 0.8rem;
+    border-radius: 12px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: white;
+    background-color: #4caf50;
+    margin-right: 5px;
+    white-space: nowrap;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
 
 
 /* 폼 */
@@ -369,16 +500,6 @@ body.fridge {
     border-radius: 8px; /* 모서리 둥글게 */
 }
 
-/* 썸네일 이미지 */
-.course-card .thumb img {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    object-fit: cover; /* 비율 유지하며 꽉 채우기 */
-    top: 0;
-    left: 0;
-}
-
 /* 정보 영역 스타일 */
 .course-info {
     padding: 0 5px;
@@ -390,8 +511,6 @@ body.fridge {
     justify-content: space-between;
     margin-top: 5px;
     font-size: 0.9em;
+
 }
 
-.badge.like-count {
-    color: #e74c3c; /* 붉은 하트 색상 */
-}

@@ -24,7 +24,6 @@
 
         <h2 id="postTitle" th:text="${post.title}">게시글</h2>
 
-        <!-- 이 부분 CSS 필요 -->
         <span th:if="${post.category != null and post.category.name() == 'NOTICE'}">공지사항</span>
         <span th:unless="${post.category != null and post.category.name() == 'NOTICE'}">자유</span>
 

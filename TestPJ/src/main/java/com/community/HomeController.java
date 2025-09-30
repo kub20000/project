@@ -32,9 +32,6 @@ public class HomeController {
         return "home";
     }
 
-    @GetMapping("/course/main")
-    public String course() {return "/course/courses";}
-
     @GetMapping("/myFridge/main")
     public String myFridge() {return "/myFridge/myFridge";}
 
@@ -47,5 +44,6 @@ public class HomeController {
     @GetMapping("/teacher/myCourse")
     public String myCourse() {return "/teacher/myCourse";}
 
-
+    @GetMapping("/myPage/main")
+    public String myPage() {return "/myPage/dashBoard";}
 }

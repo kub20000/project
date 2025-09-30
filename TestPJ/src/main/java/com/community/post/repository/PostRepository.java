@@ -3,6 +3,7 @@ package com.community.post.repository;
 import com.community.post.entity.Post;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jdbc.repository.query.Query;
 import org.springframework.data.repository.CrudRepository;
 
 import java.util.List;
@@ -21,7 +22,8 @@ public interface PostRepository extends CrudRepository<Post, Integer> {
     // 페이지네이션을 포함한 전체 목록
     Page<Post> findAll(Pageable pageable);
 
-    List<Post> findByFixedTrue();
+    @Query("SELECT * FROM posts WHERE fixed = true ORDER BY created_at DESC")
+    List<Post> findByFixedTrueOrderByCreatedAtDesc();
 
     Page<Post> findByFixedFalse(Pageable pageable);
 }

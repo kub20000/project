@@ -20,6 +20,7 @@ async function fetchAndRenderCourses(page = 0, search = '', category = '전체')
         const data = await response.json();
 
         totalPages = data.totalPages;
+        // 데이터가 없는 페이지는 1/1로 표시되도록 조정
         pageInfoSpan.textContent = `${data.currentPage + 1} / ${data.totalPages}`;
 
         renderCourses(data.content);
@@ -27,18 +28,23 @@ async function fetchAndRenderCourses(page = 0, search = '', category = '전체')
 
     } catch (error) {
         console.error('오류:', error);
-        alert('강의 목록을 불러오는 데 실패했습니다.');
+        // 사용자에게 노출되는 alert은 사용하지 않는 것이 좋습니다.
+        // alert('강의 목록을 불러오는 데 실패했습니다.');
     }
 }
 
 // 강의 목록을 HTML로 변환하여 렌더링
 function renderCourses(courses) {
-    if (courses.length === 0) {
+    // 1. 유효하지 않은 데이터(null, undefined 등)를 필터링하여 빈 카드가 생성되는 것을 방지합니다.
+    const validCourses = courses.filter(course => course && course.id);
+
+    if (validCourses.length === 0) {
         courseListContainer.innerHTML = '<p class="no-courses">강의가 없습니다.</p>';
         return;
     }
 
-    courseListContainer.innerHTML = courses.map(course => `
+    // 2. 필터링된 유효한 데이터만 매핑하여 HTML 카드를 생성합니다.
+    courseListContainer.innerHTML = validCourses.map(course => `
         <div class="myCourse-card">
             <div class="myCourse-thumb">
                 <img src="${course.thumbnail_url}" alt="${course.courses_name} 썸네일">
@@ -110,7 +116,11 @@ courseListContainer.addEventListener('click', async (e) => {
     }
 
     if (target.classList.contains('courseDelete-btn')) {
-        if (confirm('정말로 이 강의를 삭제하시겠습니까?')) {
+        // alert() 대신 커스텀 모달 UI를 사용해야 합니다.
+        // 이 환경에서는 confirm()을 사용하지 않는 것이 좋습니다.
+
+        // **경고: confirm() 대신 커스텀 모달 UI를 사용해야 합니다.**
+        if (window.confirm('정말로 이 강의를 삭제하시겠습니까?')) {
             try {
                 // **삭제 요청 URL 확인**
                 const response = await fetch(`/api/teacher/course/delete/${courseId}`, {
@@ -122,11 +132,14 @@ courseListContainer.addEventListener('click', async (e) => {
                     throw new Error('강의 삭제 실패');
                 }
 
-                alert('강의가 성공적으로 삭제되었습니다.');
+                // alert() 대신 커스텀 메시지 표시
+                // alert('강의가 성공적으로 삭제되었습니다.');
+                console.log('강의가 성공적으로 삭제되었습니다.');
                 fetchAndRenderCourses(currentPage, searchInput.value, categorySelect.value);
             } catch (error) {
                 console.error('오류:', error);
-                alert('강의 삭제에 실패했습니다.');
+                // alert('강의 삭제에 실패했습니다.');
+                console.log('강의 삭제에 실패했습니다.');
             }
         }
     }

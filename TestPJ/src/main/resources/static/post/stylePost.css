@@ -444,12 +444,22 @@ main.post-detail-container {
   gap: 10px;
   margin-top: 10px;
 }
+.comment-box form {
+    display: flex;
+    flex: 1;
+    gap: 10px;
+}
 .comment-box input {
   flex: 1;
   padding: 12px;
   border: 1px solid #ccc;
   border-radius: 8px;
   font-size: 15px;
+}
+
+.comment-box button {
+    flex-shrink: 0;
+    padding: 10px 16px;
 }
 
 /* ===== 버튼 스타일 ===== */

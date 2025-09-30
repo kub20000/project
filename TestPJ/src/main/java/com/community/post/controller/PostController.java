@@ -35,7 +35,7 @@ public class PostController {
             @PageableDefault(size = 10, sort = "created_at", direction = Sort.Direction.DESC) Pageable pageable) {
 
         // 1. 고정된 게시글 목록을 가져옵니다. (페이지네이션 미적용)
-        List<Post> fixedPosts = postRepository.findByFixedTrue();
+        List<Post> fixedPosts = postRepository.findByFixedTrueOrderByCreatedAtDesc();
         model.addAttribute("fixedPosts", fixedPosts);
 
         // 2. 일반 게시글 목록을 가져옵니다. (페이지네이션 적용)

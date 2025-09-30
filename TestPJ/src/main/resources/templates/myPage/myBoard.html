@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>내 게시글 관리</title>
+<link rel="stylesheet" href="/myPage/styleMy.css">
+</head>
+<body>
+<header>
+    <h1><a href="/">Vegan Delight</a></h1>
+    <nav id="navMenu">
+        <a href="/">홈</a>
+        <a href="/course/main">강의</a>
+        <a href="/myFridge/main">나의 냉장고</a>
+        <a href="/post/main">게시판</a>
+        <a href="login.html" id="loginBtn">로그인</a>
+        <a href="/myPage/main">마이페이지</a>
+    </nav>
+  </header>
+
+<div class="page-wrapper">
+    <nav id="subNav">
+        <a href="">내 정보 수정</a>
+        <a href="myStudy.html">내 학습 기록</a>
+        <a href="">나의 레시피</a>
+        <a href="myBoard.html">내 게시글 관리</a>
+        <a href="">회원 탈퇴</a>
+    </nav>
+</div>
+
+    <main class="board-container">
+            <h2>내 게시글 관리</h2>
+            <div class="search-box">
+                <input type="text" id="searchInput" placeholder="검색어를 입력해 주세요">
+                <button type="submit"><svg width="25" height="25" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M21 21l-4.35-4.35m1.35-5.15a7 7 0 11-14 0 7 7 0 0114 0z" stroke="#6b7280" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+                 </svg></button>
+            </div>
+        
+
+        <table id="myPostTable">
+            <thead>
+                <tr>
+                    <th>분류</th>
+                    <th>제목</th>
+                    <th>등록일</th>
+                    <th>관리</th>
+                </tr>
+            </thead>
+        <tbody>
+          <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td>
+            <button class="edit-btn" th:onclick>
+            수정
+            </button>
+            <button class="delete-btn" th:onclick>
+             삭제
+           </button>
+            </td>
+          </tr>
+
+          <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+          </tr>
+        </tbody>
+        </table>
+    </main>
+</body>
+</html>

@@ -79,6 +79,18 @@ public class CourseController {
         }
     }
 
+    // 인기 강의 클릭
+    @GetMapping("/main")
+    public String courseMain(@RequestParam(required = false) String searchKeyword, Model model) {
+        if (searchKeyword != null && !searchKeyword.trim().isEmpty()) {
+            // 홈에서 전달받은 검색어를 모델에 담아 Thymeleaf로 전달
+            model.addAttribute("initialKeyword", searchKeyword.trim());
+        }
+
+        // TODO: 강의 목록 조회 및 모델에 담는 기존 로직이 있다면 여기에 추가
+
+        return "/course/courses";
+    }
 
 
 
