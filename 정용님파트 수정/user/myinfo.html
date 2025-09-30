@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>내 정보 수정</title>
+    <link rel="stylesheet" href="styleMy.css">
+</head>
+<body class="myInfo">
+<div th:replace="fragments/mainheader :: mainHeader"></div>
+
+<main>
+    <form id="fixInfo" th:action="@{/user/myinfo}" method="post">
+        <button class="closeBtn" type="button" onclick="confirmExit()">X</button>
+        <div>
+            <label for="fixName">성명</label>
+            <input class="fixInfo" type="text" id="fixName" name="name"
+                   th:value="${user != null} ? ${user.name} : ''" placeholder="이름을 입력하세요" required>
+
+            <input class="fixInfo" type="text" id="fixName1" name="name"
+                   th:value="${user != null} ? ${user.birthdate} : ''" placeholder="이름을 입력하세요" required>
+
+            <label for="nickName">닉네임</label>
+            <input class="fixInfo" type="text" id="nickName" name="nickname"
+                   th:value="${user != null} ? ${user.nickname} : ''" placeholder="닉네임을 입력하세요" required>
+
+            <label for="newPassward">비밀번호</label>
+            <input class="fixInfo" type="password" id="newPassward" name="password" placeholder="비밀번호를 입력하세요" >
+            <button type="button" id="changePwBtn">비밀번호 변경</button>
+            <!-로컬데이다 타입으로 변환->
+            <label for="bthInfo">생년월일</label>
+            <input class="fixInfo" type="date" id="bthInfo" name="birthdate"
+                   th:value="${user != null && user.birthdate != null ? user.birthdate : ''}" required>
+
+            <label for="phoneNum">휴대전화 번호</label>
+            <input class="fixInfo" type="tel" id="phoneNum" name="phone"
+                   th:value="${user != null ? user.phone : ''}" placeholder="010-1234-5678" required>
+
+            <label for="emailInfo">이메일 정보</label>
+            <input class="fixInfo" type="email" id="emailInfo" name="email"
+                   th:value="${user != null} ? ${user.email} : ''" placeholder="example@email.com" required>
+
+            <button type="submit" class="fixInfo">정보 수정</button>
+        </div>
+        <!-- 성공 메시지 -->
+        <div th:if="${success}" style="color: green; margin-bottom: 10px;">
+            <p th:text="${success}"></p>
+        </div>
+
+        <!-- 에러 메시지 -->
+        <div th:if="${error}" style="color: red; margin-bottom: 10px;">
+            <p th:text="${error}"></p>
+        </div>
+    </form>
+</main>
+
+<script>
+
+    function confirmExit() {
+        if (confirm("정말로 나가시겠습니까?")) {
+            // window.history.back();
+            window.location.href = "/";
+        }
+    }
+
+
+    document.getElementById('changePwBtn').addEventListener('click', () => {
+        window.location.href = '/user/changePw';
+    });
+</script>
+</body>
+</html>
