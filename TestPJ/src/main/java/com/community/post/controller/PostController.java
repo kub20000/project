@@ -6,7 +6,9 @@ import com.community.post.comment.CommentService;
 import com.community.post.entity.Post;
 import com.community.post.repository.PostRepository;
 import com.community.post.service.PostService;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import org.springframework.boot.autoconfigure.security.SecurityProperties;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -65,11 +67,31 @@ public class PostController {
         return "post/addPost";
     }
 
-    // 게시글 추가(버튼 클릭하여 실제로 게시글 추가)
-    @PostMapping("/post/add")
-    public String addPost(@ModelAttribute Post post) {
-        postService.add(post);
-        return "redirect:/post/list";
+    // 게시글 등록 처리
+    @PostMapping("/posts/add")
+    public String addPost(@ModelAttribute Post post,
+                          HttpSession session, // HttpSession 객체 주입
+                          RedirectAttributes redirectAttributes) {
+
+        // 1. 세션에서 로그인 사용자 정보 (User 객체) 가져오기
+        SecurityProperties.User loginUser = (SecurityProperties.User) session.getAttribute("loginUser");
+
+        // 2. 로그인 여부 확인
+        if (loginUser == null) {
+            redirectAttributes.addFlashAttribute("errorMessage", "로그인 후 이용해 주세요.");
+            return "redirect:/user/login"; // 로그인 페이지로 리다이렉트
+        }
+
+        try {
+            // 3. 서비스 호출 시 로그인 유저 정보를 함께 전달
+            postService.add(post, loginUser);
+
+            redirectAttributes.addFlashAttribute("message", "게시글이 성공적으로 등록되었습니다.");
+            return "redirect:/posts"; // 게시글 목록 페이지로 리다이렉트
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("errorMessage", "게시글 등록 중 오류가 발생했습니다.");
+            return "redirect:/posts/add"; // 다시 등록 폼으로 리다이렉트
+        }
     }
 
     // 게시글 보기 (제목(title) 클릭해서 연결되는 페이지) -> 9.9 <br> 태그 문제 해결

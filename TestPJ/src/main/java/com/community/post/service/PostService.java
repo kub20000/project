@@ -7,6 +7,7 @@ import com.community.post.repository.PostRepo;
 import com.community.post.repository.PostRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.security.SecurityProperties;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -34,12 +35,17 @@ public class PostService {
         return postRepo.findById(id);
     }
 
-    public void add(Post post) {
-        System.out.println("post add");
-        if (post.getCreated_at() == null) {
-            post.setCreated_at(LocalDateTime.now());
+    // add 메서드에 현재 로그인한 사용자(User 객체)를 인자로 추가합니다.
+    public Post add(Post post, SecurityProperties.User loginUser) {
+        if (loginUser == null) {
+            throw new IllegalStateException("로그인된 사용자 정보가 없습니다.");
         }
-        postRepo.add(post);
+
+        // 1. Post 객체에 작성자 정보 설정
+//        post.setAuthor(loginUser.getNickname());
+
+        // 2. Repository 호출
+        return postRepo.add(post);
     }
 
     public void deleteById(int id) {

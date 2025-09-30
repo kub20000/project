@@ -323,7 +323,7 @@ button.joinUser:hover {
   width: 20%;
   margin-top: 20px;
   padding: 10px 20px;
-  border: block;
+
   border-radius: 6px;
   background-color: #4caf50;
   color: white;
@@ -671,14 +671,18 @@ body.deleteInfo .success {
 }
 
 /* ===== 내 게시글 관리 페이지 전용 스타일 ===== */
-.page-wrapper{
-  display: flex;
-  flex: 1;
-  width: 95%;
-  margin: 2rem auto;
-  gap: 20px;
-  box-sizing: border-box;
-  max-width: none;
+body.deleteInfo, body.myInfo, body.myBoard {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+.page-wrapper {
+    display: flex;
+    flex-direction: row;
+    width: 95%;
+    margin: 2rem auto;
+    gap: 20px;
+    box-sizing: border-box;
 }
 
 

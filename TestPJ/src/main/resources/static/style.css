@@ -106,7 +106,7 @@ nav a {
     padding:2rem;
 }
 .category, .course-card {
-    background:white;
+    background: #f6f7f9;
     padding:1.5rem;
     border-radius:10px;
     box-shadow:0 2px 8px rgba(0,0,0,0.1);
