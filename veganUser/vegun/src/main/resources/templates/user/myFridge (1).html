@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>나의 냉장고 - Vegan Delight</title>
-  <link rel="stylesheet" href="img/style.css">
+    <link rel="stylesheet" href="/img/style.css">
 </head>
 <body class="fridge">
   <header>
@@ -15,7 +15,7 @@
       <a href="myfridge.html">나의 냉장고</a>
       <a href="login.html">Login</a>
       <a href="notice.html">게시판</a>
-      <a href="mypage.html" class="active"><img src="/vegan/123.png" alt="마이페이지" width="36"></a>
+      <a th:href="@{/user/mypage}" class="active"><img th:src="@{/imgs/123.png}" alt="마이페이지" width="36"></a>
     </nav>
   </header>
 
@@ -69,6 +69,6 @@
     </section>
   </main>
 
-  <script src="../static/script.js"></script>
+  <script th:src="@{/js/script.js}"></script>
 </body>
 </html>

@@ -4,20 +4,20 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>관리자 로그인</title>
-    <link rel="stylesheet" href="/style.css">
+    <link rel="stylesheet" href="/img/style.css">
 
 </head>
 <body>
   <header>
-    <h1>Vegan Delight - 관리자 mode<img src=".img/회원관리.png" alt="마이페이지" width="36"></h1>
+      <h1>Vegan Delight - 관리자 mode<img th:src="@{/img/회원관리.png}" alt="마이페이지" width="36"></h1>
     <nav id="navMenu">
-        <a th:href="@{/admin/indexmg}">Home</a>
-        <a th:href="@{/admin/addNotice}">게시판</a>>
-        <a th:href="@{admin/usermng}">회원관리</a>
+        <a th:href="@{/admin/indexmg}">홈</a>
+        <a th:href="@{/admin/post}">게시판</a>
+        <a th:href="@{/admin/usermng}">회원관리</a>
     </nav>
   </header>
   <main class="form-container"style="color:white; border-radius:6px; text-decoration:none; text-align: center;">
-    <h2 style="align-self: flex-start; color: black; text-align: start;">로그인<img src="./img/새싹.png" alt="새싹" width="20px"></h2>
+    <h2 style="align-self: flex-start; color: black; text-align: start;">로그인<img th:src="@{/img/새싹.png}" alt="새싹" width="20px"></h2>
       <form th:action="@{/admin/mglogin}" th:object="${user}" method="post">
   <input type="text" name="username" style="width: 300px;" placeholder="아이디를 입력하세요." required>
   <input type="password" name="password" style="width: 300px;" placeholder="비밀번호를 입력하세요." required><br>

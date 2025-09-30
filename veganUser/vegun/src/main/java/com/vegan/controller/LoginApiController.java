@@ -34,12 +34,16 @@ public class LoginApiController {
 
         Optional<User> loginResult = userService.login(username, password);
 
+
+
         if (loginResult.isPresent()) {
             User loginUser = loginResult.get();
 
             // 세션에 로그인 사용자 정보 저장
             session.setAttribute("loginUser", loginUser);
             session.setAttribute("role", loginUser.getRole());
+
+            System.out.println("login====>"+loginUser.getBirthdate());
 
             // 성공 응답 JSON
             Map<String, Object> response = Map.of(

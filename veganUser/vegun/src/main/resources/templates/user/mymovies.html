@@ -13,21 +13,21 @@
     <h1>Vegan delight</h1>
     <nav id="mainNav">
       <nav id="mainNav">
-          <a href="index.html">Home</a>
-          <a href="courses.html">Courses</a>
-          <a href="myfridge.html">나의 냉장고</a>
-          <a href="login.html">Login</a>
-          <a href="notice.html">게시판</a>
-          <a href="mypage.html" class="active"><img src="/vegan/123.png" alt="마이페이지" width="36"></a>
+          <a th:href="@{/user/index}">홈</a>
+          <a th:href="@{/courses}">강의</a>
+          <a th:href="@{/myFridge}">나의 냉장고</a>
+          <a th:href="@{/user/login}">login</a>
+          <a th:href="@{/user/notice}">게시판</a>
+          <a th:href="@{/user/mypage}" class="active"><img th:src="@{/imgs/123.png}" alt="마이페이지" width="36"></a>
       </nav>
     </nav>
   </header>
 
   <div class="container">
     <nav id="subNav">
-      <a href="myinfo.html">내 정보 수정</a>
-      <a href="mymovies.html">최근 기록</a>
-      <a href="delete.html">회원 탈퇴</a>
+        <a th:href="@{/user/myinfo}">내정보수정</a>
+        <a th:href="@{/user/mymovies}">최근기록</a>
+        <a th:href="@{/user/delete}">회원탈퇴</a>
     </nav>
 
     <div class="wrap">

@@ -106,6 +106,14 @@ public class UserRepository {
             user.setPhone(rs.getString("phone"));
             user.setRole(Role.valueOf(rs.getString("role")));
 
+            // ResultSet에서 DATE 컬럼 가져오기(로컬데이타 타입으로 변환)
+            java.sql.Date sqlDate = rs.getDate("birthdate"); // rs.getD("birthdate") 아님
+            if (sqlDate != null) {
+                user.setBirthdate(sqlDate.toLocalDate()); // LocalDate로 변환 후 설정
+            } else {
+                user.setBirthdate(null); // null 처리
+            }
+
             Timestamp ts = rs.getTimestamp("created_at");
             user.setCreatedAt(ts != null ? ts.toLocalDateTime() : null);
 

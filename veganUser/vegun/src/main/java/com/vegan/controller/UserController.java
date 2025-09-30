@@ -13,6 +13,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.time.LocalDateTime;
+import java.util.Optional;
+
 @RequiredArgsConstructor
 @Controller
 @RequestMapping("/user") // <- 클래스 레벨 매핑 추가
@@ -47,18 +50,38 @@ public class UserController {
         return "/user/joinUser";
     }
 
-    //회원가입 처리
+    // 회원가입 처리
     @PostMapping("/joinUser")
-    public String joinUser(@ModelAttribute User user,
-                           RedirectAttributes message) {
-        System.out.println("joinUser" + user);
+    public String joinUser(@ModelAttribute User user, RedirectAttributes message) {
+        System.out.println("joinUser = " + user);
+
         try {
+            // 1️⃣ 생년월일 처리: form에서 넘어오는 yyyy-MM-dd 문자열을 LocalDate로 변환
+            // 이미 User.birthdate가 LocalDate라면 Spring이 자동 매핑 가능하지만, null 체크 필수
+            if (user.getBirthdate() == null) {
+                message.addFlashAttribute("errorMessage", "생년월일을 입력해주세요.");
+                return "redirect:/user/joinUser";
+            }
+
+            // 2️⃣ 전화번호 처리: 하이픈 제거
+            if (user.getPhone() != null) {
+                user.setPhone(user.getPhone().replaceAll("-", "").trim());
+            }
+
+            // 3️⃣ 생성일 세팅 (JPA 아님)
+            user.setCreatedAt(LocalDateTime.now());
+
+            // 4️⃣ 회원가입 서비스 호출
             userService.join(user);
+
+            // 5️⃣ 성공 시 로그인 페이지로 이동
             return "redirect:/user/login";
+
         } catch (IllegalStateException e) {
+            // 가입 실패 시 메시지 전달
             message.addFlashAttribute("errorMessage", e.getMessage());
+            return "redirect:/user/joinUser";
         }
-        return "redirect:/user/joinUser";
     }
 
 
@@ -95,6 +118,7 @@ public class UserController {
     // 👉 내 정보 수정 보기
     @GetMapping("/myinfo")
     public String myinfo(HttpSession session, Model model) {
+        System.out.println("myinfo" + session.getAttribute("loginUser"));
         User loginUser = (User) session.getAttribute("loginUser");
         if (loginUser == null) {
             return "redirect:/user/login"; // 로그인 안 되어 있으면 리다이렉트
@@ -103,48 +127,45 @@ public class UserController {
         return "user/myinfo"; // 반드시 templates/user/myinfo.html 존재해야 함
     }
 
-    // 👉 내 정보 수정하기
+
+    // 👉 내 정보 수정 처리 (비밀번호 제외)
     @PostMapping("/myinfo")
     public String updateUser(@ModelAttribute User user, HttpSession session, RedirectAttributes redirectAttributes) {
-
-        // 1️⃣ 로그인 사용자 확인
-        // 세션에서 로그인한 User 객체(loginUser)를 가져옵니다.
-        // 로그인 상태가 아니면 로그인 페이지로 리다이렉트
         User loginUser = (User) session.getAttribute("loginUser");
         if (loginUser == null) return "redirect:/user/login";
 
-        // 2️⃣ 빈 값 처리
-        // 폼에서 전달된 값이 null 또는 빈 문자열이면 기존 세션(loginUser)의 값을 사용
-        // 즉, 사용자가 입력하지 않은 필드는 기존 값 유지
-        user.setUsername(isEmpty(user.getUsername()) ? loginUser.getUsername() : user.getUsername());
-        user.setNickname(isEmpty(user.getNickname()) ? loginUser.getNickname() : user.getNickname());
-        user.setPassword(isEmpty(user.getPassword()) ? loginUser.getPassword() : user.getPassword());
-        user.setPhone(isEmpty(user.getPhone()) ? loginUser.getPhone() : user.getPhone());
-        user.setEmail(isEmpty(user.getEmail()) ? loginUser.getEmail() : user.getEmail());
-        user.setBirthdate(user.getBirthdate() == null ? loginUser.getBirthdate() : user.getBirthdate());
+        // 1️⃣ DB에서 최신 사용자 정보 가져오기
+        Optional<User> optionalUser = userService.findById(loginUser.getId());
+        if (!optionalUser.isPresent()) return "redirect:/user/login";
+        User dbUser = optionalUser.get();
 
-        // 3️⃣ ID 설정
-        // DB 업데이트 시 로그인한 사용자의 ID를 기준으로 수정
-        user.setId(loginUser.getId());
+        // 2️⃣ 폼 값이 비어있으면 DB 값을 사용 (즉, 수정하지 않은 필드는 그대로 유지)
+        user.setUsername(isEmpty(user.getUsername()) ? dbUser.getUsername() : user.getUsername());
+        user.setNickname(isEmpty(user.getNickname()) ? dbUser.getNickname() : user.getNickname());
+        user.setPhone(isEmpty(user.getPhone()) ? dbUser.getPhone() : user.getPhone());
+        user.setEmail(isEmpty(user.getEmail()) ? dbUser.getEmail() : user.getEmail());
+        user.setBirthdate(user.getBirthdate() == null ? dbUser.getBirthdate() : user.getBirthdate());
 
-        // 4️⃣ DB 업데이트
-        // UserService를 통해 DB에 회원 정보를 수정하고, 수정된 User 객체를 반환받음
+
+        // 3️⃣ 비밀번호는 변경하지 않음
+        user.setPassword(dbUser.getPassword());
+
+        // 4️⃣ ID 설정
+        user.setId(dbUser.getId());
+
+        // 5️⃣ DB 업데이트
         User updatedUser = userService.update(user);
 
-        // 5️⃣ 세션 갱신
-        // 수정된 정보를 세션에 다시 저장 → 이후 페이지에서 최신 정보 표시 가능
+        // 6️⃣ 세션 갱신
         session.setAttribute("loginUser", updatedUser);
 
-        // 6️⃣ 성공 메시지 전달
-        // RedirectAttributes를 사용해 일회성 메시지를 전달
+        // 7️⃣ 성공 메시지 전달
         redirectAttributes.addFlashAttribute("success", "정보가 수정되었습니다!");
 
-        // 7️⃣ 마이인포 페이지로 리다이렉트
         return "redirect:/user/myinfo";
     }
 
-    // 8️⃣ 유틸 메서드
-// 문자열이 null이거나 공백일 경우 true 반환
+    // 🔹 유틸 메서드
     private boolean isEmpty(String str) {
         return str == null || str.isBlank();
     }
@@ -184,6 +205,8 @@ public class UserController {
         // 3️⃣ 안내 화면으로 리다이렉트
         return "redirect:/user/logout";
     }
+
+    //강의
     @GetMapping("/courses")
     public String courses(HttpSession session, Model model) {
         User loginUser = (User) session.getAttribute("loginUser");
@@ -193,6 +216,7 @@ public class UserController {
         model.addAttribute("user", loginUser);
         return "user/courses";
     }
+    //게시판
     @GetMapping("/notice")
     public String notice(HttpSession session, Model model) {
         User loginUser = (User) session.getAttribute("loginUser");
@@ -201,6 +225,37 @@ public class UserController {
         }
         model.addAttribute("user", loginUser);
         return "user/notice";
+    }
+    //FAQ
+    @GetMapping("/faq")
+    public String faq(HttpSession session, Model model) {
+        User loginUser = (User) session.getAttribute("loginUser");
+        if (loginUser == null) {
+            return "redirect:/user/login";
+        }
+        model.addAttribute("user", loginUser);
+        return "user/faq";
+    }
+    //냉장고
+    @GetMapping("/myFridge")
+    public String myFridge(HttpSession session, Model model) {
+        System.out.println("myFridge");
+        User loginUser = (User) session.getAttribute("loginUser");
+        if (loginUser == null) {
+            return "redirect:/user/login";
+        }
+        model.addAttribute("user", loginUser);
+        return "user/myFridge";
+    }
+    //자유게시판
+    @GetMapping("/freeBoard")
+    public String freeBoard(HttpSession session, Model model) {
+        User loginUser = (User) session.getAttribute("loginUser");
+        if (loginUser == null) {
+            return "redirect:/user/login";
+        }
+        model.addAttribute("user", loginUser);
+        return "user/freeBoard";
     }
 
 

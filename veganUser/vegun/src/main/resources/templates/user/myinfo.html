@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>내 정보 수정</title>
-    <link rel="stylesheet" href="/style.css">
+    <link rel="stylesheet" href="/img/style.css">
 </head>
 <body class="myInfo">
 <header>
@@ -12,7 +12,7 @@
     <nav id="navMenu">
         <a th:href="@{/user/index}">Home</a>
         <a th:href="@{user/courses}">강의</a>
-        <a th:href="@{user/myFridge}">나의 냉장고</a>
+        <a th:href="@{/user/myFridge}">나의 냉장고</a>
         <a th:href="@{/user/notice}">게시판</a>
         <a th:href="@{/user/login}">로그인</a>
         <a th:href="@{/user/mypage}">마이페이지</a>
@@ -26,6 +26,9 @@
             <input class="fixInfo" type="text" id="fixName" name="name"
                    th:value="${user != null} ? ${user.name} : ''" placeholder="이름을 입력하세요" required>
 
+            <input class="fixInfo" type="text" id="fixName1" name="name"
+                   th:value="${user != null} ? ${user.birthdate} : ''" placeholder="이름을 입력하세요" required>
+
             <label for="nickName">닉네임</label>
             <input class="fixInfo" type="text" id="nickName" name="nickname"
                    th:value="${user != null} ? ${user.nickname} : ''" placeholder="닉네임을 입력하세요" required>
@@ -33,14 +36,14 @@
             <label for="newPassward">비밀번호</label>
             <input class="fixInfo" type="password" id="newPassward" name="password" placeholder="비밀번호를 입력하세요" >
             <button type="button" id="changePwBtn">비밀번호 변경</button>
-
+            <!-로컬데이다 타입으로 변환->
             <label for="bthInfo">생년월일</label>
             <input class="fixInfo" type="date" id="bthInfo" name="birthdate"
-                   th:value="${user != null} ? ${user.birthdate} : ''" required>
+                   th:value="${user != null && user.birthdate != null ? user.birthdate : ''}" required>
 
             <label for="phoneNum">휴대전화 번호</label>
             <input class="fixInfo" type="tel" id="phoneNum" name="phone"
-                   th:value="${user != null} ? ${user.phone} : ''" placeholder="010-1234-5678" required>
+                   th:value="${user != null ? user.phone : ''}" placeholder="010-1234-5678" required>
 
             <label for="emailInfo">이메일 정보</label>
             <input class="fixInfo" type="email" id="emailInfo" name="email"

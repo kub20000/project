@@ -4,6 +4,7 @@ import com.vegan.entity.User;
 import com.vegan.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.GetMapping;
 
 import java.util.Collection;
 import java.util.List;
@@ -59,7 +60,7 @@ public class UserService {
 
         User existingUser = userRepo.findById(updatedUser.getId())
                 .orElseThrow(() -> new IllegalStateException("회원이 존재하지 않습니다."));
-
+        System.out.println("getBirthdate()"+updatedUser.getBirthdate());
         // 2. 변경 정보 적용
         existingUser.setUsername(updatedUser.getUsername());
         existingUser.setNickname(updatedUser.getNickname());
@@ -111,6 +112,24 @@ public class UserService {
     // 회원 추가
     public void addUser(User user) {
         userRepo.save(user);
+    }
+    //나의 냉장고
+    @GetMapping("/myFridge")
+    public List<User> getMyFridge() {
+        System.out.println("getMyFridge");
+        return userRepo.findAll();
+    }
+    //강의
+    @GetMapping("/courses")
+    public List<User> getCourses() {
+        System.out.println("getCourses");
+        return userRepo.findAll();
+    }
+    //질문
+    @GetMapping("/faq")
+    public List<User> getFaq() {
+        System.out.println("getFaq");
+        return userRepo.findAll();
     }
 
 

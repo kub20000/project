@@ -4,12 +4,12 @@
 <head>
   <meta charset="UTF-8">
   <title>회원 관리 - 관리자 모드</title>
-    <link rel="stylesheet" href="/style.css">
+    <link rel="stylesheet" href="/img/style.css">
 </head>
 
 <body>
   <header>
-    <h1>Vegan Delight - 관리자 mode<img src="/vegan/supervice/img/회원관리.png" alt="마이페이지" width="36"></h1>
+    <h1>Vegan Delight - 관리자 mode<img th:src="@{/img/회원관리.png}" alt="마이페이지" width="36"></h1>
     <nav id="navMenu">
         <a th:href="@{/admin/indexmg}">Home</a>
         <a th:href="@{/admin/addNotice}">게시판</a>
@@ -23,7 +23,7 @@
       <div class="search-box">
         <input type="text" id="search" name="id" placeholder="아이디 검색">
         <button id="searchBtn">
-          <img src="img/검색.png" alt="검색">
+            <img th:src="@{/img/검색.png}" alt="검색">
         </button>
       </div>
     </div>

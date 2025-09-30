@@ -4,19 +4,19 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Vegan LMS - Home</title>
-    <link rel="stylesheet" href="/style.css">
+    <link rel="stylesheet" href="/img/style.css">
 </head>
 <body>
 <header>
     <form th:action="@{/user/index}" method="get">
         <h1>Vegan Delight</h1>
         <nav id="navMenu">
-            <a th:href="@{/user/index}">Home</a>
+            <a th:href="@{/user/index}">홈</a>
             <a th:href="@{/user/courses}">강의</a>
             <a th:href="@{/user/myFridge}">나의 냉장고</a>
             <a th:href="@{/user/login}" id="loginBtn">Login</a>
             <a th:href="@{/user/notice}">게시판</a>
-            <a th:href="@{/user/mypage}" class="active"><img th:src="@{/imags/123.png}" alt="마이페이지" width="36"></a>
+            <a th:href="@{/user/mypage}" class="active"><img th:src="@{/imgs/123.png}" alt="마이페이지" width="36"></a>
         </nav>
     </form>
 </header>
@@ -36,7 +36,7 @@
 <section class="categories" style="text-align: center;">
     <h2>Vegan Lifestyle</h2>
     <h2>Health & Diet</h2>
-    <h2>Recipes</h3>
+    <h2>Recipes</h2>
 </section>
 
 <section class="categories">

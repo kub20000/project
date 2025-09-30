@@ -4,19 +4,19 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>내 정보</title>
-    <link rel="stylesheet" href="/style.css">
+    <link rel="stylesheet" href="/img/style.css">
 </head>
 <body>
   <header>
     <h1>Vegan delight</h1>
       <form th:action="@{user/mypage}" method="post">
     <nav id="mainNav">
-        <a th:href="@{/user/index}">Home</a>
-        <a th:href="@{/user/courses}">Courses</a>
+        <a th:href="@{/user/index}">홈</a>
+        <a th:href="@{/user/courses}">강의</a>
         <a th:href="@{/user/myFridge}">나의 냉장고</a>
         <a th:href="@{user/notice}">게시판</a>
         <a th:href="@{/user/logout}">로그아웃</a>
-      <a href="mypage.html" class="active"><img src="123.png" alt="마이페이지" width="36"></a>
+        <a th:href="@{/user/mypage}" class="active"><img th:src="@{/imgs/123.png}" alt="마이페이지" width="36"></a>
     </nav>
       </form>
   </header>

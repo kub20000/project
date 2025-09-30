@@ -5,13 +5,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>공지사항</title>
-    <link rel="stylesheet" href="/style.css">
+    <link rel="stylesheet" href="/img/style.css">
 </head>
 
 <body>
     <header>
         <form id="uploadCourse" th:action="@{/admin/freepost-dlete}" method="post">
-        <h1>Vegan Delight - 관리자 mode<img src="./img/회원관리.png" alt="마이페이지" width="36"></h1>
+            <h1>Vegan Delight - 관리자 mode <img th:src="@{/img/회원관리.png}" alt="마이페이지" width="36"></h1>
         <nav id="navMenu">
             <a th:href="@{/admin/indexmg}">Home</a>
             <a th:href="@{admin/post}">게시판</a>>
@@ -22,14 +22,14 @@
 
     <div class="board-tabs">
         <a th:href="@{admin/post}">공지사항</a>
-        <a th:href="@{/freepost-delete}">자유게시판</a>
+        <a th:href="@{/admin/freepost-delete}">자유게시판</a>
     </div>
 
     <div class="board-header">
         <p>자유게시판</p>
         <div class="search-box">
             <input type="text" id="searchInput" placeholder="검색어를 입력해 주세요">
-            <button id="searchBtn"><img src="img/검색.png" alt="검색"></button>
+            <button id="searchBtn"><img th:src="@{/img/검색.png}" alt="검색"></button>
         </div>
     </div>
 
@@ -50,7 +50,7 @@
 
     <div class="pagination" id="pagination"></div>
 
-    <script src="script.js"></script>
+    <script th:src="@{/js/script.js}"></script>
 </body>
 <script>
     let currentPage = 1;

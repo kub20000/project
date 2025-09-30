@@ -13,12 +13,12 @@
       <form th:action="@{/user/notice}" method="get">
     <h1>Vegan delight</h1>
     <nav>
-        <a th:href="@{/user/index}">Home</a>
-        <a th:href="@{/user/courses}">Courses</a>
+        <a th:href="@{/user/index}">홈</a>
+        <a th:href="@{/user/courses}">강의</a>
         <a th:href="@{/user/myFridge}">나의 냉장고</a>
         <a th:href="@{/user/login}">login</a>
-        <a th:href="@{/user/notice}">Home</a>
-        <a th:href="@{/user/mypage}" class="active"><img th:src="@{/images/123.png}" alt="마이페이지" width="36"></a>
+        <a th:href="@{/user/notice}">게시판</a>
+        <a th:href="@{/user/mypage}" class="active"><img th:src="@{/imgs/123.png}" alt="마이페이지" width="36"></a>
     </nav>
       </form>
   </header>
@@ -27,8 +27,8 @@
   <!-- 카테고리 탭 -->
   <div class="board-tabs">
       <a th:href="@{/user/notice}">공지사항</a>
-    <a href="freeBoard.html">자유 게시판</a>
-    <a href="faq.html">FAQ</a>
+    <a th:href="@{/user/freeBoard}">자유 게시판</a>
+    <a th:href="@{/user/faq}">FAQ</a>
   </div>
 
   <!-- 제목 + 검색창 + 글쓰기 버튼 -->
@@ -58,7 +58,7 @@
   <!-- 페이지네이션 -->
   <div class="pagination" id="pagination"></div>
 
-  <script src="script.js"></script>
+  <script th:src="@{/js/script.js}"></script>
 </body>
 
 </html>

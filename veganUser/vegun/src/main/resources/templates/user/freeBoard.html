@@ -4,26 +4,26 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Vegan LMS - freeboard</title>
-  <link rel="stylesheet" href="img/style.css">
+    <link rel="stylesheet" href="/img/style.css">
 </head>
 <body>
   <header>
     <h1>Vegan delight</h1>
     <nav id="mainNav">
-      <a href="index.html">Home</a>
-      <a href="courses.html">Courses</a>
-      <a href="myFridge.html">나의 냉장고</a>
-      <a href="login.html" id="loginBtn">Login</a>
-      <a href="notice.html">게시판</a>
-      <a href="mypage.html" class="active"><img src="/123.png" alt="마이페이지" width="36"></a>
+        <a th:href="@{/user/index}">홈</a>
+        <a th:href="@{/user/courses}">강의</a>
+        <a th:href="@{/user/myFridge}">나의 냉장고</a>
+        <a th:href="@{/user/login}" id="loginBtn">Login</a>
+        <a th:href="@{/user/notice}">게시판</a>
+      <a href="mypage.html" class="active"><img th:src="@{/imgs/123.png}" alt="마이페이지" width="36"></a>
     </nav>
   </header>
 
   <!-- 카테고리 탭 -->
   <div class="board-tabs">
-    <a href="notice.html" >공지 사항</a>
-    <a href="freeBoard.html" class="active">자유 게시판</a>
-    <a href="faq.html">FAQ</a>
+      <a th:href="@{/user/notice}">공지사항</a>
+      <a th:href="@{/user/freeBoard}">자유 게시판</a>
+      <a th:href="@{/user/faq}">FAQ</a>
   </div>
 
   <!-- 제목 + 검색창 -->
@@ -95,5 +95,5 @@
   <div class="pagination" id="pagination"></div>
   
 </body>
-  <script src="../static/script.js"></script>
+<script th:src="@{/script.js}"></script>
 </html>

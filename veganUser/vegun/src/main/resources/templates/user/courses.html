@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Courses - Vegan LMS</title>
-    <link rel="stylesheet" href="/style.css">
+    <link rel="stylesheet" href="/img/style.css">
 </head>
 
 <body>
@@ -12,11 +12,11 @@
     <h1>Vegan delight</h1>
   <nav id="navMenu">
       <a th:href="@{/user/index}">홈</a>
-      <a th:href="@{user/courses}">강의</a>
-      <a th:href="@{user/myFridge}">나의 냉장고</a>
-      <a th:href="@{user/login}">login</a>
+      <a th:href="@{/user/courses}">강의</a>
+      <a th:href="@{/user/myFridge}">나의 냉장고</a>
+      <a th:href="@{/user/login}">login</a>
       <a th:href="@{/user/notice}">게시판</a>
-      <a th:href="@{/user/mypage}" class="active"><img th:src="@{/images/123.png}" alt="마이페이지" width="36"></a>
+      <a th:href="@{/user/mypage}" class="active"><img th:src="@{/imgs/123.png}" alt="마이페이지" width="36"></a>
     </nav>
   </header>
   <form id="coursesForm" th:action="@{/user/courses}" method="get"></form>

@@ -1,9 +1,11 @@
 package com.vegan.entity;
 
+import jakarta.persistence.PrePersist;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.io.Serializable;
 import java.time.LocalDate;
@@ -24,8 +26,5 @@ public class User {
     private String phone;
     private Role role;
     private LocalDateTime createdAt; // 생성일
-
-
-
 
 }
