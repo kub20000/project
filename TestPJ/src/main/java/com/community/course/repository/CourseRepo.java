@@ -169,5 +169,10 @@ public class CourseRepo {
         jdbc.update(sql, progressSec, id);
     }
 
+    // 인기 강의 조회
+    public List<Course> findTop3PopularCourses() {
+        String sql = "SELECT * FROM courses ORDER BY like_count DESC LIMIT 3";
+        return jdbc.query(sql, courseRowMapper());
+    }
 
 }

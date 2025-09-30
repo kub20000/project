@@ -223,4 +223,9 @@ public class CourseService {
         courseRepo.updateProgress(courseId, durationSec);
     }
 
+    // 인기 강의 조회
+    public List<Course> getTop3PopularCourses() {
+        return courseRepo.findTop3PopularCourses();
+    }
+
 }

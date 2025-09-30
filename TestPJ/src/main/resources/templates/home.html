@@ -64,6 +64,32 @@
     </section>
 
     <div class="course-list reveal">
+        <div class="course-card" th:each="course : ${topCourses}">
+
+            <a th:href="@{/course/main}" class="course-link">
+                <div class="thumb">
+                    <img th:src="${course.thumbnail_url}" th:alt="${course.courses_name} + ' 썸네일'" style="width: 100%; height: 100%; object-fit: cover;">
+                </div>
+            </a>
+
+            <div class="course-info">
+                <a th:href="@{/course/main}">
+                    <h3 th:text="${course.courses_name}">Vegan Basics</h3>
+                </a>
+
+                <div class="meta-info">
+                    <span class="badge" th:text="${course.courses_category}">LIFESTYLE</span>
+
+                    <span class="badge like-count">
+                        <i class="fas fa-heart"></i> <span th:text="${course.like_count}">1500</span>
+                    </span>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="course-list reveal">
         <div class="course-card">
             <h3>Vegan Basics</h3>
 

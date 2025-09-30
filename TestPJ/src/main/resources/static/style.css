@@ -358,3 +358,40 @@ body.fridge {
     background: #388e3c;
 }
 
+/* 썸네일 컨테이너 */
+.course-card .thumb {
+    width: 100%;
+    /* 16:9 비율 유지를 위한 패딩 (레이아웃 안정화) */
+    padding-bottom: 56.25%;
+    position: relative;
+    overflow: hidden; /* 이미지 튀어나오는 것 방지 */
+    margin-bottom: 10px;
+    border-radius: 8px; /* 모서리 둥글게 */
+}
+
+/* 썸네일 이미지 */
+.course-card .thumb img {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* 비율 유지하며 꽉 채우기 */
+    top: 0;
+    left: 0;
+}
+
+/* 정보 영역 스타일 */
+.course-info {
+    padding: 0 5px;
+}
+
+/* 메타 정보 (카테고리, 좋아요) 정렬 */
+.meta-info {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 5px;
+    font-size: 0.9em;
+}
+
+.badge.like-count {
+    color: #e74c3c; /* 붉은 하트 색상 */
+}
