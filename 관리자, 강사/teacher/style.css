@@ -1,0 +1,516 @@
+/* 기본 레이아웃 */
+/* 전체 폰트 통일 */
+
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    background: #f6f7f9;
+}
+
+/* 헤더 */
+header {
+    background: #4caf50;
+    color: white;
+    padding: 1rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+header h1 {
+    margin: 0;
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+header h1 a {
+    text-decoration: none;
+    color: white;
+}
+header h1 a:visited,
+header h1 a:hover,
+header h1 a:active {
+    text-decoration: none;
+    color: white;
+}
+
+
+nav {
+    display: flex;
+    gap: 1rem;
+}
+nav a {
+    color: white;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+/* Hero */
+.hero {
+    position: relative;
+    overflow: hidden;
+    height: 550px; /* 원하는 높이로 조정 */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    background-size: cover;
+    background-position: center;
+    transition: background-image 1s ease-in-out;
+}
+
+.reveal {
+    opacity: 0;
+    transform: translateY(40px);
+    transition: 0.8s ease;
+}
+.reveal.active {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.hero-content {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    color: white;
+    background: rgba(0,0,0,0.4);
+    padding: 1.5rem;
+    border-radius: 10px;
+}
+.hero h2 { font-size:2rem; margin-bottom:1rem; }
+.cta-btn {
+    background:#4caf50;
+    color:white;
+    padding:0.7rem 1.5rem;
+    border-radius:6px;
+    text-decoration:none;
+    display:inline-block;
+    transition: 0.3s;
+}
+.cta-btn:hover { background:#388e3c; }
+
+.middle{
+    position: relative;
+    text-align: center;
+    color: black;
+    font-size: 25px;
+    padding: 55px;
+}
+
+
+/* 카드형 섹션 */
+.categories, .course-list {
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+    gap:1rem;
+    padding:2rem;
+}
+.category, .course-card {
+    background: #f6f7f9;
+    padding:1.5rem;
+    border-radius:10px;
+    box-shadow:0 2px 8px rgba(0,0,0,0.1);
+}
+.course-card h3 { margin-top:0; }
+
+.categories {
+    display: grid;
+    grid-template-columns: repeat(auto-fit,minmax(250px,1fr));
+    gap: 2rem;
+    padding: 3rem 2rem;
+    text-align: center;
+}
+
+.category-card {
+    background: white;
+    border-radius: 15px;
+    padding: 2rem 1rem;
+    box-shadow: 0 6px 16px rgba(0,0,0,0.1);
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.category-card i {
+    font-size: 40px;
+    color: #4caf50;
+    margin-bottom: 1rem;
+}
+
+.category-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 12px 24px rgba(0,0,0,0.15);
+}
+
+/* 인기 강의 섹션 */
+.courses {
+    padding: 3rem 1.5rem;
+    background: #f9fafb;
+}
+
+/* 가로 스크롤 영역 */
+.course-scroll {
+    display: flex;
+    gap: 1.5rem;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    padding-bottom: 1rem;
+}
+.course-scroll::-webkit-scrollbar {
+    height: 10px;
+}
+.course-scroll::-webkit-scrollbar-thumb {
+    background: #ccc;
+    border-radius: 10px;
+}
+.course-scroll::-webkit-scrollbar-track {
+    background: #f0f0f0;
+}
+
+/* 카드 */
+.course-card {
+    flex: 0 0 350px;
+    border-radius: 16px;
+    box-shadow: 0 6px 16px rgba(0,0,0,0.08);
+    overflow: hidden;
+    scroll-snap-align: start;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+}
+.course-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 12px 24px rgba(0,0,0,0.15);
+}
+
+.course-card .course-body {
+    background-color: #f0f9f4;
+    padding: 1rem;
+    border-radius: 0 0 16px 16px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+
+/* 썸네일 */
+.course-card .thumb {
+    width: 100%;
+    /* 16:9 비율 유지를 위한 패딩 (레이아웃 안정화) */
+    padding-bottom: 56.25%;
+    position: relative;
+    overflow: hidden; /* 이미지 튀어나오는 것 방지 */
+    margin-bottom: 10px;
+    border-radius: 8px; /* 모서리 둥글게 */
+}
+
+/* 새로운 이미지 포지셔닝 CSS */
+.course-card .thumb img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform .4s ease;
+}
+.course-card:hover .thumb img {
+    transform: scale(1.08);
+}
+
+.course-body {
+    padding: 1rem;
+    text-align: left;
+}
+
+.course-body a {
+    color: #000 !important;
+    text-decoration: none !important;
+    font-weight: bold;
+    display: inline-block;
+}
+
+.course-body a h3 {
+    color: #000;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+/* 하트 + 좋아요 숫자 */
+.badge.like-count {
+    color: #4caf50; /* 초록색 */
+    font-size: 1.1rem; /* 숫자 크기 키움 */
+    font-weight: 600;
+}
+
+.actions .fa-heart {
+    color: #4caf50; /* 초록 하트 */
+    font-size: 1.5rem; /* 조금 더 크게 */
+}
+
+/* 썸네일 크기 줄이기 */
+.course-card .thumb {
+    width: 100%;
+    height: 120px;
+    overflow: hidden;
+    border-radius: 8px;
+    position: relative;
+}
+.course-card .thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.badge.category {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.3rem 0.8rem;
+    border-radius: 12px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: white;
+    background-color: #4caf50;
+    margin-right: 5px;
+    white-space: nowrap;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+
+/* 폼 */
+.form-container {
+    max-width:400px;
+    margin:3rem auto;
+    background:white;
+    padding:2rem;
+    border-radius:10px;
+    box-shadow:0 2px 8px rgba(0,0,0,0.1);
+}
+.form-container input {
+    width:100%;
+    padding:0.8rem;
+    margin:0.5rem 0;
+    border:1px solid #ccc;
+    border-radius:6px;
+}
+.form-container button {
+    width:100%;
+    padding:0.8rem;
+    background:#4caf50;
+    color:white;
+    border:none;
+    border-radius:6px;
+    font-size:1rem;
+    transition: 0.3s;
+}
+.form-container button:hover { background:#388e3c; }
+
+/* 푸터 (site-footer) */
+.site-footer {
+    position: relative;
+    left: 0;
+    right: 0;
+    width: 100%;   /* 뷰포트 전체 너비 */
+    background: #0f172a;
+    color: #e0e0e0;
+    padding: 40px 16px 20px;
+}
+.footer-top {
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+    gap:1rem;
+    /* margin: 0 auto 20px;*/
+}
+.footer-logo {
+    font-size: 24px;
+    color: #4caf50;
+    margin-bottom: 12px;
+
+}
+.footer-left p {
+    font-size: 14px;
+    line-height: 1.6;
+
+}
+.socials {
+    margin-top: 12px;
+}
+.socials a {
+    color: #e0e0e0;
+    margin-right: 12px;
+    font-size: 18px;
+    text-decoration: none;
+}
+.socials a:hover { color: #4caf50; }
+
+.footer-center h3, .footer-right h3 {
+    margin-bottom: 12px;
+    font-size: 16px;
+    color: #ffffff;
+}
+.footer-center ul, .footer-right ul {
+    list-style: none;
+    padding: 0;
+}
+.footer-center ul li, .footer-right ul li {
+    margin-bottom: 8px;
+}
+.footer-center ul li a, .footer-right ul li a {
+    color: #e0e0e0;
+    text-decoration: none;
+    font-size: 14px;
+}
+.footer-center ul li a:hover, .footer-right ul li a:hover { color:#4caf50; }
+
+.footer-bottom {
+    /*margin: 0 auto;*/
+    justify-content: space-between;
+    font-size: 12px;
+    border-top: 1px solid #1f2937;
+    padding-top: 12px;
+}
+
+/*나의 냉장고*/
+body.fridge {
+    background: #f9f9f9;
+}
+
+
+.fridge-container {
+    display: flex;
+    min-height: calc(100vh - 80px);
+}
+
+.ingredients-panel {
+    width: 380px;
+    background: white;
+    border-right: 1px solid #ddd;
+    padding: 1rem;
+}
+
+.ingredients-panel h3 {
+    margin-top: 0;
+}
+
+#ingredientSearch {
+    width: 90%;
+    padding: 0.5rem;
+    margin: 0.8rem 0 1rem;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 14px;
+}
+
+.ingredient-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.ingredient-list button {
+    padding: 0.4rem 0.8rem;
+    border: 1px solid #ddd;
+    background: #f9f9f9;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.ingredient-list button:hover {
+    background: #e8f5e9;
+}
+
+.tag-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+
+.tag {
+    background: #4caf50;
+    color: white;
+    padding: 0.3rem 0.8rem;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.tag:hover {
+    background: #388e3c;
+}
+
+.tag .remove {
+    font-weight: bold;
+    cursor: pointer;
+}
+
+/* 오른쪽 레시피 패널 */
+.recipe-panel {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 2rem;
+}
+
+.recipe-placeholder {
+    text-align: center;
+    max-width: 500px;
+}
+
+#selectedIngredients {
+    margin: 1rem 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    justify-content: center;
+}
+
+#selectedIngredients span {
+    background: #c8e6c9;
+    padding: 0.3rem 0.7rem;
+    border-radius: 15px;
+    font-size: 0.9rem;
+}
+
+#getRecipeBtn {
+    padding: 0.6rem 1.2rem;
+    border: none;
+    background: #4caf50;
+    color: white;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1rem;
+}
+
+#getRecipeBtn:hover {
+    background: #388e3c;
+}
+
+/* 썸네일 컨테이너 */
+.course-card .thumb {
+    width: 100%;
+    /* 16:9 비율 유지를 위한 패딩 (레이아웃 안정화) */
+    padding-bottom: 56.25%;
+    position: relative;
+    overflow: hidden; /* 이미지 튀어나오는 것 방지 */
+    margin-bottom: 10px;
+    border-radius: 8px; /* 모서리 둥글게 */
+}
+
+/* 정보 영역 스타일 */
+.course-info {
+    padding: 0 5px;
+}
+
+/* 메타 정보 (카테고리, 좋아요) 정렬 */
+.meta-info {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 5px;
+    font-size: 0.9em;
+
+}
+

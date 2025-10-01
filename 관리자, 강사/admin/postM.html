@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>공지사항</title>
+   <link rel="stylesheet" href="styleM.css">
+</head>
+
+<body>
+<header>
+    <h1><a href="/">Vegan Delight</a></h1>
+    <nav id="navMenu">
+             <a th:href="@{/admin/indexmg}">홈</a>
+        <a th:href="@{/admin/usermng}">회원 관리</a>
+        <a th:href="@{/admin/postM}">게시판 관리</a> 
+         <a th:href="@{/mglogin.html}">로그인</a>      
+    </nav>
+</header>
+
+ <div class="page-wrapper">
+    <nav id="subNav">
+      <a href="">회원 정보 관리</a>
+      <a href="">게시판 관리</a>
+    </nav>
+
+<main class="board-container">
+    <h2>게시판 관리</h2>
+    <div class="search-box">
+        <form th:action="@{/post/search}" method="get">
+
+        <div class="board-tools">
+            <select name="searchType" class="select-control">
+                <option value="title">제목</option>
+                <option value="content">내용</option>
+                <option value="author">작성자</option>
+            </select>
+
+
+        <div class="searchForm">
+            <input type="text" name="keyword" placeholder="검색어를 입력해 주세요" class="search-input">
+            
+            <button type="submit"><svg width="25" height="25" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M21 21l-4.35-4.35m1.35-5.15a7 7 0 11-14 0 7 7 0 0114 0z" stroke="#6b7280" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg></button>
+            </div>
+        </div>
+        
+        </form>    
+
+
+        <div class="writeBtn">
+        <a href="/post/add">
+            <button id="openWriteModal">글쓰기</button>
+        </a>
+       </div>
+    </div>
+
+<table id="noticeTable">
+    <thead>
+    <tr>
+        <th>분류</th>
+        <th>제목</th>
+        <th>작성자</th>
+        <th>등록일</th>
+        <th>관리</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="post : ${posts}">
+        <td th:text="${post.id}"></td>
+        <td>
+            <a th:href="@{|/admin/post-edit?id=${post.id}|}" th:text="${post.title}"></a>
+        </td>
+        <td th:text="${post.author}"></td>
+        <td th:text="${#dates.format(post.created_at, 'yyyy.MM.dd')}"></td>
+        <td>
+            <button class="edit-btn" th:onclick="'window.location.href=\'@{/admin/post-edit(id=${post.id})}\' '">수정</button>
+            <button class="delete-btn" th:href="@{|/admin/post-delete?id=${post.id}|}" onclick="return confirm('삭제하시겠습니까?');">삭제</a>
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+<div class="pagination" id="pagination">
+    <a th:if="${normalPostsPage.hasPrevious()}"
+       th:href="@{/post/list(page=${normalPostsPage.number - 1})}">이전</a>
+
+    <th:block th:each="i : ${#numbers.sequence(0, normalPostsPage.totalPages - 1)}">
+        <a th:href="@{/post/list(page=${i})}" th:text="${i + 1}"
+           th:classappend="${i == normalPostsPage.number} ? 'active' : ''"></a>
+    </th:block>
+
+    <a th:if="${normalPostsPage.hasNext()}"
+       th:href="@{/post/list(page=${normalPostsPage.number + 1})}">다음</a>
+</div>
+
+</main>
+
+<script>
+    // 전체 게시글 데이터 유지
+    const allPosts = JSON.parse(localStorage.getItem("posts")) || [
+        { id: 10, title: "최신 공지사항", author: "관리자", date: "2025.09.09" },
+        { id: 9, title: "공지사항 예시", author: "a", date: "2025.09.05" },
+        { id: 8, title: "테스트 제목", author: "a", date: "2025.09.01" },
+        { id: 7, title: "업데이트 알림", author: "a", date: "2025.08.30" },
+        { id: 6, title: "공지사항 제목", author: "a", date: "2025.08.25" },
+        { id: 5, title: "임시 테스트", author: "a", date: "2025.08.20" },
+        { id: 4, title: "공지 예시", author: "a", date: "2025.08.10" },
+        { id: 3, title: "이전 글", author: "a", date: "2025.08.05" },
+        { id: 2, title: "공지사항 테스트", author: "a", date: "2025.08.01" },
+        { id: 1, title: "첫 글", author: "a", date: "2025.07.25" }
+    ];
+
+    let currentPage = 1;
+    const postsPerPage = 5;
+    let filteredPosts = [...allPosts];
+
+    function renderPosts() {
+        const tbody = document.querySelector("#noticeTable tbody");
+        tbody.innerHTML = "";
+
+        const start = (currentPage - 1) * postsPerPage;
+        const pagePosts = filteredPosts.slice(start, start + postsPerPage);
+
+        pagePosts.forEach(post => {
+            const row = tbody.insertRow();
+            row.innerHTML = `
+                <td>${post.id}</td>
+                <td><span class="title-link" onclick="viewPost(${post.id})">${post.title}</span></td>
+                <td>${post.author}</td>
+                <td>${post.date}</td>
+                <td>
+                    <button onclick="editPost(${post.id})">수정</button>
+                    <button onclick="deletePost(${post.id})">삭제</button>
+                </td>
+            `;
+        });
+
+        renderPagination();
+    }
+
+    function renderPagination() {
+        const pagination = document.getElementById("pagination");
+        pagination.innerHTML = "";
+        const totalPages = Math.ceil(filteredPosts.length / postsPerPage);
+
+        // 이전
+        const prev = document.createElement("span");
+        prev.textContent = "<";
+        prev.classList.add("page-link", "prev-link");
+        if (currentPage === 1) {
+            prev.classList.add("disabled");
+        } else {
+            prev.onclick = () => { currentPage--; renderPosts(); }
+        }
+        pagination.appendChild(prev);
+
+        // 페이지 번호
+        let pageNumbers = [];
+        if (totalPages <= 7) {
+            for (let i = 1; i <= totalPages; i++) pageNumbers.push(i);
+        } else {
+            pageNumbers = [1];
+            if (currentPage > 4) pageNumbers.push("…");
+            for (let i = currentPage - 2; i <= currentPage + 2; i++) {
+                if (i > 1 && i < totalPages) pageNumbers.push(i);
+            }
+            if (currentPage < totalPages - 3) pageNumbers.push("…");
+            pageNumbers.push(totalPages);
+        }
+
+        pageNumbers.forEach(num => {
+            const span = document.createElement("span");
+            span.textContent = num;
+            if (num !== "…") {
+                span.classList.add("page-link");
+                if (num === currentPage) span.classList.add("active");
+                span.onclick = () => { currentPage = num; renderPosts(); }
+            } else {
+                span.classList.add("ellipsis");
+            }
+            pagination.appendChild(span);
+        });
+
+        // 다음
+        const next = document.createElement("span");
+        next.textContent = ">";
+        next.classList.add("page-link", "next-link");
+        if (currentPage === totalPages) {
+            next.classList.add("disabled");
+        } else {
+            next.onclick = () => { currentPage++; renderPosts(); }
+        }
+        pagination.appendChild(next);
+    }
+
+    // 상세, 수정, 삭제
+    function viewPost(id) {  window.location.href = `/admin/post-view?id=${id}`; }
+    function editPost(id) { window.location.href = `/admin/post-edit?id=${id}`;}
+    function deletePost(id) {
+        if (!confirm("정말 삭제하시겠습니까?")) return;
+        const indexAll = allPosts.findIndex(p => p.id === id);
+        if (indexAll !== -1) allPosts.splice(indexAll, 1);
+        filteredPosts = filteredPosts.filter(p => p.id !== id);
+        localStorage.setItem("posts", JSON.stringify(allPosts));
+        renderPosts();
+    }
+
+    // 공지 추가 버튼
+    document.getElementById("addNoticeBtn").addEventListener("click", () => { window.location.href = "/admin/addNotice";});
+
+    // 검색 기능 (제목 + ID)
+    const searchInput = document.getElementById("searchInput");
+    const searchBtn = document.getElementById("searchBtn");
+
+    function searchPosts() {
+        const keyword = searchInput.value.trim().toLowerCase();
+        if (!keyword) {
+            filteredPosts = [...allPosts]; // 전체 표시
+        } else {
+            filteredPosts = allPosts.filter(p =>
+                p.title.toLowerCase().includes(keyword) ||
+                String(p.id) === keyword
+            );
+        }
+        currentPage = 1;
+        renderPosts();
+    }
+
+    searchBtn.addEventListener("click", searchPosts);
+    searchInput.addEventListener("keyup", function(e) {
+        if(e.key === "Enter") searchPosts(); // Enter 키로도 검색
+    });
+
+    // 초기 렌더링
+    renderPosts();
+</script>
+</body>
+
+</html>
