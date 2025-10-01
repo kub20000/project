@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+  <meta charset="UTF-8">
+  <title>회원 관리 - 관리자 모드</title>
+    <link rel="stylesheet" href="/img/style.css">
+</head>
+
+<body>
+  <header>
+    <h1>Vegan Delight - 관리자 mode<img th:src="@{/img/회원관리.png}" alt="마이페이지" width="36"></h1>
+    <nav id="navMenu">
+        <a th:href="@{/admin/indexmg}">Home</a>
+        <a th:href="@{/admin/addNotice}">게시판</a>
+        <a th:href="@{/admin/usermng}">회원관리</a>
+    </nav>
+  </header>
+  <main>
+      <form id="searchForm" th:action="@{/admin/usermng}" method="post">
+    <div class="table-header">
+      <h2>회원 목록</h2>
+      <div class="search-box">
+        <input type="text" id="search" name="id" placeholder="아이디 검색">
+        <button id="searchBtn">
+            <img th:src="@{/img/검색.png}" alt="검색">
+        </button>
+      </div>
+    </div>
+      </form>
+
+    <table id="userTable">
+      <thead>
+        <tr>
+          <th>id</th>
+          <th>아이디</th>
+          <th>이름</th>
+          <th>이메일</th>
+          <th>관리</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- JS에서 API 호출 결과로 채워짐 -->
+      </tbody>
+    </table>
+
+
+  <!-- 1:1 문의 답변 모달 -->
+  <div id="answerModal">
+    <div id="answerModalContent">
+      <h3>1:1 문의 답변</h3>
+      <div id="inquiryText">문의 내용 불러오는 중...</div>
+      <textarea id="answerText" rows="5" placeholder="답변을 입력하세요"></textarea>
+      <div style="margin-top:10px; text-align:right;">
+        <button onclick="sendAnswer()">전송</button>
+        <button onclick="closeAnswerModal()">닫기</button>
+      </div>
+    </div>
+  </div>
+  </main>
+</body>
+  <script>
+      const API_BASE = "http://localhost:8080/api/admin"; // 백엔드 API 경로
+      let currentUserId = null;
+      let users = []; // 전역 변수 선언
+
+      // 회원 목록 불러오기
+      async function fetchUsers() {
+          try {
+              const res = await fetch(`${API_BASE}/usermng`);
+              if (!res.ok) throw new Error("회원 목록 불러오기 실패");
+              users = await res.json(); // 전역 users에 저장
+              renderUsers(users);
+          } catch (err) {
+              alert(err.message);
+          }
+      }
+
+      // 회원 목록 렌더링
+      function renderUsers(usersList) {
+          const tbody = document.querySelector("#userTable tbody");
+          tbody.innerHTML = ""; // 기존 내용 초기화
+
+          usersList.forEach(user => {
+              const answerBtn = user.inquiry && user.inquiry.trim() !== ""
+                  ? `<button onclick="openAnswerModal(${user.id})">1:1 문의 답변</button>`
+                  : `<button disabled>1:1 문의 답변</button>`;
+
+              const tr = document.createElement("tr");
+              tr.innerHTML = `
+            <td>${user.id}</td>
+            <td>${user.username}</td>
+            <td>${user.name}</td>
+            <td>${user.email}</td>
+            <td>
+                <button onclick="editUser(${user.id})">수정</button>
+                <button onclick="deleteUser(${user.id})">삭제</button>
+                ${answerBtn}
+            </td>
+        `;
+              tbody.appendChild(tr);
+          });
+      }
+
+      // 수정 버튼: 서버에서 제공하는 edit 페이지로 이동
+      function editUser(id) {
+          window.location.href = `/admin/edit/${id}`;
+      }
+
+      // 삭제 버튼: 서버 DELETE 요청
+      async function deleteUser(id) {
+          if (!confirm("정말 삭제하시겠습니까?")) return;
+          try {
+              const res = await fetch(`${API_BASE}/usermng/${id}`, { method: "DELETE" });
+              if (!res.ok) throw new Error("삭제 실패");
+              alert("삭제 완료");
+              fetchUsers(); // 삭제 후 목록 갱신
+          } catch (err) {
+              alert(err.message);
+          }
+      }
+
+      // 1:1 문의 열기: 서버 GET 요청
+      async function openAnswerModal(userId) {
+          currentUserId = userId;
+          try {
+              const res = await fetch(`${API_BASE}/usermng/${userId}`); // GET 요청으로 수정
+              if (!res.ok) throw new Error("문의 내용 불러오기 실패");
+              const data = await res.json();
+              document.getElementById("inquiryText").textContent = data.inquiry || "문의 내용이 없습니다.";
+              document.getElementById("answerModal").style.display = "flex";
+          } catch (err) {
+              alert(err.message);
+          }
+      }
+
+      // 모달 닫기
+      function closeAnswerModal() {
+          document.getElementById("answerModal").style.display = "none";
+          document.getElementById("answerText").value = "";
+      }
+
+      // 답변 전송: 서버 POST 요청
+      async function sendAnswer() {
+          const answer = document.getElementById("answerText").value.trim();
+          if (!answer) return alert("답변 내용을 입력해주세요.");
+          try {
+              const res = await fetch(`${API_BASE}/usermng/${currentUserId}/answer`, {
+                  method: "POST",
+                  headers: { "Content-Type": "application/json" },
+                  body: JSON.stringify({ answer })
+              });
+              if (!res.ok) throw new Error("답변 전송 실패");
+              alert("답변이 전송되었습니다!");
+              closeAnswerModal();
+              fetchUsers(); // 답변 후 목록 갱신
+          } catch (err) {
+              alert(err.message);
+          }
+      }
+
+      // 초기 실행
+      document.addEventListener("DOMContentLoaded", fetchUsers);
+
+      // 검색 기능
+      document.getElementById("searchBtn").addEventListener("click", function () {
+          const keyword = document.getElementById("search").value.trim().toLowerCase();
+          if (!keyword) return alert("검색어를 입력하세요.");
+          const filtered = users.filter(user => user.username.toLowerCase().includes(keyword));
+          renderUsers(filtered);
+      });
+
+      // form 제출 막기
+      document.getElementById("searchForm").addEventListener("submit", function (e) {
+          e.preventDefault();
+      });
+  </script>
+</html>
