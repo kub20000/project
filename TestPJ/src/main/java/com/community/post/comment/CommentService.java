@@ -1,6 +1,6 @@
-package com.community.post.comment;
+package com.bproject.post.comment;
 
-import com.community.post.entity.Post;
+import com.bproject.post.entity.Post;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -13,8 +13,8 @@ public class CommentService {
 
     public CommentService(CommentRepo commentRepo) {this.commentRepo = commentRepo;}
 
-        public List<Comment> findById(int id) {
-            return commentRepo.findById(id);
+    public List<Comment> findById(int id) {
+        return commentRepo.findById(id);
     }
 
 

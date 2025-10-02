@@ -1,4 +1,4 @@
-package com.community.post;
+package com.bproject.post;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;

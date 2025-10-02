@@ -1,14 +1,14 @@
-package com.community.post.controller;
+package com.bproject.post.controller;
 
-import com.community.post.PostDTO;
-import com.community.post.comment.Comment;
-import com.community.post.comment.CommentService;
-import com.community.post.entity.Post;
-import com.community.post.repository.PostRepository;
-import com.community.post.service.PostService;
+import com.bproject.post.PostDTO;
+import com.bproject.post.comment.Comment;
+import com.bproject.post.comment.CommentService;
+import com.bproject.post.entity.Post;
+import com.bproject.post.repository.PostRepository;
+import com.bproject.post.service.PostService;
+import com.bproject.user.entity.User;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
-import org.springframework.boot.autoconfigure.security.SecurityProperties;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -37,7 +37,7 @@ public class PostController {
             @PageableDefault(size = 10, sort = "created_at", direction = Sort.Direction.DESC) Pageable pageable) {
 
         // 1. 고정된 게시글 목록을 가져옵니다. (페이지네이션 미적용)
-        List<Post> fixedPosts = postRepository.findByFixedTrueOrderByCreatedAtDesc();
+        List<Post> fixedPosts = postRepository.findByFixedTrue();
         model.addAttribute("fixedPosts", fixedPosts);
 
         // 2. 일반 게시글 목록을 가져옵니다. (페이지네이션 적용)
@@ -62,68 +62,94 @@ public class PostController {
 
     // 게시글 추가(페이지 연결)
     @GetMapping("/post/add")
-    public String addForm(Model model) {
-        model.addAttribute("post", new Post());
+    public String addPostForm(Model model, HttpSession session) {
+
+        // 1. 세션에서 로그인 유저 정보 가져오기
+        User loginUser = (User) session.getAttribute("loginUser");
+
+        // 2. 로그인 유저의 Role 정보를 모델에 담기
+        String userRole = "GUEST"; // 기본값 (로그인 안 한 경우)
+        if (loginUser != null) {
+            // User 엔티티에서 role 필드를 가져와 String으로 변환 (예: "ADMIN", "USER", "INSTRUCTOR")
+            userRole = loginUser.getRole().name();
+        }
+
+        // 모델에 role 정보와 Post 객체 전달
+        model.addAttribute("post", new Post()); // Post 객체도 필요하므로 다시 추가
+        model.addAttribute("userRole", userRole);
+
         return "post/addPost";
     }
 
-    // 게시글 등록 처리
-    @PostMapping("/posts/add")
-    public String addPost(@ModelAttribute Post post,
-                          HttpSession session, // HttpSession 객체 주입
-                          RedirectAttributes redirectAttributes) {
+    // 게시글 추가(버튼 클릭하여 실제로 게시글 추가)
+    @PostMapping("/post/add")
+    public String addPost(@ModelAttribute Post post, HttpSession session) { // HttpSession 추가
+        // 1. 세션에서 로그인 유저 정보 가져오기
+        User loginUser = (User) session.getAttribute("loginUser");
 
-        // 1. 세션에서 로그인 사용자 정보 (User 객체) 가져오기
-        SecurityProperties.User loginUser = (SecurityProperties.User) session.getAttribute("loginUser");
-
-        // 2. 로그인 여부 확인
+        // 2. 로그인 유저가 없을 경우 처리 (예: 로그인 페이지로 리다이렉트 또는 에러 처리)
         if (loginUser == null) {
-            redirectAttributes.addFlashAttribute("errorMessage", "로그인 후 이용해 주세요.");
-            return "redirect:/user/login"; // 로그인 페이지로 리다이렉트
+            // 실제 운영 환경에서는 적절한 예외 처리나 로그인 페이지 리다이렉션이 필요합니다.
+            // 여기서는 임시로 에러를 출력하고 리스트로 리다이렉트합니다.
+            System.out.println("ERROR: 게시글 작성 시 로그인된 유저 정보가 없습니다.");
+            return "redirect:/login"; // 예시: 로그인 페이지로 리다이렉트
         }
 
-        try {
-            // 3. 서비스 호출 시 로그인 유저 정보를 함께 전달
-            postService.add(post, loginUser);
+        // 3. Post 엔티티의 author 필드에 로그인 유저의 nickname 설정 (핵심 로직)
+        post.setAuthor(loginUser.getNickname());
 
-            redirectAttributes.addFlashAttribute("message", "게시글이 성공적으로 등록되었습니다.");
-            return "redirect:/posts"; // 게시글 목록 페이지로 리다이렉트
-        } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("errorMessage", "게시글 등록 중 오류가 발생했습니다.");
-            return "redirect:/posts/add"; // 다시 등록 폼으로 리다이렉트
-        }
+        // 4. 서비스 호출
+        postService.add(post);
+
+        return "redirect:/post/list";
     }
 
     // 게시글 보기 (제목(title) 클릭해서 연결되는 페이지) -> 9.9 <br> 태그 문제 해결
     @GetMapping("/post/detail/{id}")
-    public String postDetailForm(@PathVariable int id, Model model){
+    public String postDetailForm(@PathVariable int id, Model model, HttpSession session){ // ⭐️ HttpSession 추가
 
-        //1. 게시글 데이터 가져오기
+        // 1. 게시글 데이터 가져오기
         Post post = (Post) postService.findById(id).orElseThrow(
-                ()->new IllegalArgumentException("Invaild id"));
+                ()->new IllegalArgumentException("Invalid post id: " + id));
+
         String content = Optional.ofNullable(post.getContent()).orElse("");
         String contentWithBr = content.replace("\n", "<br>");
-        model.addAttribute("post",post);
-        model.addAttribute("contentWithBr",contentWithBr);
-        System.out.println("post : "+post);
+        model.addAttribute("post", post);
+        model.addAttribute("contentWithBr", contentWithBr);
+        System.out.println("post : " + post);
 
-        // 2. 다음/이전 게시글 ID 찾기
+        // 2. 로그인 유저 정보 추출 및 모델에 담기 (추가된 핵심 로직)
+        User loginUser = (User) session.getAttribute("loginUser");
+
+        String loginUserNickname = null;
+        String userRole = "GUEST"; // 기본값
+
+        if (loginUser != null) {
+            loginUserNickname = loginUser.getNickname();
+            userRole = loginUser.getRole().name(); // 예: "ADMIN", "USER"
+        }
+
+        // HTML 조건부 렌더링을 위해 모델에 추가
+        model.addAttribute("loginUserNickname", loginUserNickname);
+        model.addAttribute("userRole", userRole);
+
+        // 3. 다음/이전 게시글 ID 찾기
         Optional<Integer> nextId = postService.findNextPostId(id);
         Optional<Integer> prevId = postService.findPrevPostId(id);
 
         System.out.println("Next ID: " + nextId);
         System.out.println("Prev ID: " + prevId);
 
-        // 3. Optional 객체에서 값 가져와서 모델에 추가
+        // 4. Optional 객체에서 값 가져와서 모델에 추가
         nextId.ifPresent(next -> model.addAttribute("nextId", next));
         prevId.ifPresent(prev -> model.addAttribute("prevId", prev));
 
-        //4. 댓글
+        // 5. 댓글 처리
         List<Comment> comments = commentService.findById(id);
-        // 한줄 내려쓰기 판단
+
         List<Comment> processedComments = comments.stream()
                 .map(comment -> {
-                    String commentContent = comment.getComments_content();
+                    String commentContent = Optional.ofNullable(comment.getComments_content()).orElse("");
                     String processedContent = commentContent.replace("\n", "<br>");
                     comment.setComments_content(processedContent);
                     return comment;
@@ -131,7 +157,7 @@ public class PostController {
                 .collect(Collectors.toList());
         model.addAttribute("comments", processedComments);
 
-        // 댓글
+        // 6. 댓글 등록 폼을 위한 객체
         model.addAttribute("comment", new Comment());
 
         return "post/detailPost";

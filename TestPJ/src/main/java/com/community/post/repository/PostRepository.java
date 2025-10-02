@@ -1,6 +1,6 @@
-package com.community.post.repository;
+package com.bproject.post.repository;
 
-import com.community.post.entity.Post;
+import com.bproject.post.entity.Post;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jdbc.repository.query.Query;
@@ -22,8 +22,10 @@ public interface PostRepository extends CrudRepository<Post, Integer> {
     // 페이지네이션을 포함한 전체 목록
     Page<Post> findAll(Pageable pageable);
 
-    @Query("SELECT * FROM posts WHERE fixed = true ORDER BY created_at DESC")
-    List<Post> findByFixedTrueOrderByCreatedAtDesc();
+    List<Post> findByFixedTrue();
 
     Page<Post> findByFixedFalse(Pageable pageable);
+
+    // 닉네임으로만 필터링된 게시글 총 개수 카운트
+    long countByAuthorAndTitleContaining(String author, String title);
 }

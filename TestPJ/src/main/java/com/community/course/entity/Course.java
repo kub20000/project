@@ -1,4 +1,4 @@
-package com.community.course.entity;
+package com.bproject.course.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -19,8 +19,8 @@ public class Course {
     private CourseCategory courses_category;
     private String description;
     private String video_url;
-    private int duration_sec;
     private int like_count;
     private int total_sec;
     private String thumbnail_url;
+    private int instructor_id;
 }

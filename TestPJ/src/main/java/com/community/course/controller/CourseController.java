@@ -1,7 +1,9 @@
-package com.community.course.controller;
+package com.bproject.course.controller;
 
-import com.community.course.entity.Course;
-import com.community.course.service.CourseService;
+import com.bproject.course.entity.Course;
+import com.bproject.course.service.CourseService;
+import com.bproject.user.entity.User;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -18,7 +20,6 @@ import java.util.Map;
 @RequestMapping("/course")
 public class CourseController {
 
-    @Autowired
     private final CourseService courseService;
 
     public CourseController(CourseService courseService) {
@@ -27,13 +28,30 @@ public class CourseController {
 
     @PostMapping("/upload-and-get-id")
     @ResponseBody
-    public ResponseEntity<Map<String, Object>> uploadCourseAndGetId(@RequestParam("courses_name") String coursesName,
-                                                                    @RequestParam("description") String description,
-                                                                    @RequestParam("videoFile") MultipartFile videoFile,
-                                                                    @RequestParam("thumbnailFile") MultipartFile thumbnailFile,
-                                                                    @RequestParam("courses_category") Course.CourseCategory courses_category) {
+    public ResponseEntity<Map<String, Object>> uploadCourseAndGetId(
+            @RequestParam("courses_name") String coursesName,
+            @RequestParam("description") String description,
+            @RequestParam("videoFile") MultipartFile videoFile,
+            @RequestParam("thumbnailFile") MultipartFile thumbnailFile,
+            @RequestParam("courses_category") Course.CourseCategory courses_category,
+            HttpSession session) {
+
+        User loginUser = (User) session.getAttribute("loginUser");
+
+        // 🚨 [핵심] 로그인 유저 검증 및 ID 추출
+        if (loginUser == null) {
+            Map<String, Object> errorResponse = new HashMap<>();
+            errorResponse.put("error", "로그인 상태가 아닙니다. 다시 로그인 해주세요.");
+            return ResponseEntity.status(401).body(errorResponse);
+        }
+        int instructorId = loginUser.getId(); // ⭐️ 로그인된 유저의 ID를 강사 ID로 사용
+
         try {
-            Course savedCourse = courseService.uploadCourse(coursesName, description, videoFile, thumbnailFile, courses_category);
+            // ⭐️ Service 메서드 호출 시 추출한 instructorId를 전달
+            Course savedCourse = courseService.uploadCourse(
+                    coursesName, description, videoFile, thumbnailFile, courses_category, instructorId
+            );
+
             Map<String, Object> response = new HashMap<>();
             response.put("id", savedCourse.getId());
             response.put("message", "강의가 성공적으로 등록되었습니다.");
@@ -71,11 +89,11 @@ public class CourseController {
         try {
             courseService.updateCourse(id, coursesName, description, videoFile, thumbnailFile, courses_category, existingVideoUrl, existingThumbnailUrl);
             redirectAttributes.addFlashAttribute("message", "강의가 성공적으로 수정되었습니다.");
-            return "redirect:/course/main"; // 수정 후 메인 페이지로 리디렉션
+            return "redirect:course/main"; // 수정 후 메인 페이지로 리디렉션
         } catch (IOException e) {
             e.printStackTrace();
             redirectAttributes.addFlashAttribute("errorMessage", "강의 수정에 실패했습니다.");
-            return "redirect:/course/edit/" + id;
+            return "redirect:course/edit/" + id;
         }
     }
 
@@ -89,7 +107,7 @@ public class CourseController {
 
         // TODO: 강의 목록 조회 및 모델에 담는 기존 로직이 있다면 여기에 추가
 
-        return "/course/courses";
+        return "course/courses";
     }
 
 

@@ -1,4 +1,4 @@
-package com.community.post.entity;
+package com.bproject.post.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -12,6 +12,7 @@ import java.time.LocalDateTime;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString
 @Table("posts")
 public class Post {
 

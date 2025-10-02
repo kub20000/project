@@ -1,13 +1,12 @@
-package com.community.post.service;
+package com.bproject.post.service;
 
-import com.community.post.PostDTO;
-import com.community.post.comment.CommentService;
-import com.community.post.entity.Post;
-import com.community.post.repository.PostRepo;
-import com.community.post.repository.PostRepository;
+import com.bproject.post.PostDTO;
+import com.bproject.post.comment.CommentService;
+import com.bproject.post.entity.Post;
+import com.bproject.post.repository.PostRepo;
+import com.bproject.post.repository.PostRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.security.SecurityProperties;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -35,17 +34,23 @@ public class PostService {
         return postRepo.findById(id);
     }
 
-    // add 메서드에 현재 로그인한 사용자(User 객체)를 인자로 추가합니다.
-    public Post add(Post post, SecurityProperties.User loginUser) {
-        if (loginUser == null) {
-            throw new IllegalStateException("로그인된 사용자 정보가 없습니다.");
+    public void add(Post post) {
+        System.out.println("post add");
+
+        if (post.getCategory() == null) {
+            // Post 엔티티 내부에 정의된 Category Enum을 사용하여 FREEBOARD로 설정
+            post.setCategory(Post.Category.FREEBOARD);
         }
 
-        // 1. Post 객체에 작성자 정보 설정
-//        post.setAuthor(loginUser.getNickname());
+        if (post.getCreated_at() == null) {
+            post.setCreated_at(LocalDateTime.now());
+        }
 
-        // 2. Repository 호출
-        return postRepo.add(post);
+        if (post.getFixed() == null) {
+            post.setFixed(false); // 기본값은 고정 안 함(false)으로 설정
+        }
+
+        postRepo.add(post);
     }
 
     public void deleteById(int id) {

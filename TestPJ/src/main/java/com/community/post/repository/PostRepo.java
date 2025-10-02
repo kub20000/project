@@ -1,7 +1,7 @@
-package com.community.post.repository;
+package com.bproject.post.repository;
 
-import com.community.course.entity.Course;
-import com.community.post.entity.Post;
+import com.bproject.course.entity.Course;
+import com.bproject.post.entity.Post;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -9,6 +9,7 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -45,7 +46,7 @@ public class PostRepo {
     public List<Post> findAll() {
         String sql = "SELECT * FROM posts";
         return jdbc.query(sql,postRowMapper());
-        }
+    }
 
     // 게시글 매핑(출력 전 매핑)
     private RowMapper<Post> postRowMapper() {
@@ -60,13 +61,13 @@ public class PostRepo {
                     : Post.Category.FREEBOARD;
 
             Post p = new Post();
-                    p.setId(rs.getInt("id"));
-                    p.setAuthor(rs.getString("author"));
-                    p.setTitle(rs.getString("title"));
-                    p.setContent(rs.getString("content"));
-                    p.setCreated_at(createdAt);
-                    p.setCategory(categoryEnum);
-                    p.setFixed(rs.getBoolean("fixed"));
+            p.setId(rs.getInt("id"));
+            p.setAuthor(rs.getString("author"));
+            p.setTitle(rs.getString("title"));
+            p.setContent(rs.getString("content"));
+            p.setCreated_at(createdAt);
+            p.setCategory(categoryEnum);
+            p.setFixed(rs.getBoolean("fixed"));
             return p;
         };
     }
@@ -128,5 +129,42 @@ public class PostRepo {
         return jdbc.queryForObject(sql, Integer.class);
     }
 
-}
+    // 마이페이지 게시글 조회
+    public List<Post> findMyPostsWithPagination(String authorNickname, int limit, int offset, String keyword) {
+        // SQL 빌더를 사용하여 동적으로 쿼리를 구성합니다.
+        StringBuilder sqlBuilder = new StringBuilder("SELECT * FROM posts WHERE author = ?");
+        List<Object> params = new ArrayList<>();
+        params.add(authorNickname); // 1. 닉네임 필터링 (필수)
 
+        // 2. 검색 키워드 필터링 (선택)
+        if (keyword != null && !keyword.isEmpty()) {
+            sqlBuilder.append(" AND title LIKE ?"); // 제목만 검색한다고 가정
+            params.add("%" + keyword + "%");
+        }
+
+        // 3. 정렬 및 페이지네이션
+        sqlBuilder.append(" ORDER BY created_at DESC LIMIT ? OFFSET ?");
+        params.add(limit);
+        params.add(offset);
+
+        return jdbc.query(sqlBuilder.toString(), postRowMapper(), params.toArray());
+    }
+
+    // 마이페이지 게시글 카운트, 검색
+    public long countMyPosts(String authorNickname, String keyword) {
+        StringBuilder sqlBuilder = new StringBuilder("SELECT COUNT(*) FROM posts WHERE author = ?");
+        List<Object> params = new ArrayList<>();
+        params.add(authorNickname);
+
+        // 검색 키워드 필터링
+        if (keyword != null && !keyword.isEmpty()) {
+            sqlBuilder.append(" AND title LIKE ?");
+            params.add("%" + keyword + "%");
+        }
+
+        // 결과는 Long 타입으로 받습니다.
+        return jdbc.queryForObject(sqlBuilder.toString(), Long.class, params.toArray());
+    }
+
+
+}

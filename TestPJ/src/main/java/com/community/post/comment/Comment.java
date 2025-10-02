@@ -1,4 +1,4 @@
-package com.community.post.comment;
+package com.bproject.post.comment;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -10,7 +10,6 @@ import java.time.LocalDateTime;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString
 public class Comment {
     private int id;
     private int posts_id;

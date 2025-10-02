@@ -1,6 +1,8 @@
-package com.community.course;
+package com.bproject.course;
 
-import com.community.course.entity.Course;
+
+
+import com.bproject.course.entity.Course;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

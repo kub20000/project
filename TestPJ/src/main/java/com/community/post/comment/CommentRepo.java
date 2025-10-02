@@ -1,6 +1,6 @@
-package com.community.post.comment;
+package com.bproject.post.comment;
 
-import com.community.post.entity.Post;
+import com.bproject.post.entity.Post;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;

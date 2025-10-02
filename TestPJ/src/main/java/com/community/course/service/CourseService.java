@@ -1,8 +1,12 @@
-package com.community.course.service;
+package com.bproject.course.service;
 
-import com.community.course.CoursePageDto;
-import com.community.course.entity.Course;
-import com.community.course.repository.CourseRepo;
+import com.bproject.course.CourseDetailDto;
+import com.bproject.course.CoursePageDto;
+import com.bproject.course.entity.Course;
+import com.bproject.course.repository.CourseRepo;
+import com.bproject.userscourses.UCService;
+import com.bproject.userscourses.UsersCourses;
+import lombok.RequiredArgsConstructor;
 import org.jcodec.common.io.FileChannelWrapper;
 import org.jcodec.common.io.NIOUtils;
 import org.jcodec.containers.mp4.boxes.MovieBox;
@@ -20,26 +24,21 @@ import java.nio.file.Paths;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class CourseService {
 
     private final CourseRepo courseRepo;
+    private final UCService ucService;
 
     // @Value 어노테이션은 필드에 직접 주입할 수 있도록 변경
     @Value("${file.upload-path}")
     private String uploadPath;
 
-    public CourseService(CourseRepo courseRepo) {
-        this.courseRepo = courseRepo;
-    }
-
     public Optional<Course> findById(int courseId) {
         return courseRepo.findById(courseId);
-    }
-
-    public List<Course> findAll() {
-        return courseRepo.findAll();
     }
 
     public int increaseLikeCount(int courseId) {
@@ -52,7 +51,8 @@ public class CourseService {
 
     public Course uploadCourse(String coursesName, String description,
                                MultipartFile videoFile, MultipartFile thumbnailFile,
-                               Course.CourseCategory courses_category) throws IOException {
+                               Course.CourseCategory courses_category,
+                               int instructorId) throws IOException {
 
         File videoTempFile = saveFileAndGetFile(videoFile, "videos");
         String videoPath = "/uploads/videos/" + videoTempFile.getName();
@@ -67,6 +67,7 @@ public class CourseService {
         course.setThumbnail_url(thumbnailPath);
         course.setCourses_category(courses_category);
         course.setTotal_sec(totalSeconds);
+        course.setInstructor_id(instructorId);
 
         courseRepo.save(course);
 
@@ -208,24 +209,57 @@ public class CourseService {
         courseRepo.deleteById(courseId);
     }
 
-    // 내 강의 페이지네이션
-    public CoursePageDto findCoursesWithFilterAndPagination(int page, int size, String search, String category) {
+    // myCourse id데이터 전달
+    public CoursePageDto findCoursesByInstructor(int instructorId, int page, int size, String search, String category) {
         int offset = page * size;
-        List<Course> courses = courseRepo.findWithFilterAndPagination(size, offset, search, category);
-        long totalItems = courseRepo.countWithFilterAndSearch(search, category);
+
+        // 레포지토리에 instructorId를 전달하여 해당 강사의 강의만 조회하도록 수정
+        List<Course> courses = courseRepo.findInstructorCourses(
+                instructorId, size, offset, search, category
+        );
+
+        // 전체 항목 개수도 instructorId를 기준으로 다시 계산
+        long totalItems = courseRepo.countInstructorCourses(instructorId, search, category);
         int totalPages = (int) Math.ceil((double) totalItems / size);
 
         return new CoursePageDto(courses, page, totalPages, totalItems);
     }
 
     @Transactional
-    public void updateProgress(int courseId, int durationSec) {
-        courseRepo.updateProgress(courseId, durationSec);
+    public void updateProgress(int userId, int courseId, int newProgress, int durationSec) {
+        ucService.saveOrUpdateProgress(userId, courseId, newProgress, durationSec);
     }
 
     // 인기 강의 조회
     public List<Course> getTop3PopularCourses() {
         return courseRepo.findTop3PopularCourses();
     }
+
+    // 진도율
+    public int getUserDurationSecForClient(int userId, int courseId) {
+        return ucService.getUserDurationSec(userId, courseId);
+    }
+
+    public List<CourseDetailDto> findAllCoursesWithProgress(int userId) {
+        // 1. 모든 강의 목록 (Course 엔티티)을 가져옵니다.
+        List<Course> courses = courseRepo.findAll();
+
+        // 2. 각 Course를 CourseDetailDto로 변환하고 진도율 정보를 주입합니다.
+        return courses.stream()
+                .map(course -> {
+                    CourseDetailDto dto = new CourseDetailDto(course, 0); // 기본 DTO 생성 (시청 시간 0으로 시작)
+
+                    if (userId > 0) { // 로그인 유저일 경우에만 진도율을 조회
+                        UsersCourses userProgress = ucService.getUsersCourses(userId, course.getId());
+
+                        if (userProgress != null) {
+                            dto.setUserDurationSec(userProgress.getDuration_sec());
+                        }
+                    }
+                    return dto;
+                })
+                .collect(Collectors.toList());
+    }
+
 
 }
