@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title th:text="${recipe.title}">나의 레시피</title>
+  <link rel="stylesheet" th:href="@{/css/styleMy.css}">
+</head>
+<body class="deleteInfo">
+  <div th:replace="fragments/mainheader :: mainHeader"></div>
+  <div class="page-wrapper">
+    <nav th:replace="fragments/mypageheader :: sitenav"></nav>
+
+    <main class="board-container">
+      <h2 th:text="${recipe.title}">제목</h2>
+      <article>
+        <pre style="white-space: pre-wrap;" th:text="${recipe.recipe}"></pre>
+      </article>
+      <p style="margin-top: 24px;"><a th:href="@{/mypage/myRecipe}">목록으로</a></p>
+    </main>
+  </div>
+</body>
+</html>

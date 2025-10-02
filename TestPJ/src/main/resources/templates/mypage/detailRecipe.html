@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>레시피 상세보기</title>
+  <link rel="stylesheet" href="/css/styleMy.css">
+   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+</head>
+<body class="deleteInfo">
+
+<div th:replace="fragments/mainheader :: mainHeader"></div>
+
+  <div class="page-wrapper">
+    <nav th:replace="fragments/mypageheader :: sitenav"></nav>
+       
+    <main class="board-container">
+        <div class="recipe-card-wrapper">
+                <div class="recipe-detail-header">레시피 제목</div>
+                <div class="recipe-card-detail">
+                <div class="recipe-detail-info">
+                 <p>레시피 내용</p>
+                </div>
+            
+            
+                  <div class="recipe-cardBtns">
+                   <button class="recipeList-btn" onclick="location.href='dashBoard.html#recipeSection'">
+                    목록
+                    </button>
+                   <button class="recipeDelete-btn" onclick="location.href='dashBoard.html#recipeSection'">
+                   삭제
+                  </button>
+                  </div>
+               </div>
+            </div>
+    </main>
+    </div>
+</body>
+<script>
+  const deleteBtn = document.querySelector('.recipeDelete-btn');
+
+  deleteBtn.addEventListener('click', function() {
+    const confirmed = confirm("삭제하시겠습니까?");
+    if (confirmed) {
+      alert("삭제되었습니다."); 
+    } else {
+      return;
+    }
+  });
+</script>
+</html>

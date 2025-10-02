@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>나의 레시피(단독)</title>
+  <style>
+    body { font-family: system-ui, sans-serif; margin: 24px; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; }
+    .card { border: 1px solid #ddd; border-radius: 12px; padding: 16px; text-decoration: none; color: inherit; }
+    .card h3 { margin: 0 0 8px; font-size: 18px; }
+    .muted { color: #555; white-space: pre-wrap; }
+  </style>
+</head>
+<body>
+  <h1>나의 레시피(단독 템플릿)</h1>
+  <p><a href="/mypage/myRecipe">프래그먼트 버전으로 이동</a></p>
+
+  <div class="grid">
+    <a class="card" th:each="r : ${recipes}" th:href="@{'/mypage/myRecipe_plain/' + ${r.id}}">
+      <h3 th:text="${r.title}">레시피 제목</h3>
+      <div class="muted" th:text="${#strings.abbreviate(#strings.replace(r.recipe, '\n', ' '), 160)}">내용</div>
+    </a>
+    <div th:if="${#lists.isEmpty(recipes)}">
+      저장된 레시피가 없습니다. 냉장고에서 저장해보세요.
+    </div>
+  </div>
+</body>
+</html>

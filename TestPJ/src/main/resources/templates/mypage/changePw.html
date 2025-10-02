@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>비밀번호 변경</title>
+  <link rel="stylesheet" href="/css/styleLogin.css">
+</head>
+  <div th:replace="fragments/header :: siteHeader"></div>
+<body class="changePw">
+  <main class="form-container">
+  <button class="closeBtn">X</button>   
+
+  <h3 style="align-self: flex-start;">비밀번호 변경</h3>
+  <form id="changePwForm">
+    <input class="changePw" type="password" id="nowPw" placeholder="현재 비밀번호를 입력하세요." required>
+    <div style="position: relative;">
+      <input type="password" id="newPw" placeholder="새로운 비밀번호를 입력하세요." required>
+      <div id="capsLockWarning" class="caps-warning">Caps Lock이 켜져 있습니다!</div>
+      <div id="pwStrength" class="strength"></div>
+    </div>
+    <input type="password" id="confirmPw" placeholder="다시 한 번 입력하세요." required>
+    <button class="changePw" type="submit">비밀번호 변경</button>
+  </form>
+</main>
+
+ <script>
+    const form = document.getElementById("changePwForm");
+    const newPwInput = document.getElementById("newPw");
+    const confirmPwInput = document.getElementById("confirmPw");
+    const strengthDiv = document.getElementById("pwStrength");
+    const capsLockWarning = document.getElementById("capsLockWarning");
+
+    // Caps Lock 감지
+    newPwInput.addEventListener("keyup", (e) => {
+      capsLockWarning.style.display = e.getModifierState("CapsLock") ? "block" : "none";
+    });
+
+    // 비밀번호 안전도 검증
+    newPwInput.addEventListener("input", () => {
+      const pwd = newPwInput.value;
+      let strength = "약함";
+      let color = "red";
+
+      const regexStrong = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/;
+      const regexMedium = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{6,}$/;
+
+      if (regexStrong.test(pwd)) {
+        strength = "강함";
+        color = "green";
+      } else if (regexMedium.test(pwd)) {
+        strength = "보통";
+        color = "orange";
+      }
+
+      strengthDiv.textContent = `비밀번호 안전도: ${strength}`;
+      strengthDiv.style.color = color;
+    });
+
+    // 폼 제출 backend
+    form.addEventListener("submit", async function (event) {
+      event.preventDefault();
+
+      const nowPw = document.getElementById("nowPw").value;
+      const newPw = newPwInput.value;
+      const confirmPw = confirmPwInput.value;
+
+      if (newPw !== confirmPw) {
+        alert("비밀번호가 일치하지 않습니다. 다시 입력해주세요.");
+        return;
+      }
+
+      try {
+        const res = await fetch("/api/change-password", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ nowPw, newPw })
+        });
+
+        const data = await res.json();
+        if (res.ok) {
+          alert("비밀번호가 정상적으로 변경되었습니다.");
+        } else {
+          alert("실패: " + data.message);
+        }
+      } catch (err) {
+        console.error(err);
+        alert("서버 오류가 발생했습니다.");
+      }
+    });
+  </script>
+</body>
+
+</html>

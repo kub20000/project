@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>대시보드 - 나의 레시피</title>
+  <link rel="stylesheet" href="/css/styleMy.css">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+</head>
+<body class="deleteInfo">
+<div th:replace="fragments/mainheader :: mainHeader"></div>
+<div class="page-wrapper">
+  <nav th:replace="fragments/mypageheader :: sitenav"></nav>
+
+  <main class="board-container">
+    <h2 style="margin-bottom: 80px;" id="recipeSection">나의 레시피</h2>
+
+    <div class="recipe-search" style="justify-content: end;">
+      <input type="text" id="recipe-searchInput" placeholder="검색어를 입력해 주세요">
+      <button type="button" id="recipe-searchBtn" aria-label="검색">
+        <svg width="25" height="25" fill="currentColor" viewBox="0 0 24 24">
+          <path d="M21 21l-4.35-4.35m1.35-5.15a7 7 0 11-14 0 7 7 0 0114 0z" stroke="#6b7280" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div>
+
+    <div class="recipe-grid" id="recipeGrid">
+      <a class="recipe-card-link"
+         th:each="r : ${recipes}"
+         th:href="@{'/mypage/myRecipe/' + ${r.id}}"
+         th:attr="data-title=${r.title}, data-content=${r.recipe}">
+        <div class="recipe-header" th:text="${r.title}">레시피 제목</div>
+        <div class="recipe-card">
+          <div class="recipe-info">
+            <p th:text="${#strings.abbreviate(#strings.replace(r.recipe, '\n', ' '), 120)}">레시피 내용</p>
+          </div>
+        </div>
+      </a>
+
+      <div class="recipe-card-link" th:if="${#lists.isEmpty(recipes)}" style="text-decoration:none; cursor:default;">
+        <div class="recipe-header">저장된 레시피가 없습니다</div>
+        <div class="recipe-card">
+          <div class="recipe-info">
+            <p>냉장고에서 레시피를 생성한 뒤 <b>저장하기</b>를 누르면 이곳에 표시됩니다. <a href="/myFridge">냉장고로 이동</a></p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<script>
+(function () {
+  const input = document.getElementById('recipe-searchInput');
+  const btn = document.getElementById('recipe-searchBtn');
+  const grid = document.getElementById('recipeGrid');
+  function filter() {
+    const q = (input.value || '').trim().toLowerCase();
+    grid.querySelectorAll('.recipe-card-link').forEach(el => {
+      const t = (el.getAttribute('data-title') || '').toLowerCase();
+      const c = (el.getAttribute('data-content') || '').toLowerCase();
+      el.style.display = (!q || t.includes(q) || c.includes(q)) ? '' : 'none';
+    });
+  }
+  input && input.addEventListener('input', filter);
+  btn && btn.addEventListener('click', filter);
+  filter();
+})();
+</script>
+</body>
+</html>

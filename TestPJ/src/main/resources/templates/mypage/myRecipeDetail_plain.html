@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title th:text="${recipe.title}">나의 레시피(단독)</title>
+  <style>
+    body { font-family: system-ui, sans-serif; margin: 24px; }
+    pre { white-space: pre-wrap; }
+  </style>
+</head>
+<body>
+  <h1 th:text="${recipe.title}">제목</h1>
+  <pre th:text="${recipe.recipe}">본문</pre>
+  <p><a th:href="@{/mypage/myRecipe_plain}">목록</a> · <a th:href="@{/mypage/myRecipe}">프래그먼트 버전</a></p>
+</body>
+</html>

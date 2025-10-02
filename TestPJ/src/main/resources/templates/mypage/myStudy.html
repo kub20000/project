@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>최근 본 영상</title>
+    <link rel="stylesheet" href="/css/styleMy.css">
+</head>
+
+<body>
+<div th:replace="fragments/mainheader :: mainHeader"></div>
+
+<div class="page-wrapper">
+    <nav th:replace="fragments/mypageheader :: sitenav"></nav>
+
+    <main class="board-container">
+        <h2>내 학습 기록</h2>
+
+        <!-- 카테고리별 학습 진도율 섹션 (대시보드와 동일하게 수정) -->
+        <div class="progress-section">
+            <h3>카테고리별 학습 진도율</h3>
+            <div class="progress-grid">
+                <!-- loginUser의 progressList를 반복하여 출력합니다. -->
+                <div class="progress-card" th:each="progress : ${progressList}">
+                    <div class="card-header">
+                        <span class="icon"
+                              th:text="${progress.category == 'LIFE' ? '🌱' :
+                                     (progress.category == 'RECIPE' ? '🍳' :
+                                     (progress.category == 'SKILL' ? '🔪' : '❓'))}">
+                            ❓
+                        </span>
+                        <span class="title"
+                              th:text="${progress.category == 'LIFE' ? '비건 라이프 스타일' :
+                                     (progress.category == 'RECIPE' ? '요리 레시피' :
+                                     (progress.category == 'SKILL' ? '조리 스킬' : '기타'))}">
+                            카테고리 이름
+                        </span>
+                    </div>
+
+                    <div class="progress-bar">
+                        <!-- 게이지 막대 -->
+                        <div class="progress" th:style="'width: ' + ${progress.rate} + '%;'">
+                        </div>
+                        <!-- 중앙 고정 텍스트 -->
+                        <span class="progress-rate-text" th:text="${progress.rate} + '%'">0%</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--   강의 탭    -->
+        <div class="stydy-tabs">
+            <button class="stydy-tab active" data-tab="recent">최근 본 강의</button>
+            <button class="stydy-tab" data-tab="completed">완료한 강의</button>
+            <button class="stydy-tab" data-tab="liked">좋아요한 강의</button>
+        </div>
+
+        <div class="stydy-tab-content active">
+
+            <div class="course-list reveal">
+
+                <div class="course-card" th:each="history : ${historyPage.content}">
+
+                    <a th:href="@{/course/main(searchKeyword=${history.videoTitle})}" class="course-link">
+                        <div class="thumb">
+                            <img th:src="${history.thumbnail_url}" th:alt="${history.videoTitle} + ' 썸네일'"
+                                 style="width: 100%; height: 100%; object-fit: cover;">
+                        </div>
+                    </a>
+
+                    <div class="course-body">
+                        <div class="course-info">
+                            <a th:href="@{/course/main(searchKeyword=${history.videoTitle})}">
+                                <h3 th:text="${history.videoTitle}">강의 제목</h3>
+                            </a>
+
+                            <div class="actions">
+                                <div class="meta-info">
+                            <span class="badge category"
+                                  th:text="${#temporals.format(history.watched_date, 'yy.MM.dd')}">24.01.01</span>
+
+                                    <span class="badge progress">
+                                <i class="fa-solid fa-chart-simple"></i>
+                                <span th:text="${history.progress_rate} + '%'">50%</span>
+                            </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="progress-bar-small">
+                        <div class="progress"
+                             th:style="'width: ' + ${history.progress_rate} + '%;'">
+                        </div>
+                    </div>
+
+                </div>
+
+                <div th:if="${historyPage.content.isEmpty()}" style="padding: 20px; text-align: center; width: 100%;">
+                    <p>최근 본 영상 기록이 없습니다.</p>
+                </div>
+            </div>
+
+            <div class="pagination" th:if="${historyPage.totalPages > 1}">
+                <a th:if="${historyPage.hasPrevious()}"
+                   th:href="@{/mypage/myStudy(page=${historyPage.number - 1})}"
+                   class="prev-btn">이전</a>
+
+                <span th:each="i : ${#numbers.sequence(0, historyPage.totalPages - 1)}">
+            <a th:if="${i >= historyPage.number - 2 and i <= historyPage.number + 2}"
+               th:href="@{/mypage/myStudy(page=${i})}"
+               th:text="${i + 1}"
+               th:class="${i == historyPage.number ? 'active-page' : ''}">1</a>
+        </span>
+
+                <a th:if="${historyPage.hasNext()}"
+                   th:href="@{/mypage/myStudy(page=${historyPage.number + 1})}"
+                   class="next-btn">다음</a>
+            </div>
+        </div>
+    </main>
+</div>
+</body>
+</html>

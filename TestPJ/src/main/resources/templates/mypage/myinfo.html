@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>내 정보 수정</title>
+   <link rel="stylesheet" href="/css/styleMy.css">
+</head>
+<body class="myInfo">
+  <div th:replace="fragments/mainheader :: mainHeader"></div>
+  <main>
+    </section>
+    <form id="fixInfo">
+    <button class="closeBtn">X</button>
+    <div>
+      <label for="fixName">성명</label>
+      <input class="fixInfo" type="text" id="fixName" placeholder="이름을 입력하세요" required>
+    </div>
+    <div>
+      <label for="nickName">닉네임</label>
+      <input class="fixInfo" type="text" id="nickName" placeholder="닉네임을 입력하세요" required>
+    </div>
+    <div>
+      <label for="newPassward">비밀번호</label>
+      <a href="@{/changePw}"><button type="submit" class="fixInfo">변경</button></a>
+    </div>
+    <div>
+      <label for="bthInfo">생년월일</label>
+      <input class="fixInfo" type="date" id="bthInfo" required>
+    </div>
+    <div>
+      <label for="phoneNum">휴대전화 번호</label>
+      <input class="fixInfo" type="tel" id="phoneNum" placeholder="010-1234-5678" required>
+    </div>
+    <div>
+      <label for="emailInfo">이메일 정보</label>
+      <input class="fixInfo" type="email" id="emailInfo" placeholder="example@email.com" required>
+    </div>
+    <button type="submit" class="fixInfo">정보 수정</button>
+  </form>
+  </main>
+</body>
+</html>

@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>최근 본 영상</title>
+  <link rel="stylesheet" href="/css/styleMy.css">
+</head>
+
+<body>
+   <div th:replace="fragments/mainheader :: mainHeader"></div>
+
+  <div class="page-wrapper">
+    <nav th:replace="fragments/mypageheader :: sitenav"></nav>
+  
+   <main class="board-container">
+      <h2>내 학습 기록</h2>
+
+      <div class="progress-section">
+  <h3>카테고리별 학습 진도율</h3>
+  <div class="progress-grid">
+
+    <div class="progress-card">
+      <div class="card-header">
+        <span class="icon">🌱</span>
+        <span class="title">비건 라이프 스타일</span>
+      </div>
+      <div class="progress-bar">
+        <div class="progress" style="width: 70%;"><span>70%</span></div>
+      </div>
+    </div>
+
+    <div class="progress-card">
+      <div class="card-header">
+        <span class="icon">🍳</span>
+        <span class="title">요리 레시피</span>
+      </div>
+      <div class="progress-bar">
+        <div class="progress" style="width: 45%;"><span>45%</span></div>
+      </div>
+    </div>
+
+    <div class="progress-card">
+      <div class="card-header">
+        <span class="icon">🔪</span>
+        <span class="title">조리 스킬</span>
+      </div>
+      <div class="progress-bar">
+        <div class="progress" style="width: 85%;"><span>85%</span></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
+
+      <div class="stydy-tabs">
+        <button class="stydy-tab">최근 본 강의</button>
+        <button class="stydy-tab active">완료한 강의</button>
+        <button class="stydy-tab">좋아요한 강의</button>
+      </div>
+
+      <div class="stydy-tab-content">
+        <p>강의 내역이 여기에 표시됩니다.</p>
+      </div>
+
+    </main>
+  </div>
+</body>
+</html>

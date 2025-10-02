@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>최근 본 영상</title>
+  <link rel="stylesheet" href="/css/styleMy.css">
+</head>
+
+<body>
+ <div th:replace="fragments/mainheader :: mainHeader"></div>
+
+  <div class="page-wrapper">
+    <nav th:replace="fragments/mypageheader :: sitenav"></nav>
+  
+    <main class="board-container">
+      <h2>내 학습 기록</h2>
+
+      <div class="progress-section">
+  <h3>카테고리별 학습 진도율</h3>
+  <div class="progress-grid">
+
+    <div class="progress-card">
+      <div class="card-header">
+        <span class="icon">🌱</span>
+        <span class="title">비건 라이프 스타일</span>
+      </div>
+      <div class="progress-bar">
+        <div class="progress" style="width: 70%;"><span>70%</span></div>
+      </div>
+    </div>
+
+    <div class="progress-card">
+      <div class="card-header">
+        <span class="icon">🍳</span>
+        <span class="title">요리 레시피</span>
+      </div>
+      <div class="progress-bar">
+        <div class="progress" style="width: 45%;"><span>45%</span></div>
+      </div>
+    </div>
+
+    <div class="progress-card">
+      <div class="card-header">
+        <span class="icon">🔪</span>
+        <span class="title">조리 스킬</span>
+      </div>
+      <div class="progress-bar">
+        <div class="progress" style="width: 85%;"><span>85%</span></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
+
+      <div class="stydy-tabs">
+        <button class="stydy-tab">최근 본 강의</button>
+        <button class="stydy-tab">완료한 강의</button>
+        <button class="stydy-tab active">좋아요한 강의</button>
+      </div>
+
+      <div class="stydy-tab-content">
+        <p>강의 내역이 여기에 표시됩니다.</p>
+      </div>
+      
+    </main>
+  </div>
+  </div>
+ </div>
+
+
+
+
+
+
+
+
+  <!-- <script src="https://www.youtube.com/iframe_api"></script>
+  <script>
+    const API_BASE = "/api/progress"; // 백엔드 REST API 엔드포인트
+    const now = () => new Date().toISOString();
+
+    const SampleVideos = {
+      'sample-bbb': { id: 'sample-bbb', title: '초보 비거니스트가 실수하는 10가지', youtubeId: '3zRYW491eA0', poster: './img/vegan2.png' },
+      'oliveoil': { id: 'oliveoil', title: '좋은 올리브오일 고르는 법', youtubeId: 'X4xwwg3me4o', poster: './img/oliveoil.png' }
+    };
+    const DEFAULT_POSTER = './img/default.png';
+
+    // -------------------------
+    // ✅ API 통신 헬퍼
+    // -------------------------
+    async function listProgress() {
+      const res = await fetch(API_BASE);
+      return await res.json(); // [{id,title,lastTime,duration,updatedAt}, ...]
+    }
+
+    async function getProgress(id) {
+      const res = await fetch(`${API_BASE}/${id}`);
+      if (res.ok) return await res.json();
+      return null;
+    }
+
+    async function upsertProgress(p) {
+      await fetch(API_BASE, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(p)
+      });
+    }
+
+    async function clearProgress(id) {
+      await fetch(`${API_BASE}/${id}`, { method: 'DELETE' });
+    }
+
+    // -------------------------
+    // ✅ UI 유틸
+    // -------------------------
+    const app = document.getElementById('app');
+    const tabHome = document.getElementById('tab-home');
+    const tabPlayer = document.getElementById('tab-player');
+
+    function setActiveTab(tab) {
+      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+    }
+
+    function toast(msg) {
+      const el = document.getElementById('toast');
+      el.textContent = msg;
+      el.classList.add('show');
+      setTimeout(() => el.classList.remove('show'), 1800);
+    }
+
+    function fmtTime(sec) {
+      if (!Number.isFinite(sec)) return '0:00';
+      sec = Math.floor(sec);
+      const m = Math.floor(sec / 60), s = sec % 60;
+      return m + ':' + String(s).padStart(2, '0');
+    }
+
+    function getVideoMeta(id) {
+      return SampleVideos[id] || { id, title: id, poster: DEFAULT_POSTER };
+    }
+
+    // -------------------------
+    // ✅ 렌더링
+    // -------------------------
+    function VideoCard(v) {
+      return `<article class="video-item">
+      <a class="thumb" href="#" data-id="${v.id}">
+        <img src="${v.poster || DEFAULT_POSTER}" alt="${v.title}">
+      </a>
+      <div class="row">
+        <div>${v.title}</div>
+        <a class="btn primary" href="#" data-id="${v.id}">재생</a>
+      </div>
+    </article>`;
+    }
+
+    function renderProgressCard(p) {
+      const percent = (p.duration && p.lastTime)
+        ? Math.min(100, Math.round((p.lastTime / p.duration) * 100))
+        : 0;
+      const poster = (SampleVideos[p.id]?.poster) || DEFAULT_POSTER;
+      const btnLabel = percent >= 100 ? "다시보기" : "이어보기";
+
+      return `<article class="video-item">
+      <a class="thumb" href="#" data-id="${p.id}">
+        <img src="${poster}" alt="${p.title || p.id}">
+      </a>
+      <div class="progress"><div class="bar" style="width:${percent}%"></div></div>
+      <div class="row">
+        <div>
+          ${p.title || p.id}<br>
+          <span class="muted">진행도 ${percent}%</span>
+        </div>
+        <div style="display:flex; gap:6px;">
+          <a class="btn primary" href="#" data-id="${p.id}">${btnLabel}</a>
+          <button class="btn ghost delete-btn" data-del="${p.id}">기록 삭제</button>
+        </div>
+      </div>
+    </article>`;
+    }
+
+    async function renderHome() {
+      setActiveTab(tabHome);
+      const list = await listProgress(); // 🔥 서버에서 기록 가져옴
+      let html = '';
+      if (list.length === 0) {
+        html = `<div class="grid">
+        <div class="card">
+          <h2>최근 본 강의</h2>
+          <p class="muted">아직 기록이 없어요.</p>
+          <div class="grid videos">${Object.values(SampleVideos).map(v => VideoCard(v)).join('')}</div>
+        </div>
+      </div>`;
+      } else {
+        html = `<div class="grid">
+        <div class="card">
+          <h2>최근 본 강의</h2>
+          <div id="list" class="grid videos">${list.map(renderProgressCard).join('')}</div>
+        </div>
+      </div>`;
+      }
+      app.innerHTML = html;
+    }
+
+    // -------------------------
+    // ✅ 유튜브 플레이어
+    // -------------------------
+    let ytPlayer = null;
+    let saveTimer = null;
+
+    async function renderPlayer(videoId) {
+      setActiveTab(tabPlayer);
+      const meta = getVideoMeta(videoId);
+      const progress = await getProgress(meta.id);
+      const last = progress?.lastTime || 0;
+
+      app.innerHTML = `<div class="player">
+      <div class="row"><div class="pill" id="backHome">← 마이페이지</div></div>
+      <div class="card">
+        <h2>${meta.title}</h2>
+        <div id="ytplayer"></div>
+        <div class="muted">${last > 0 ? `이어서 ${fmtTime(last)} 부터 가능` : '처음부터 재생'}</div>
+      </div>
+    </div>`;
+
+      ytPlayer = new YT.Player('ytplayer', {
+        videoId: meta.youtubeId,
+        playerVars: { rel: 0, modestbranding: 1 },
+        events: {
+          'onReady': e => { if (last > 0) e.target.seekTo(last, true); },
+          'onStateChange': e => {
+            if (e.data === YT.PlayerState.PLAYING) {
+              if (saveTimer) clearInterval(saveTimer);
+              saveTimer = setInterval(async () => {
+                const t = ytPlayer.getCurrentTime();
+                const d = ytPlayer.getDuration();
+                await upsertProgress({ id: meta.id, title: meta.title, duration: d, lastTime: t });
+              }, 5000);
+            }
+            if (e.data === YT.PlayerState.ENDED) {
+              if (saveTimer) clearInterval(saveTimer);
+              toast('시청 완료! 다시 보기를 선택할 수 있습니다.');
+            }
+          }
+        }
+      });
+    }
+
+    // -------------------------
+    // ✅ 이벤트 바인딩
+    // -------------------------
+    app.addEventListener('click', async e => {
+      if (e.target.id === 'backHome') {
+        renderHome();
+        return;
+      }
+
+      if (e.target.dataset.id) {
+        e.preventDefault();
+        renderPlayer(e.target.dataset.id);
+        return;
+      }
+
+      if (e.target.dataset.del) {
+        e.preventDefault();
+        await clearProgress(e.target.dataset.del);
+        renderHome();
+        toast("기록이 삭제되었습니다.");
+        return;
+      }
+    });
+
+    window.onYouTubeIframeAPIReady = function () {
+      renderHome();
+    };
+
+    tabHome.addEventListener('click', renderHome);
+  </script> -->

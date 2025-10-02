@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>게시글 등록</title>
-    <link rel="stylesheet" href="/post/stylePost.css">
+    <link rel="stylesheet" href="/css/stylePost.css">
     <style>
         textarea {
             width: 100%;
@@ -16,17 +16,7 @@
 </head>
 
 <body>
-<header>
-    <h1><a href="/">Vegan Delight</a></h1>
-    <nav>
-        <a href="/">Home</a>
-        <a href="/course/main">Courses</a>
-        <a href="/myFridge/main">나의 냉장고</a>
-        <a href="login.html">Login</a>
-        <a href="/post/main">게시판</a>
-        <a href="/myPage/main">마이페이지</a>
-    </nav>
-</header>
+<div th:replace="fragments/mainheader :: mainHeader"></div>
 
 <main class="addPost-detail-container">
 
@@ -34,22 +24,27 @@
         <h2>게시글 등록</h2>
 
         <form th:action="@{/post/add}" th:object="${post}" method="post">
-            
-            <div class="control">
-            <div class="category">
-            <select th:field="*{fixed}">
-                <option value="0">일반 게시글</option>
-                <option value="1">고정 게시글</option>
-            </select>
+
+            <div class="control" th:if="${userRole == 'ADMIN'}">
+                <div class="category">
+                    <select th:field="*{fixed}">
+                        <option value="0">일반 게시글</option>
+                        <option value="1">고정 게시글</option>
+                    </select>
+                </div>
+
+                <div class="category">
+                    <select th:field="*{category}">
+                        <option value="FREEBOARD">자유</option>
+                        <option value="NOTICE">공지사항</option>
+                    </select>
+                </div>
             </div>
-            
-            <div class="category">
-            <select th:field="*{category}">
-                <option value="FREEBOARD">자유</option>
-                <option value="NOTICE">공지사항</option>
-            </select>
-            </div>
-            </div>
+            <th:block th:if="${userRole != 'ADMIN'}">
+                <input type="hidden" th:field="*{fixed}" value="0" />
+                <input type="hidden" th:field="*{category}" value="FREEBOARD" />
+            </th:block>
+
 
             <p style="color:#4caf50; font-weight: 600; margin-right: 6px;">
                 제목 : <input type="text" id="addTitle" th:field="*{title}"/></p>
@@ -63,7 +58,6 @@
             </div>
         </form>
     </div>
-
 
 </main>
 </body>

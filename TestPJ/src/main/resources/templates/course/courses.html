@@ -1,24 +1,14 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Courses - Vegan LMS</title>
-  <link rel="stylesheet" href="/course/styleCourse.css">
+  <link rel="stylesheet" href="/css/styleCourse.css">
 </head>
 
 <body>
-<header>
-    <h1><a href="/">Vegan Delight</a></h1>
-    <nav id="navMenu">
-        <a href="/">홈</a>
-        <a href="/course/main">강의</a>
-        <a href="/myFridge/main">나의 냉장고</a>
-        <a href="/post/main">게시판</a>
-        <a href="login.html" id="loginBtn">로그인</a>
-        <a href="/myPage/main">마이페이지</a>
-    </nav>
-</header>
+  <div th:replace="fragments/mainheader :: mainHeader"></div>
 
 <!-- Search / Sort / Filter -->
 <section class="controls">
@@ -80,6 +70,6 @@
     </div>
   </div>
 </div>
-<script src="/course/scriptCourse.js"></script>
+<script src="/js/scriptCourse.js"></script>
 </body>
 </html>

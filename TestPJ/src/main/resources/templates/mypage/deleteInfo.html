@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>회원 탈퇴</title>
+  <link rel="stylesheet" href="/css/styleMy.css">
+
+</head>
+<body class="deleteInfo">
+
+<div th:replace="fragments/mainheader :: mainHeader"></div>
+
+
+<main>
+  <form id="deleteForm">
+    <button class="closeBtn">X</button>
+    <div>
+      <label for="userId">아이디</label>
+      <input type="text" id="userId" placeholder="아이디 입력" required>
+    </div>
+    <div>
+      <label for="password">비밀번호</label>
+      <input type="password" id="password" placeholder="비밀번호 입력" required>
+    </div>
+    <div>
+      <label for="passwordConfirm">비밀번호 확인</label>
+      <input type="password" id="passwordConfirm" placeholder="비밀번호 재입력" required>
+      <span class="error" id="passwordError">비밀번호가 일치하지 않습니다.</span>
+    </div>
+    <button type="submit" style="margin-left: 40px;">회원 탈퇴</button>
+    <p id="resultMsg" class="success"></p>
+  </form>
+</main>
+  
+<script>
+const form = document.getElementById('deleteForm');
+const password = document.getElementById('password');
+const passwordConfirm = document.getElementById('passwordConfirm');
+const errorMsg = document.getElementById('passwordError');
+const resultMsg = document.getElementById('resultMsg');
+
+form.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  
+  // 비밀번호 확인 체크
+  if(password.value !== passwordConfirm.value){
+    errorMsg.style.display = 'block';
+    resultMsg.textContent = '';
+    return;
+  } else {
+    errorMsg.style.display = 'none';
+  }
+
+  const userId = document.getElementById('userId').value;
+  const userPw = password.value;
+
+  try {
+    // 서버 API 호출 (DELETE)
+    const response = await fetch('/api/deleteinfo', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ username: userId, password: userPw })
+    });
+
+    const data = await response.json();
+
+    if(response.ok){
+      resultMsg.style.color = 'green';
+      resultMsg.textContent = data.message || '회원 탈퇴가 완료되었습니다.';
+      form.reset();
+    } else {
+      resultMsg.style.color = 'red';
+      resultMsg.textContent = data.message || '회원 탈퇴 실패. 다시 시도하세요.';
+    }
+  } catch (err) {
+    resultMsg.style.color = 'red';
+    resultMsg.textContent = '서버와 통신 중 오류가 발생했습니다.';
+    console.error(err);
+  }
+});
+</script>
+
+</body>
+</html>

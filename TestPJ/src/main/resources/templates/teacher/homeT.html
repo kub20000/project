@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vegan LMS - Home</title>
+    <link rel="stylesheet" href="/css/styleT.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+<header>
+    <h1><a href="/">Vegan Delight</a></h1>
+    <nav id="navMenu">
+        <a th:href="homeT.html">홈</a>
+        <a th:href="myCourse">나의 강의 관리</a>
+        <a th:href="uploadCourse">강의 등록/퀴즈 출제</a>
+        <a th:href="">로그인</a>
+    </nav>
+</header>
+
+<section class="hero">
+    <div class="hero-content">
+        <h2>Learn Vegan Lifestyle with Us</h2>
+        <p>건강하고 맛있는 비건 라이프의 시작</p>
+    </div>
+</section>
+
+<section class="middle reveal">
+    <p>"비건 딜라이트에서 당신의 삶을 바꾸는 건강한 선택을 만나보세요"</p>
+</section>
+
+<section class="categories" style="text-align: center;">
+    <h2>Vegan Lifestyle</h2>
+    <h2>Health & Diet</h2>
+    <h3>Recipes</h3>
+</section>
+
+<section class="categories reveal">
+    <div class="category-card reveal">
+        <i class="fas fa-leaf"></i>
+        <h3>Vegan Lifestyle</h3>
+        <p>비건 기초지식 & 실습</p>
+    </div>
+    <div class="category-card reveal">
+        <i class="fas fa-apple-alt"></i>
+        <h3>Health & Diet</h3>
+        <p>영양, 체중 관리, 그리고 웰빙</p>
+    </div>
+    <div class="category-card reveal">
+        <i class="fas fa-utensils"></i>
+        <h3>Recipes</h3>
+        <p>채식 요리 강좌</p>
+    </div>
+</section>
+
+
+
+<footer class="site-footer">
+    <div class="footer-top">
+        <div class="footer-left">
+            <h2 class="footer-logo">VeganDelight</h2>
+            <p>비건 딜라이트와 함께 맛있고 행복한 비건 레시피를 찾아보세요.<br>
+                더 건강하고 지속 가능한 식단을 향한 여정의 시작입니다.</p>
+        </div>
+        <div class="footer-center">
+            <h3>Quick Links</h3>
+            <ul>
+                <li><a href="/course/main">강의</a></li>
+                <li><a href="/myFridge/main">나의 냉장고</a></li>
+                <li><a href="/post/main">게시판</a></li>
+            </ul>
+        </div>
+
+        <div class="footer-right">
+            <h3>Categories</h3>
+            <ul>
+                <li><a href="#">라이프 스타일</a></li>
+                <li><a href="#">건강&다이어트</a></li>
+                <li><a href="#">레시피</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="footer-bottom">
+        <span>© 2025 VeganDelight. All rights reserved.</span>
+        <span class="designed-by">Designed by <strong>TeamB</strong></span>
+    </div>
+</footer>
+
+
+<script src="/js/scriptT.js"></script>
+</body>
+</html>
