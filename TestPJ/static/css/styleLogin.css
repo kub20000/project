@@ -1,0 +1,872 @@
+/* 기본 레이아웃 */
+/* 전체 폰트 통일 */
+
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  background: #f6f7f9;
+}
+
+/* 헤더 */
+header {
+  background: #4caf50;
+  color: white;
+  padding: 1rem 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+header h1 {
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+header h1 a {
+  text-decoration: none;
+  color: white;
+}
+header h1 a:visited,
+header h1 a:hover,
+header h1 a:active {
+  text-decoration: none;
+  color: white;
+}
+
+
+nav {
+  display: flex;
+  gap: 1rem;
+}
+nav a {
+  color: white;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+/* Hero 섹션 */
+.hero {
+  position: relative;
+  overflow: hidden;
+  height: 550px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  background-size: cover;
+  background-position: center;
+  transition: background-image 1s ease-in-out;
+}
+
+.hero-content {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+  color: white;
+  background: rgba(0, 0, 0, 0.4);
+  padding: 1.5rem;
+  border-radius: 10px;
+}
+
+.hero h2 {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+}
+
+.cta-btn {
+  background: #4caf50;
+  color: white;
+  padding: 0.7rem 1.5rem;
+  border-radius: 6px;
+  text-decoration: none;
+  display: inline-block;
+  transition: 0.3s;
+}
+
+.cta-btn:hover {
+  background: #388e3c;
+}
+
+/* 카드형 섹션 */
+.categories,
+.course-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1rem;
+  padding: 2rem;
+}
+
+.category,
+.course-card {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.course-card h3 {
+  margin-top: 0;
+}
+
+/* 공통 폼 스타일 */
+.form-container,
+#fixInfo {
+  max-width: 400px;
+  margin: 3rem auto;
+  background: white;
+  padding: 2rem;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  position: relative;
+}
+
+.form-container.changePw {
+  background: #fff;
+  width: 400px;
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  position: relative;
+}
+
+
+.form-container .closeBtn {
+  all: unset; /* 다른 버튼 스타일 초기화 */
+  position: absolute;
+  top: 8px;        /* 위쪽 끝 */
+  right: 8px;      /* 오른쪽 끝 */
+  background: none; /* 배경 제거 */
+  border: none;     /* 테두리 제거 */
+  font-size: 22px;  
+  font-weight: bold;
+  color: #555;
+  cursor: pointer;
+  line-height: 1;
+  padding: 0;
+}
+
+.closeBtn:hover {
+   background: none !important;
+  color: #000;
+}
+
+input.changePw {
+  width: 250px;
+  padding: 0.5rem;
+ 
+}
+
+button.changePw {
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+
+.form-container input,
+input {
+  padding: 0.8rem;
+  margin: 0.5rem 0;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  width: 80%;
+  margin-left: 30px;
+}
+
+input.newPw{
+  width: 300px;
+}
+input:focus {
+  outline: none;
+  border-color: #0077ff;
+  box-shadow: 0 0 4px #0077ff50;
+}
+
+.form-container button,
+button {  width: 80%;
+  padding: 10px;
+  border: none;
+  border-radius: 6px;
+  background-color: #4caf50;
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+  margin-top: 0.5rem;
+  margin-left: 45px;
+}
+
+
+.form-container button:hover,
+button:hover {
+  background-color: #45a049;
+}
+
+/* 서브 내비게이션 */
+#subNav {
+  width: 200px;
+  background: #ffffff;
+  padding: 1rem;
+  margin: 2rem;
+  border-radius: 6px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+#subNav a {
+  display: flex;
+  margin: 8px;
+  padding: 0.5rem 1rem;
+  height: 100%;
+  background: #4cb94e;
+  color: white;
+  text-decoration: none;
+  border-radius: 4px;
+}
+
+#subNav a:hover {
+  background: #549850;
+}
+
+
+/* 푸터 */
+.site-footer {
+  position: relative;
+  left: 0;
+  right: 0;
+  width: 100%;
+  background: #0f172a;
+  color: #e0e0e0;
+  padding: 40px 16px 20px;
+  font-family: Inter, system-ui, sans-serif;
+}
+
+body.class {
+  font-family: Arial, sans-serif;
+  background: #f9f9f9;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.strength {
+  font-size: 0.9rem;
+  margin-top: -0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.caps-warning {
+  color: red;
+  font-size: 0.8rem;
+  display: none;
+}
+
+body.joinUser {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  background: #f9f9f9;
+  font-size: 16px;
+}
+
+.join{
+  display: flex;
+  justify-content: end;
+  margin: 20px;
+}
+
+#entryInfo .closeBtn {
+  all: unset;              /* 기존 버튼 스타일 초기화 */
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  font-size: 20px;
+  font-weight: bold;
+  color: #666;
+  cursor: pointer;
+  line-height: 1;
+}
+
+/* hover 효과 → 배경 없이 글자 색만 */
+#entryInfo .closeBtn:hover {
+  background: none !important;
+  color: #000;
+}
+
+
+#entryInfo {
+  width: 500px;
+  margin: 50px auto;
+  padding: 20px;
+  border: 1px solid #49951d;
+  background-color: white;
+  border-radius: 20px;
+  text-align: left;
+   position: relative;
+}
+
+
+#entryInfo div {
+  margin-bottom: 15px;
+  display: flex;
+  flex-direction: column;
+}
+
+input.joinUser{
+  width: 80%;
+}
+
+/* 회원가입 버튼을 더 일관된 초록색 계열로 */
+button.joinUser {
+  width: 80%;
+  /* 버튼을 폼 너비에 맞춤 */
+  background-color: #4caf50;
+  transition: background-color 0.2s;
+}
+
+button.joinUser:hover {
+  background-color: #43a047;
+}
+
+#checkNicknameBtn,
+#checkPwBtn {
+  width: 80%;
+  margin-top: 5px;
+}
+
+.role-options {
+  display: flex;
+  gap: 20px;
+}
+
+.role-item {
+  display: flex;
+  align-items: center; /* 같은 행 정렬 */
+  gap: 5px;           /* 라벨과 버튼 사이 간격 */
+}
+.role-options input[type="radio"] {
+  margin-right: 5px;
+}
+
+.msg {
+  font-size: 13px;
+  line-height: 1.4;
+}
+/* 완료 메시지 스타일 */
+#successMsg {
+  display: none;
+  text-align: center;
+  margin-top: 80px;
+}
+
+#successMsg h2 {
+  color: green;
+  font-size: 24px;
+  margin-bottom: 10px;
+}
+
+#successMsg button {
+  width: 20%;
+  margin-top: 20px;
+  padding: 10px 20px;
+  border: block;
+  border-radius: 6px;
+  background-color: #4caf50;
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+#successMsg button:hover {
+  background-color: #45a049;
+}
+
+label {
+  margin-bottom: 5px;
+  font-weight: bold;
+  color: #333;
+}
+
+/* 입력창 focus 효과를 기존 초록 계열로 맞춤 */
+input.joinUser:focus {
+  border-color: #4caf50;
+  box-shadow: 0 0 6px rgba(76, 175, 80, 0.3);
+}
+
+body.myInfo {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  background: #f9f9f9;
+}
+
+#fixInfo {
+  width: 400px;
+  margin: 50px auto;
+  padding: 20px;
+  border: 1px solid #49951d;
+  background-color: white;
+  border-radius: 20px;
+  text-align: left;
+}
+
+#fixInfo div {
+  margin-bottom: 15px;
+  display: flex;
+  flex-direction: column;
+  /* label과 input을 위아래 정렬 */
+}
+
+input.myInfo {
+  width: 90%;
+  padding: 8px;
+  border: 1px solid #aaa;
+  border-radius: 6px;
+}
+
+input:focus {
+  outline: none;
+  border-color: #0077ff;
+  box-shadow: 0 0 4px #0077ff50;
+}
+
+/* ===== 페이지 범위 지정: body.myInfo ===== */
+
+/* 부모 컨테이너 */
+body.myInfo .container {
+  display: flex;
+  align-items: flex-start;
+  gap: 20px;
+  width: 100%;
+  max-width: 1500px;
+  margin: 0 auto;
+}
+
+/* 왼쪽 메뉴 */
+body.myInfo #subNav {
+  flex: 0 0 200px;
+  /* 너비 200px 고정 */
+  background: #f7f7f7;
+  border-right: 1px solid #ddd;
+  padding: 15px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+body.myInfo #subNav a {
+  display: flex;
+  padding: 0.5rem 1rem;
+  background: #4cb94e;
+  color: white;
+  text-decoration: none;
+  border-radius: 4px;
+}
+
+body.myInfo #subNav a:hover {
+  background: #549850;
+}
+
+/* 오른쪽 본문 */
+body.myInfo .wrap {
+  flex: 1;
+  /* 남은 공간 차지 */
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 24px;
+  box-sizing: border-box;
+}
+
+/* header */
+body.myInfo header {
+  display: flex;
+  background-color: #22c55e;
+  gap: 12px;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+  padding: 8px 16px;
+}
+
+body.myInfo .brand {
+  font-weight: 700;
+  color: #ffffff;
+  font-size: 20px;
+}
+
+/* 탭 */
+body.myInfo .tabs {
+  display: flex;
+  gap: 6px;
+}
+
+body.myInfo .tab {
+  padding: 8px 12px;
+  border-radius: 10px;
+  background: transparent;
+  color: rgba(255, 255, 255, 0.3);
+  border: 1px solid #243244;
+  cursor: pointer;
+}
+
+body.myInfo .tab.active {
+  color: #ffffff;
+  background: #22c55e99;
+}
+
+/* 카드 */
+body.myInfo .card {
+  background: hsla(126, 85%, 77%, 0.115);
+  border: 1px solid #1f2b39;
+  border-radius: 16px;
+  padding: 18px;
+  color: #7ed29d;
+}
+
+/* 그리드 */
+body.myInfo .grid {
+  display: grid;
+  gap: 14px;
+}
+
+body.myInfo .grid.videos {
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+}
+
+/* 비디오 아이템 */
+body.myInfo .video-item {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* 썸네일 */
+body.myInfo .thumb {
+  position: relative;
+  height: 150px;
+  border-radius: 12px;
+  overflow: hidden;
+  background: #0a1016;
+  border: 1px solid #213044;
+}
+
+body.myInfo .thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  filter: brightness(.9);
+}
+
+/* 진행바 */
+body.myInfo .progress {
+  height: 6px;
+  background: #14202c;
+  border-radius: 6px;
+  overflow: hidden;
+  border: 1px solid #223448;
+}
+
+body.myInfo .bar {
+  height: 100%;
+  width: 0;
+  background: linear-gradient(90deg, #60a5fa, #22c55e);
+}
+
+/* muted 텍스트 */
+body.myInfo .muted {
+  color: rgba(255, 255, 255, 0.31);
+  font-size: 12px;
+}
+
+/* row */
+body.myInfo .row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+/* 버튼 */
+body.myInfo .btn {
+  appearance: none;
+  border: none;
+  background: #22c55e;
+  border: 1px solid #2bb03f;
+  color: #ffffff;
+  padding: 8px 12px;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+body.myInfo .btn:hover {
+  filter: brightness(1.1);
+}
+
+body.myInfo .btn.primary {
+  background: #22c55e;
+  border-color: #2bb03f;
+}
+
+/* 플레이어 영역 */
+body.myInfo .player {
+  display: grid;
+  gap: 12px;
+}
+
+/* pill 버튼 */
+body.myInfo .pill {
+  display: inline-flex;
+  gap: 8px;
+  align-items: center;
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: #132031;
+  border: 1px solid #284058;
+  color: rgba(255, 255, 255, 0.31);
+  font-size: 12px;
+  cursor: pointer;
+}
+
+/* 토스트 */
+body.myInfo #toast {
+  position: fixed;
+  right: 16px;
+  bottom: 16px;
+  background: #12202f;
+  border: 1px solid #264058;
+  color: #ffffff;
+  border-radius: 12px;
+  padding: 10px 12px;
+  opacity: 0;
+  transform: translateY(8px);
+  transition: .3s;
+}
+
+body.myInfo #toast.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* === 회원 탈퇴 페이지 전용 스타일 === */
+
+body.deleteInfo #deleteForm {
+  width: 90%;
+  max-width: 350px;
+  margin: 50px auto;
+  padding: 20px;
+  background: white;
+  border: 1px solid #49951d;
+  border-radius: 20px;
+}
+
+body.deleteInfo #deleteForm div {
+  margin-bottom: 15px;
+  display: flex;
+  flex-direction: column;
+}
+
+body.deleteInfo label {
+  margin-bottom: 5px;
+  font-weight: bold;
+  color: #333;
+}
+
+body.deleteInfo input {
+  padding: 8px;
+  border-radius: 6px;
+  border: 1px solid #aaa;
+}
+
+body.deleteInfo input:focus {
+  outline: none;
+  border-color: #0077ff;
+  box-shadow: 0 0 4px #0077ff50;
+}
+
+body.deleteInfo button {
+  width: 80%;
+  padding: 10px;
+  border: none;
+  border-radius: 6px;
+  background-color: #4caf50;
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+body.deleteInfo button:hover {
+  background-color: #45a049;
+}
+
+body.deleteInfo .error {
+  color: red;
+  font-size: 13px;
+  display: none;
+  margin-top: -10px;
+  margin-bottom: 10px;
+}
+
+body.deleteInfo .success {
+  color: green;
+  font-size: 14px;
+  margin-top: 10px;
+}
+
+/* ===== 내 게시글 관리 페이지 전용 스타일 ===== */
+body.myBoard .container {
+  display: flex;
+  padding: 2rem;
+  gap: 2rem;
+}
+
+/* 서브 내비게이션 */
+body.myBoard #subNav {
+  width: 200px;
+  background: #ffffff;
+  padding: 1rem;
+  border-radius: 6px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  flex-shrink: 0;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+}
+
+body.myBoard #subNav a {
+  display: block;
+  padding: 0.5rem 1rem;
+  background: #4cb94e;
+  color: white;
+  text-decoration: none;
+  border-radius: 4px;
+  text-align: center;
+}
+
+body.myBoard #subNav a:hover {
+  background: #549850;
+}
+
+/* 게시판 영역 */
+body.myBoard .board-area {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+body.myBoard .board-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+body.myBoard .search-box input {
+  padding: 0.5rem;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+}
+
+body.myBoard table {
+  width: 100%;
+  border-collapse: collapse;
+  background: white;
+  border-radius: 6px;
+  overflow: hidden;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+}
+
+body.myBoard th,
+body.myBoard td {
+  padding: 0.7rem 1rem;
+  text-align: center;
+  border-bottom: 1px solid #ddd;
+}
+
+body.myBoard th {
+  background: #4cb94e;
+  color: white;
+}
+
+body.myBoard tr:hover {
+  background: #f0f0f0;
+}
+
+/* 버튼 */
+body.myBoard button {
+  width: 20%;
+  margin-right: 0.3rem;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+body.myBoard button:hover {
+  opacity: 0.8;
+}
+
+body.myBoard button.edit {
+  background: #4cb94e;
+  color: white;
+}
+
+body.myBoard button.delete {
+  background: #f44336;
+  color: white;
+}
+
+/* 모달 */
+body.myBoard .modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  justify-content: center;
+  align-items: center;
+}
+
+body.myBoard .modal-content {
+  background: white;
+  padding: 2rem;
+  border-radius: 6px;
+  width: 400px;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  position: relative;
+}
+
+body.myBoard .modal-content input,
+body.myBoard .modal-content textarea {
+  width: 100%;
+  padding: 0.5rem;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+}
+
+body.myBoard .modal-content button {
+  width: 100px;
+}
+
+body.myBoard .close-modal {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 1.2rem;
+}
+
+button.fixInfo{
+  margin-left: 35px;
+  width: 80%;
+}
+/* 기타 세부 스타일은 필요에 따라 그대로 유지 */
+/* 예: 냉장고 페이지, 강의 페이지 등 */
