@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>공지사항</title>
+    <link th:href="@{/img/style.css}" rel="stylesheet">
+</head>
+
+<body>
+<header>
+    <h1>Vegan Delight - 관리자 mode <img th:src="@{/img/회원관리.png}" alt="마이페이지" width="36"></h1>
+    <nav id="navMenu">
+        <a th:href="@{/admin/indexmg}">Home</a>
+        <a th:href="@{/admin/addNotice}">게시판</a>
+        <a th:href="@{/admin/usermng}">회원관리</a>
+    </nav>
+</header>
+
+<div class="board-tabs">
+    <a th:href="@{/admin/post}">공지사항</a>
+    <a th:href="@{/admin/freepost-delete}">자유게시판</a>
+</div>
+<div class="board-header">
+    <p>공지사항</p>
+    <div class="search-box">
+        <input type="text" id="searchInput" placeholder="검색어를 입력해 주세요">
+        <button id="searchBtn">
+            <img th:src="@{/img/검색.png}" alt="검색">
+        </button>
+    </div>
+</div>
+
+<table id="noticeTable">
+    <thead>
+    <tr>
+        <th>번호</th>
+        <th>제목</th>
+        <th>작성자</th>
+        <th>등록일</th>
+        <th>관리</th>
+    </tr>
+    </thead>
+    <tbody></tbody>
+</table>
+
+<div class="plusNotice">
+    <button id="addNoticeBtn" style="margin: 20px; width: 80px;">+공지</button>
+</div>
+
+<div class="pagination" id="pagination"></div>
+
+<script>
+    // ===================== 변수 선언 =====================
+    let allPosts = [];       // 모든 게시글
+    let filteredPosts = [];  // 검색/필터 적용
+    let currentPage = 1;     // 현재 페이지
+    const postsPerPage = 5;  // 페이지당 게시물 수
+
+    // ===================== 서버에서 게시글 가져오기 =====================
+    function fetchPosts() {
+        fetch('/api/post-list')
+            .then(res => res.json())
+            .then(data => {
+                console.log("서버 응답:", data);
+
+                // 서버 응답이 배열인지 확인 후 map 처리
+                const postsArray = Array.isArray(data) ? data : [];
+                allPosts = postsArray.map(post => ({
+                    id: post.id,
+                    title: post.title,
+                    author: post.author,
+                    date: post.created_at ? new Date(post.created_at).toLocaleDateString() : ""
+                }));
+
+                filteredPosts = [...allPosts];
+                renderPosts();
+            })
+            .catch(err => console.error("게시글 불러오기 실패:", err));
+    }
+
+    // ===================== 게시글 렌더링 =====================
+    function renderPosts() {
+        const tbody = document.querySelector("#noticeTable tbody");
+        tbody.innerHTML = "";
+
+        const start = (currentPage - 1) * postsPerPage;
+        const pagePosts = filteredPosts.slice(start, start + postsPerPage);
+
+        pagePosts.forEach(post => {
+            const row = tbody.insertRow();
+            row.innerHTML = `
+            <td>${post.id}</td>
+            <td><span class="title-link" onclick="viewPost(${post.id})">${post.title}</span></td>
+            <td>${post.author}</td>
+            <td>${post.date}</td>
+            <td>
+                <button onclick="editPost(${post.id})">수정</button>
+                <button onclick="deletePost(${post.id})">삭제</button>
+            </td>
+        `;
+        });
+
+        renderPagination();
+    }
+
+    // ===================== 페이지네이션 =====================
+    function renderPagination() {
+        const pagination = document.getElementById("pagination");
+        pagination.innerHTML = "";
+
+        const totalPages = Math.ceil(filteredPosts.length / postsPerPage);
+
+        // 이전
+        const prev = document.createElement("span");
+        prev.textContent = "<";
+        prev.classList.add("page-link", "prev-link");
+        if (currentPage > 1) prev.onclick = () => { currentPage--; renderPosts(); }
+        else prev.classList.add("disabled");
+        pagination.appendChild(prev);
+
+        // 페이지 번호
+        for (let i = 1; i <= totalPages; i++) {
+            const span = document.createElement("span");
+            span.textContent = i;
+            span.classList.add("page-link");
+            if (i === currentPage) span.classList.add("active");
+            span.onclick = () => { currentPage = i; renderPosts(); }
+            pagination.appendChild(span);
+        }
+
+        // 다음
+        const next = document.createElement("span");
+        next.textContent = ">";
+        next.classList.add("page-link", "next-link");
+        if (currentPage < totalPages) next.onclick = () => { currentPage++; renderPosts(); }
+        else next.classList.add("disabled");
+        pagination.appendChild(next);
+    }
+
+    // ===================== 상세/수정/삭제 =====================
+    function viewPost(id) { window.location.href = `/admin/post-view?id=${id}`; }
+    function editPost(id) {   window.location.href = `/admin/post-edit/${id}`; }
+    function deletePost(id) {
+        if (!confirm("정말 삭제하시겠습니까?")) return;
+
+        const indexAll = allPosts.findIndex(p => p.id === id);
+        if (indexAll !== -1) allPosts.splice(indexAll, 1);
+        filteredPosts = filteredPosts.filter(p => p.id !== id);
+
+        renderPosts();
+    }
+
+    // ===================== 공지 추가 버튼 =====================
+    document.getElementById("addNoticeBtn")?.addEventListener("click", () => {
+        window.location.href = "addNotice.html";
+    });
+
+    // ===================== 검색 =====================
+    document.getElementById("searchInput")?.addEventListener("keyup", function () {
+        const keyword = this.value.toLowerCase();
+        filteredPosts = allPosts.filter(p => p.title.toLowerCase().includes(keyword));
+        currentPage = 1;
+        renderPosts();
+    });
+
+    // ===================== 페이지 로딩 시 실행 =====================
+    window.addEventListener("DOMContentLoaded", () => {
+        fetchPosts(); // 서버에서 게시글 불러오기
+    });
+</script>
+</body>
+</html>

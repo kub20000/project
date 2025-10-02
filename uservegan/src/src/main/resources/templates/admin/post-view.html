@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.w3.org/1999/xhtml">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>공지사항 상세보기</title>
+  <style>
+    body.view {
+      font-family: Arial, sans-serif;
+      background: #f9f9f9;
+      margin: 0;
+      padding: 0;
+    }
+
+    .post-container {
+      width: 80%;
+      max-width: 800px;
+      margin: 30px auto;
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .post-title {
+      font-size: 24px;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+
+    .post-meta {
+      font-size: 14px;
+      color: gray;
+      margin-bottom: 20px;
+    }
+
+    .post-content {
+      font-size: 16px;
+      line-height: 1.6;
+      min-height: 200px;
+      white-space: pre-line;
+      /* 줄바꿈 유지 */
+    }
+
+    .btn-area {
+      margin-top: 20px;
+    }
+
+    .btn-area button {
+      padding: 8px 16px;
+      margin-right: 8px;
+      background: #4caf50;
+      color: white;
+      border-radius: 6px;
+      border: none;
+      cursor: pointer;
+    }
+
+    .btn-area button:hover {
+      background: #45a049;
+    }
+  </style>
+</head>
+
+<body class="view">
+<form id="post-view" th:action="@{/admin/post-view{id}}" method="post">
+    <div class="post-container">
+        <div class="post-title" id="postTitle"></div>
+        <div class="post-meta">
+            <span id="postAuthor"></span> | <span id="postDate"></span>
+        </div>
+        <div class="post-content" id="postContent"></div>
+
+        <div class="btn-area">
+            <button id="editBtn" type="button">수정</button>
+            <button id="backBtn" type="button">목록</button>
+        </div>
+    </div>
+</form>
+
+<script>
+    // URL에서 id 가져오기
+      const params = new URLSearchParams(window.location.search);
+      const id = Number(params.get("id"));
+
+      // 게시글 상세조회 API 호출
+      async function fetchPost(id) {
+          try {
+              const response = await fetch(`/api/post-view/${id}`); // 컨트롤러: @GetMapping("/post-view/{id}")
+              if (!response.ok) throw new Error("게시글을 불러오지 못했습니다.");
+              return await response.json();
+          } catch (error) {
+              console.error(error);
+              throw error;
+          }
+      }
+
+      // 게시글 데이터를 화면에 출력
+      fetchPost(id)
+          .then(post => {
+              document.getElementById("postTitle").innerText = post.title;
+              document.getElementById("postAuthor").innerText = post.author;
+              document.getElementById("postDate").innerText = new Date(post.created_at).toLocaleString();
+              document.getElementById("postContent").innerHTML = post.content;
+          })
+          .catch(err => {
+              document.querySelector(".post-container").innerHTML = `<p>${err.message}</p>`;
+          });
+
+      // 수정 버튼 클릭
+      document.getElementById("editBtn").addEventListener("click", () => {
+          window.location.href = `/admin/post-edit?id=${id}`;
+      });
+
+      // 목록 버튼 클릭
+      document.getElementById("backBtn").addEventListener("click", () => {
+          window.location.href = `/admin/post`;
+      });
+</script>
+</body>
+</html>

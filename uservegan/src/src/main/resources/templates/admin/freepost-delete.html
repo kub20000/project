@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>공지사항</title>
+    <link rel="stylesheet" href="/img/style.css">
+</head>
+
+<body>
+    <header>
+        <form id="uploadCourse" th:action="@{/admin/freepost-delete}" method="post">
+            <h1>Vegan Delight - 관리자 mode <img th:src="@{/img/회원관리.png}" alt="마이페이지" width="36"></h1>
+        <nav id="navMenu">
+            <a th:href="@{/admin/indexmg}">Home</a>
+            <a th:href="@{admin/post}">게시판</a>>
+            <a th:href="@{admin/usermng}">회원관리</a>
+        </nav>
+        </form>
+    </header>
+
+    <div class="board-tabs">
+    <a th:href="@{/admin/post}">공지사항</a>
+    <a th:href="@{/admin/freepost-delete}">자유게시판</a>
+    </div>
+
+    <div class="board-header">
+        <p>자유게시판</p>
+        <div class="search-box">
+            <input type="text" id="searchInput" placeholder="번호를 입력해 주세요">
+            <button id="searchBtn"><img th:src="@{/img/검색.png}" alt="검색"></button>
+        </div>
+    </div>
+
+    <table id="noticeTable">
+        <thead>
+        <tr>
+            <th>번호</th>
+            <th>제목</th>
+            <th>작성자</th>
+            <th>등록일</th>
+            <th>관리</th>
+        </tr>
+        </thead>
+        <tbody>
+        <!-- JS에서 렌더링 -->
+        </tbody>
+    </table>
+
+    <div class="pagination" id="pagination"></div>
+
+    <script>
+        let currentPage = 1;
+        const postsPerPage = 5;
+        let totalPages = 1;
+        let filteredPosts = [];
+
+        // 1. 게시글 목록 가져오기
+        async function fetchPosts(searchKeyword = "") {
+            try {
+                // 수정: 백엔드 API 경로
+                const res = await fetch(`/api/freeposts?search=${encodeURIComponent(searchKeyword)}&page=${currentPage}&limit=${postsPerPage}`);
+                if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
+                const data = await res.json(); // { posts: [...], totalPages: n }
+
+                filteredPosts = Array.isArray(data.posts) ? data.posts : [];
+                totalPages = data.totalPages || 1;
+
+                renderPosts();
+                renderPagination();
+            } catch (err) {
+                console.error("게시글 불러오기 실패", err);
+                const tbody = document.querySelector("#noticeTable tbody");
+                tbody.innerHTML = `<tr><td colspan="5">게시글을 불러오지 못했습니다.</td></tr>`;
+            }
+        }
+
+        // 2. 게시글 렌더링
+        function renderPosts() {
+            const tbody = document.querySelector("#noticeTable tbody");
+            tbody.innerHTML = "";
+
+            filteredPosts.forEach(post => {
+                const row = tbody.insertRow();
+                row.innerHTML = `
+                    <td>${post.id}</td>
+                    <td><span class="title-link" onclick="viewPost(${post.id})">${post.title}</span></td>
+                    <td>${post.author}</td>
+                    <td>${post.date}</td>
+                    <td>
+                        <button onclick="editPost(${post.id})">수정</button>
+                        <button onclick="deletePost(${post.id})">삭제</button>
+                    </td>
+                `;
+            });
+
+            if (filteredPosts.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="5">검색 결과가 없습니다.</td></tr>`;
+            }
+        }
+
+        // 3. 페이지네이션 렌더링
+        function renderPagination() {
+            const pagination = document.getElementById("pagination");
+            pagination.innerHTML = "";
+
+            // 이전
+            const prev = document.createElement("button");
+            prev.textContent = "<";
+            prev.disabled = currentPage === 1;
+            prev.onclick = () => { currentPage--; fetchPosts(document.getElementById("searchInput").value); };
+            pagination.appendChild(prev);
+
+            // 페이지 번호
+            for (let i = 1; i <= totalPages; i++) {
+                const btn = document.createElement("button");
+                btn.textContent = i;
+                if (i === currentPage) btn.classList.add("active");
+                btn.onclick = () => { currentPage = i; fetchPosts(document.getElementById("searchInput").value); };
+                pagination.appendChild(btn);
+            }
+
+            // 다음
+            const next = document.createElement("button");
+            next.textContent = ">";
+            next.disabled = currentPage === totalPages;
+            next.onclick = () => { currentPage++; fetchPosts(document.getElementById("searchInput").value); };
+            pagination.appendChild(next);
+        }
+
+        // 4. 상세 / 수정 / 삭제
+        function viewPost(id) { window.location.href = `/admin/freepost/${id}`; } // 수정: 자유게시판 상세보기
+        function editPost(id) { window.location.href = `/admin/post-edit?id=${id}`; }
+
+        async function deletePost(id) {
+            if (!confirm("정말 삭제하시겠습니까?")) return;
+            try {
+                const res = await fetch(`/api/posts/${id}`, { method: "DELETE" });
+                if (res.ok) fetchPosts(document.getElementById("searchInput").value);
+            } catch (err) { console.error(err); }
+        }
+
+        // 5. 검색 이벤트
+        const searchInput = document.getElementById("searchInput");
+        const searchBtn = document.getElementById("searchBtn");
+
+        searchBtn.addEventListener("click", () => {
+            const keyword = searchInput.value.trim();
+            if (!keyword) return alert("번호를 입력해 주세요");
+            if (!isNaN(keyword)) {
+                currentPage = 1;
+                fetchPosts(keyword);
+            } else {
+                alert("번호 검색만 지원됩니다.");
+            }
+        });
+
+        // Enter 키 입력
+        searchInput.addEventListener("keypress", (e) => {
+            if (e.key === "Enter") {
+                e.preventDefault();
+                searchBtn.click();
+            }
+        });
+
+        // 초기 로딩
+        document.addEventListener("DOMContentLoaded", () => {
+            fetchPosts();
+        });
+    </script>
+</html>

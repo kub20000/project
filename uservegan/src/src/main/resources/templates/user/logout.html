@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>로그아웃</title>
+    <link rel="stylesheet" href="/img/style.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+</head>
+<body class="deleteInfo">
+
+<header>
+    <h1><a href="/">Vegan Delight</a></h1>
+</header>
+
+<main class="board-container">
+    <p th:text="${message}">성공적으로 로그아웃 되었습니다!</p>
+    <a th:href="@{/user/login}">로그인 페이지로 이동</a>
+
+    <div class="profile">
+        <div class="profile-avatar"><i class="fas fa-user"></i></div>
+        <p><strong>사용자 ID</strong></p>
+
+        <!-- logout 전용 form -->
+        <form id="logoutForm" th:action="@{/user/logout}" method="post">
+            <button type="submit" class="logout-btn">Logout</button>
+        </form>
+    </div>
+</main>
+
+</body>
+</html>
