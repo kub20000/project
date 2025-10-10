@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>나의 냉장고 - Vegan Delight</title>
+
+    <!-- 정적 CSS: 컨텍스트 경로 안전하게 -->
+    <link rel="stylesheet" th:href="@{/css/style.css}" href="/css/style.css">
+</head>
+<body class="fridge">
+<div th:replace="fragments/mainheader :: mainHeader"></div>
+
+<main class="fridge-container">
+    <aside class="ingredients-panel">
+        <h3>냉장고 속 재료를 선택해주세요</h3>
+        <input type="text" id="ingredientSearch" placeholder="추가 재료 검색" />
+        <div id="tagContainer" class="tag-container"></div>
+
+        <div class="ingredient-list">
+            <button>토마토</button><button>시금치</button><button>버섯</button>
+            <button>양파</button><button>마늘</button><button>당근</button>
+            <button>브로콜리</button><button>애호박</button><button>가지</button>
+            <button>감자</button><button>고구마</button><button>아보카도</button>
+            <button>오이</button><button>상추</button><button>케일</button>
+            <button>양배추</button><button>병아리콩</button><button>검은콩</button>
+            <button>렌틸콩</button><button>퀴노아</button><button>쌀</button>
+            <button>파스타</button><button>두부</button><button>코코넛밀크</button>
+            <button>올리브오일</button><button>레몬</button><button>생강</button>
+            <button>바질</button><button>파슬리</button>
+        </div>
+    </aside>
+
+    <section class="recipe-panel">
+        <div class="recipe-placeholder">
+            <h2>요리 할 준비가 되셨나요?</h2>
+            <p>냉장고에 있는 비건 재료를 선택하여</p>
+            <p>지금 만들 수 있는 레시피를 찾아보세요.</p>
+
+            <div id="selectedIngredients"></div>
+
+            <button id="getRecipeBtn">레시피 찾기</button>
+
+            <!-- 로딩 메시지 -->
+            <div id="loadingMessage" style="margin-top:1rem; display:none; font-weight:bold; color:#4caf50;">
+                레시피 생성 중...
+            </div>
+
+            <div id="notice" class="recipeNotice"></div>
+            <!-- 레시피 카드 -->
+            <div class="recipeCard">
+                <h3 id="recipeTitle"></h3>
+                <pre id="recipeContent" style="white-space: pre-wrap;"></pre>
+                <div class="save">
+                    <button id="saveBtn">저장하기</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+</main>
+<div th:replace="fragments/footer :: footer"></div>
+<!-- 정적 JS: defer + 컨텍스트 경로 안전 -->
+<script th:src="@{/js/script.js}" src="/js/script.js" defer></script>
+</body>
+</html>

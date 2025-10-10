@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+ <link rel="stylesheet" th:href="@{/css/style.css}" href="/css/style.css">
+  <footer th:fragment="footer">
+    <footer class="site-footer">
+        <div class="footer-top">
+            <div class="footer-left">
+                <h2 class="footer-logo">VeganDelight</h2>
+                <p>비건 딜라이트와 함께 맛있고 행복한 비건 레시피를 찾아보세요.<br>
+                    더 건강하고 지속 가능한 식단을 향한 여정의 시작입니다.</p>
+            </div>
+
+            <div class="footer-center">
+                <h3>Quick Links</h3>
+                <ul>
+                    <li><a th:href="@{/courses.html}" href="/courses.html">강의</a></li>
+                    <li><a th:href="@{/myFridge/myFridge}" href="/myFridge">나의 냉장고</a></li>
+                    <li><a th:href="@{/main.html}" href="/main.html">게시판</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-right">
+                <h3>Categories</h3>
+                <ul>
+                    <li><a href="#">라이프 스타일</a></li>
+                    <li><a href="#">건강&다이어트</a></li>
+                    <li><a href="#">레시피</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <span>© 2025 VeganDelight. All rights reserved.</span>
+            <span class="designed-by">Designed by <strong>TeamB</strong></span>
+        </div>
+    </footer>
+  </footer>
+</body>
+</html>
