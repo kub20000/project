@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>내 학습 기록</title>
+    <link rel="stylesheet" href="/css/styleMy.css">
+    <!-- 폰트 어썸 아이콘 사용을 위한 링크 (필요 시 추가) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+</head>
+
+<body>
+<div th:replace="fragments/mainheader :: mainHeader"></div>
+
+<div class="page-wrapper">
+    <nav th:replace="fragments/mypageheader :: sitenav"></nav>
+
+    <main class="board-container">
+        <h2>내 학습 기록</h2>
+
+        <!-- 카테고리별 학습 진도율 섹션 -->
+        <div class="progress-section">
+            <h3>카테고리별 학습 진도율</h3>
+            <div class="progress-grid">
+                <!-- loginUser의 progressList를 반복하여 출력합니다. -->
+                <div class="progress-card" th:each="progress : ${progressList}">
+                    <div class="card-header">
+                        <span class="icon"
+                              th:text="${progress.category == 'LIFE' ? '🌱' :
+                                     (progress.category == 'RECIPE' ? '🍳' :
+                                     (progress.category == 'SKILL' ? '🔪' : '❓'))}">
+                            ❓
+                        </span>
+                        <span class="title"
+                              th:text="${progress.category == 'LIFE' ? '비건 라이프 스타일' :
+                                     (progress.category == 'RECIPE' ? '요리 레시피' :
+                                     (progress.category == 'SKILL' ? '조리 스킬' : '기타'))}">
+                            카테고리 이름
+                        </span>
+                    </div>
+
+                    <div class="progress-bar">
+                        <!-- 게이지 막대 -->
+                        <div class="progress" th:style="'width: ' + ${progress.rate} + '%;'">
+                        </div>
+                        <!-- 중앙 고정 텍스트 -->
+                        <span class="progress-rate-text" th:text="${progress.rate} + '%'">0%</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--  강의 탭: data-tab 속성 유지  -->
+        <div class="stydy-tabs">
+            <button class="stydy-tab active" data-tab="recent">최근 본 강의</button>
+            <button class="stydy-tab" data-tab="completed">완료한 강의</button>
+        </div>
+
+        <!-- '최근 본 강의' 탭 내용  -->
+        <div id="recentContent" class="stydy-tab-content active">
+
+            <div class="course-list reveal">
+                <!-- 기존 Thymeleaf 리스트 반복문 유지 -->
+                <div class="course-card" th:each="history : ${historyPage.content}">
+
+                    <a th:href="@{/course/main(searchKeyword=${history.videoTitle})}" class="course-link">
+                        <div class="thumb">
+                            <img th:src="${history.thumbnail_url}" th:alt="${history.videoTitle} + ' 썸네일'"
+                                 style="width: 100%; height: 100%; object-fit: cover;">
+                        </div>
+                    </a>
+
+                    <div class="course-body">
+                        <div class="course-info">
+                            <a th:href="@{/course/main(searchKeyword=${history.videoTitle})}">
+                                <h3 th:text="${history.videoTitle}">강의 제목</h3>
+                            </a>
+
+                            <div class="actions">
+                                <div class="meta-info">
+                            <span class="badge category"
+                                  th:text="${#temporals.format(history.watched_date, 'yy.MM.dd')}">24.01.01</span>
+
+                                    <span class="badge progress">
+                                <i class="fa-solid fa-chart-simple"></i>
+                                <span th:text="${history.progress_rate} + '%'">50%</span>
+                            </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="progress-bar-small">
+                        <div class="progress"
+                             th:style="'width: ' + ${history.progress_rate} + '%;'">
+                        </div>
+                    </div>
+
+                </div>
+
+                <div th:if="${historyPage.content.isEmpty()}" style="padding: 20px; text-align: center; width: 100%;">
+                    <p>최근 본 영상 기록이 없습니다.</p>
+                </div>
+            </div>
+
+            <div class="pagination" th:if="${historyPage.totalPages > 1}">
+                <!-- 기존 페이징 로직 유지 -->
+                <a th:if="${historyPage.hasPrevious()}"
+                   th:href="@{/mypage/myStudy(page=${historyPage.number - 1})}"
+                   class="prev-btn">이전</a>
+
+                <span th:each="i : ${#numbers.sequence(0, historyPage.totalPages - 1)}">
+                    <a th:if="${i >= historyPage.number - 2 and i <= historyPage.number + 2}"
+                       th:href="@{/mypage/myStudy(page=${i})}"
+                       th:text="${i + 1}"
+                       th:class="${i == historyPage.number ? 'active-page' : ''}">1</a>
+                </span>
+
+                <a th:if="${historyPage.hasNext()}"
+                   th:href="@{/mypage/myStudy(page=${historyPage.number + 1})}"
+                   class="next-btn">다음</a>
+            </div>
+        </div>
+
+        <!-- '완료한 강의' 탭 내용  -->
+        <div id="completedContent" class="stydy-tab-content" style="display: none;">
+            <div class="course-list reveal">
+                <!-- JavaScript를 통해 이 안에 강의 카드들이 동적으로 삽입됩니다. -->
+                <div class="initial-message" style="padding: 20px; text-align: center; width: 100%;">
+                    <p>데이터를 로드하는 중...</p>
+                </div>
+            </div>
+            <!-- 완료 강의는 현재 페이징을 구현하지 않으므로 비워둡니다. -->
+            <div class="pagination"></div>
+        </div>
+    </main>
+</div>
+
+<!--  JavaScript 탭 전환 및 AJAX 로직  -->
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const tabs = document.querySelectorAll('.stydy-tab');
+        const recentContent = document.getElementById('recentContent');
+        const completedContent = document.getElementById('completedContent');
+        const completedListContainer = completedContent.querySelector('.course-list');
+
+        // 데이터 로드 상태를 추적하는 변수
+        let completedDataLoaded = false;
+
+        // 초기 상태 설정: '최근 본 강의'만 보임 (HTML style="display: none;"으로 이미 처리됨)
+
+        tabs.forEach(tab => {
+            tab.addEventListener('click', (event) => {
+                const tabName = event.target.getAttribute('data-tab');
+
+                // 탭 활성화 상태 변경
+                tabs.forEach(t => t.classList.remove('active'));
+                event.target.classList.add('active');
+
+                // 내용 컨테이너 표시/숨김
+                if (tabName === 'recent') {
+                    recentContent.style.display = 'block';
+                    completedContent.style.display = 'none';
+                } else if (tabName === 'completed') {
+                    recentContent.style.display = 'none';
+                    completedContent.style.display = 'block';
+
+                    // 완료된 강의 데이터 로드 (첫 클릭 시에만 로드)
+                    if (!completedDataLoaded) {
+                        loadCompletedCourses();
+                    }
+                }
+            });
+        });
+
+        /**
+         * 완료된 강의 데이터를 서버에서 가져와 리스트를 동적으로 그리는 함수
+         */
+        function loadCompletedCourses() {
+            // 로딩 메시지 표시
+            completedListContainer.innerHTML = '<div style="padding: 20px; text-align: center; width: 100%;"><p>완료된 강의 목록을 불러오는 중...</p></div>';
+
+            fetch('/mypage/completedCourses') // Controller의 새로운 엔드포인트 호출
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('서버 응답 오류가 발생했습니다.');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    completedListContainer.innerHTML = ''; // 기존 내용 초기화
+
+                    if (data && data.length > 0) {
+                        data.forEach(dto => {
+                            // DTO 데이터를 사용하여 카드 생성 및 추가
+                            const card = createCourseCard(dto);
+                            completedListContainer.appendChild(card);
+                        });
+                        completedDataLoaded = true; // 로드 완료
+                    } else {
+                        completedListContainer.innerHTML = '<div style="padding: 20px; text-align: center; width: 100%;"><p>아직 완료한 영상 기록이 없습니다.</p></div>';
+                    }
+                })
+                .catch(error => {
+                    console.error('완료된 강의를 가져오는 중 오류 발생:', error);
+                    completedListContainer.innerHTML = '<div style="padding: 20px; text-align: center; width: 100%;"><p>데이터 로딩 중 오류가 발생했습니다. (' + error.message + ')</p></div>';
+                });
+        }
+
+        /**
+         * VideoHistoryDto 객체로 강의 카드 HTML 요소를 생성하는 헬퍼 함수
+         */
+        function createCourseCard(dto) {
+            const card = document.createElement('div');
+            card.className = 'course-card';
+
+            // 1. 날짜 포맷팅: 'yy.MM.dd' 형식
+            // dto.watched_date는 서버에서 넘어온 LocalDateTime 문자열
+            let watchedDateText = '';
+            try {
+                const date = new Date(dto.watched_date);
+                watchedDateText = date.toLocaleDateString('ko-KR', {
+                    year: '2-digit', month: '2-digit', day: '2-digit'
+                }).replace(/\s/g, '').replace(/\./g, '.').slice(0, -1);
+            } catch (e) {
+                watchedDateText = '날짜 정보 없음';
+            }
+
+            const videoTitle = dto.videoTitle;
+            const thumbnailUrl = dto.thumbnail_url;
+            const progressRate = dto.progress_rate; // 완료 강의이므로 항상 100
+
+            card.innerHTML = `
+            <a href="/course/main?searchKeyword=${encodeURIComponent(videoTitle)}" class="course-link">
+                <div class="thumb">
+                    <img src="${thumbnailUrl}" alt="${videoTitle} 썸네일"
+                         style="width: 100%; height: 100%; object-fit: cover;">
+                </div>
+            </a>
+            <div class="course-body">
+                <div class="course-info">
+                    <a href="/course/main?searchKeyword=${encodeURIComponent(videoTitle)}">
+                        <h3>${videoTitle}</h3>
+                    </a>
+                    <div class="actions">
+                        <div class="meta-info">
+                            <span class="badge progress completed">
+                                <i class="fa-solid fa-check-circle"></i>
+                                <span>${progressRate}%</span>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="progress-bar-small">
+                <div class="progress" style="width: ${progressRate}%;"></div>
+            </div>
+        `;
+            return card;
+        }
+    });
+</script>
+</body>
+</html>

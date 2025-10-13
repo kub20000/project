@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vegan LMS - uploadCourse</title>
+    <link rel="stylesheet" href="/css/styleT.css">
+</head>
+<body>
+<header> <h1><a th:href="@{/}">Vegan Delight</a></h1>
+    <nav id="navMenu">
+
+        <a th:href="@{/teacher/homeT}">홈</a>
+        <a th:href="@{/teacher/myCourse}">나의 강의 관리</a>
+        <a th:href="@{/teacher/uploadCourse}">강의 등록/퀴즈 출제</a>
+        <a th:href="@{/logout}">로그아웃</a>
+    </nav>
+</header>
+<div class="page-wrapper">
+    <nav id="subNavT">
+        <a href="/teacher/myCourse">나의 강의 관리</a>
+        <a href="/teacher/uploadCourse">강의 등록 / 퀴즈 출제</a>
+    </nav>
+    <main class="uploadCourse-container">
+        <h2>강의 등록</h2>
+        <form id="courseUploadForm" enctype="multipart/form-data">
+            <div class="uploadCourse-Control">
+                <select id="uploadCourse-Category" name="courses_category">
+                    <option value="LIFE">비건 라이프 스타일</option>
+                    <option value="RECIPE">요리 레시피</option>
+                    <option value="SKILL">조리 스킬</option>
+                </select>
+            </div>
+
+            <p style="color:#4caf50; font-weight: 600; margin-right: 6px;">
+                강의 제목 : <input type="text" name="courses_name" placeholder="제목 입력"></p>
+            <hr>
+            <div class="uploadMedia-card">
+                <div class="uploadMedia-action">
+                    <label class="upload-btn">
+                        🎬 영상 업로드
+                        <input type="file" name="videoFile" accept="video/*" style="display:none"
+                               onchange="handleFileSelect(event, 'video')">
+                    </label>
+                    <p id="videoFileName"></p>
+                </div>
+                <div class="uploadMedia-action">
+                    <label class="upload-btn">
+                        🖼️ 이미지 업로드
+                        <input type="file" name="thumbnailFile" accept="image/*" style="display:none"
+                               onchange="handleFileSelect(event, 'image')">
+                    </label>
+                    <p id="imageFileName"></p>
+                </div>
+            </div>
+            <p style="color:#4caf50; font-weight: 600; margin-right: 6px;">
+                강의 내용 </p>
+            <textarea name="description" placeholder="내용 입력" rows="12" style="font-size: 16px;"></textarea>
+            <div class="uploadBtns">
+                <button type="submit">등록</button>
+                <button type="button" onclick="window.location.href='/teacher/homeT'">닫기</button>
+            </div>
+        </form>
+    </main>
+</div>
+</body>
+<script>
+    function handleFileSelect(event, type) {
+        const file = event.target.files[0];
+        if (file) {
+            let fileNameElementId = type === 'video' ? 'videoFileName' : 'imageFileName';
+            document.getElementById(fileNameElementId).textContent = '선택된 파일: ' + file.name;
+        }
+    }
+
+    // uploadQuiz 페이지 연결
+    document.getElementById('courseUploadForm').addEventListener('submit', function(event) {
+        event.preventDefault();
+
+        const form = event.target;
+        const formData = new FormData(form);
+
+        fetch('/course/upload-and-get-id', {
+            method: 'POST',
+            body: formData
+        })
+            .then(response => {
+                if (!response.ok) {
+                    // 서버가 보낸 오류 메시지를 확인
+                    return response.json().then(err => { throw new Error(err.error); });
+                }
+                return response.json(); // 서버에서 반환된 JSON을 파싱
+            })
+            .then(data => {
+                const courseId = data.id; // JSON 응답에서 ID 값 추출
+                if (courseId) {
+                    alert(data.message); // 서버에서 받은 메시지 표시
+                    window.location.href = `/quiz/upload/${courseId}`; // ID를 포함하여 페이지 이동
+                } else {
+                    alert("강의 등록 후 ID를 받지 못했습니다.");
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert(error.message);
+            });
+    });
+</script>
+</html>
