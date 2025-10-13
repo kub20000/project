@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Vegan LMS - Home</title>
-    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" th:href="@{/css/style.css}" href="/css/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
@@ -13,7 +13,7 @@
     </h1>
     <nav id="navMenu">
         <a th:href="@{/admin/indexmg}">홈</a>
-        <a th:href="@{/admin/postM}">게시판</a>
+        <a th:href="@{/manager/postM}">게시판 관리</a>
         <a th:href="@{/admin/usermng}">회원관리</a>
         <a th:href="@{/logout}">로그아웃</a>
         <p th:if="${success}" th:text="${success}" style="color:green;"></p>
@@ -60,7 +60,7 @@
     <div class="footer-top">
       <div class="footer-left">
         <h2 class="footer-logo">VeganDelight</h2>
-        <p>비건 딜라이트와 함께 맛있고 행복한 비건 레시피를 찾아보세요. 
+        <p>비건 딜라이트와 함께 맛있고 행복한 비건 레시피를 찾아보세요.
            더 건강하고 지속 가능한 식단을 향한 여정의 시작입니다.</p>
       </div>
       <div class="footer-center">
@@ -90,6 +90,6 @@
     </div>
   </footer>
 
-<script th:src="@{/js/script.js}"></script>
+<script th:src="@{/js/script.js}" src="/js/script.js" defer></script>
 </body>
 </html>

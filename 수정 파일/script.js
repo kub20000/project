@@ -15,7 +15,7 @@ document.addEventListener("DOMContentLoaded", () => {
     // =========================
     const hero = document.querySelector(".hero");
     if (hero) {
-        const images = ["images/vegan1.jpg","images/vegan2.jpg","images/vegan3.jpg","images/vegan4.jpg"];
+        const images = ["/images/vegan1.jpg","/images/vegan2.jpg","/images/vegan3.jpg","/images/vegan4.jpg"];
         let i = 0;
         hero.style.backgroundImage = `url(${images[i]})`;
         setInterval(() => {
@@ -28,7 +28,7 @@ document.addEventListener("DOMContentLoaded", () => {
     // 냉장고 페이지 (있을 때만)
     // =========================
 
-        const ingredientListEl = document.querySelector(".ingredient-list");
+    const ingredientListEl = document.querySelector(".ingredient-list");
     const tagContainer = document.getElementById("tagContainer");
     const ingredientSearch = document.getElementById("ingredientSearch");
     const getRecipeBtn = document.getElementById("getRecipeBtn");
@@ -41,121 +41,121 @@ document.addEventListener("DOMContentLoaded", () => {
     const loadingMessageEl = document.getElementById("loadingMessage");
     const noticeEl = document.getElementById("notice");
 
-        if (ingredientListEl && tagContainer && ingredientSearch && getRecipeBtn) {
-            const selected = new Set();
+    if (ingredientListEl && tagContainer && ingredientSearch && getRecipeBtn) {
+        const selected = new Set();
 
-            function renderTags() {
-                tagContainer.innerHTML = "";
-                [...selected].forEach(ing => {
-                    const tag = document.createElement("div");
-                    tag.className = "tag";
-                    tag.innerHTML = `${ing} <span class="remove">&times;</span>`;
-                    tag.querySelector(".remove").addEventListener("click", () => {
-                        selected.delete(ing);
-                        renderTags();
-                    });
-                    tagContainer.appendChild(tag);
+        function renderTags() {
+            tagContainer.innerHTML = "";
+            [...selected].forEach(ing => {
+                const tag = document.createElement("div");
+                tag.className = "tag";
+                tag.innerHTML = `${ing} <span class="remove">&times;</span>`;
+                tag.querySelector(".remove").addEventListener("click", () => {
+                    selected.delete(ing);
+                    renderTags();
                 });
-            }
+                tagContainer.appendChild(tag);
+            });
+        }
 
-            // 재료 버튼 클릭
-            ingredientListEl.addEventListener("click", (e) => {
-                if (e.target.tagName === "BUTTON") {
-                    const ing = e.target.textContent.trim();
-                    selected.has(ing) ? selected.delete(ing) : selected.add(ing);
+        // 재료 버튼 클릭
+        ingredientListEl.addEventListener("click", (e) => {
+            if (e.target.tagName === "BUTTON") {
+                const ing = e.target.textContent.trim();
+                selected.has(ing) ? selected.delete(ing) : selected.add(ing);
+                renderTags();
+            }
+        });
+
+        // 입력창 Enter로 추가
+        ingredientSearch.addEventListener("keydown", (e) => {
+            if (e.key === "Enter") {
+                e.preventDefault();
+                const ing = ingredientSearch.value.trim();
+                if (ing) {
+                    selected.add(ing);
+                    ingredientSearch.value = "";
                     renderTags();
                 }
-            });
+            }
+        });
 
-            // 입력창 Enter로 추가
-            ingredientSearch.addEventListener("keydown", (e) => {
-                if (e.key === "Enter") {
-                    e.preventDefault();
-                    const ing = ingredientSearch.value.trim();
-                    if (ing) {
-                        selected.add(ing);
-                        ingredientSearch.value = "";
-                        renderTags();
-                    }
-                }
-            });
+        // 레시피 요청
+        getRecipeBtn.addEventListener("click", async () => {
+            const ingredients = [...selected];
+            if (ingredients.length === 0) return alert("재료를 하나 이상 선택하세요!");
 
-            // 레시피 요청
-            getRecipeBtn.addEventListener("click", async () => {
-                const ingredients = [...selected];
-                if (ingredients.length === 0) return alert("재료를 하나 이상 선택하세요!");
+            // 로딩 시작: 카드 숨기고 로딩 메시지 표시
+            recipeCard.style.display = "none";
+            document.getElementById("loadingMessage").style.display = "block";
 
-                // 로딩 시작: 카드 숨기고 로딩 메시지 표시
-                recipeCard.style.display = "none";
-                document.getElementById("loadingMessage").style.display = "block";
+            document.getElementById("notice").textContent = "";
 
-                document.getElementById("notice").textContent = "";
+            getRecipeBtn.disabled = true;
 
-                getRecipeBtn.disabled = true;
-
-                try {
-                    const res = await fetch("/api/fridge/getRecipe", {
-                        method: "POST",
-                        headers: { "Content-Type": "application/json" },
-                        body: JSON.stringify({ ingredients })
-                    });
+            try {
+                const res = await fetch("/api/fridge/getRecipe", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ ingredients })
+                });
 
 
-                    if (res.ok) {
-                        const data = await res.json();
-                        const recipeText = data.recipe || "";
+                if (res.ok) {
+                    const data = await res.json();
+                    const recipeText = data.recipe || "";
 
-                        let notice = "";
-                        let title = "제목 없음";
-                        let content = "";
+                    let notice = "";
+                    let title = "제목 없음";
+                    let content = "";
 
-                        const match = recipeText.match(/\[(.*?)\]/); // [제목] 찾기
-                        if (match) {
-                            // 안내문 = [제목] 나오기 전까지
-                            notice = recipeText.substring(0, match.index).trim();
+                    const match = recipeText.match(/\[(.*?)\]/); // [제목] 찾기
+                    if (match) {
+                        // 안내문 = [제목] 나오기 전까지
+                        notice = recipeText.substring(0, match.index).trim();
 
-                            // 제목 = [ ] 안
-                            title = match[1].trim();
+                        // 제목 = [ ] 안
+                        title = match[1].trim();
 
-                            // 본문 = [제목] 뒤쪽
-                            content = recipeText.substring(match.index + match[0].length).trim();
-                        } else {
-                            // [ ] 제목이 없으면 그냥 본문 처리
-                            content = recipeText.trim();
-                        }
-
-                        // 안내문은 카드 밖 영역
-                        document.getElementById("notice").textContent = notice;
-
-                        // 제목/본문은 카드 안
-                        document.getElementById("recipeTitle").textContent = title;
-                        document.getElementById("recipeContent").textContent = content;
-
-                        // 로딩 메시지 숨기고 카드 표시
-                        document.getElementById("loadingMessage").style.display = "none";
-                        recipeCard.style.display = "block";
-
+                        // 본문 = [제목] 뒤쪽
+                        content = recipeText.substring(match.index + match[0].length).trim();
                     } else {
-                        const text = await res.text();
-                        document.getElementById("recipeTitle").textContent = "오류";
-                        document.getElementById("recipeContent").textContent = `요청 실패: ${text}`;
-
-                        document.getElementById("loadingMessage").style.display = "none";
-                        recipeCard.style.display = "block";
+                        // [ ] 제목이 없으면 그냥 본문 처리
+                        content = recipeText.trim();
                     }
-                } catch (err) {
+
+                    // 안내문은 카드 밖 영역
+                    document.getElementById("notice").textContent = notice;
+
+                    // 제목/본문은 카드 안
+                    document.getElementById("recipeTitle").textContent = title;
+                    document.getElementById("recipeContent").textContent = content;
+
+                    // 로딩 메시지 숨기고 카드 표시
+                    document.getElementById("loadingMessage").style.display = "none";
+                    recipeCard.style.display = "block";
+
+                } else {
+                    const text = await res.text();
                     document.getElementById("recipeTitle").textContent = "오류";
-                    document.getElementById("recipeContent").textContent = "요청 실패: " + err.message;
+                    document.getElementById("recipeContent").textContent = `요청 실패: ${text}`;
 
                     document.getElementById("loadingMessage").style.display = "none";
                     recipeCard.style.display = "block";
-                } finally {
-                    getRecipeBtn.disabled = false;
                 }
-            });
+            } catch (err) {
+                document.getElementById("recipeTitle").textContent = "오류";
+                document.getElementById("recipeContent").textContent = "요청 실패: " + err.message;
+
+                document.getElementById("loadingMessage").style.display = "none";
+                recipeCard.style.display = "block";
+            } finally {
+                getRecipeBtn.disabled = false;
+            }
+        });
 
 
-            // ===== 🔽 추가: 저장하기 버튼 핸들러 (이동 없음) =====
+        // ===== 🔽 추가: 저장하기 버튼 핸들러 (이동 없음) =====
         if (saveBtn) {
             saveBtn.addEventListener("click", async () => {
                 const title = (recipeTitleEl?.textContent || "").trim();
@@ -293,4 +293,4 @@ document.addEventListener("DOMContentLoaded", () => {
 
         displayPage(1);
     }
-});
+});0
