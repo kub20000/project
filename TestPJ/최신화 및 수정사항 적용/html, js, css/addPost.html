@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>게시글 등록</title>
+    <link rel="stylesheet" href="/css/stylePost.css">
+    <style>
+        textarea {
+            width: 100%;
+            height: 400px;
+            resize: vertical;
+            font-family: inherit;
+            font-family: 'Malgun Gothic', '맑은 고딕', sans-serif;
+        }
+    </style>
+</head>
+
+<body>
+<header th:if="${userRole == 'ADMIN'}">
+    <h1>Vegan Delight - 관리자 mode
+        <img th:src="@{/images/회원관리.png}" alt="마이페이지" width="36">
+    </h1>
+    <nav id="navMenu">
+        <a th:href="@{/admin/indexmg}">홈</a>
+        <a th:href="@{/manager/postM}">게시판</a>
+        <a th:href="@{/admin/usermng}">회원관리</a>
+        <a th:href="@{/logout}">로그아웃</a>
+        <p th:if="${success}" th:text="${success}" style="color:green;"></p>
+        <p>환영합니다, 관리자님!</p>
+    </nav>
+</header>
+<th:block th:if="${userRole == 'USER'}">
+    <div th:replace="fragments/mainheader :: mainHeader"></div>
+</th:block>
+
+<main class="addPost-detail-container">
+
+    <div class="addPost-card">
+        <h2>게시글 등록</h2>
+
+        <form th:action="@{/post/add}" th:object="${post}" method="post">
+
+            <div class="control" th:if="${userRole == 'ADMIN'}">
+                <div class="category">
+                    <select th:field="*{fixed}">
+                        <option value="0">일반 게시글</option>
+                        <option value="1">고정 게시글</option>
+                    </select>
+                </div>
+
+                <div class="category">
+                    <select th:field="*{category}">
+                        <option value="FREEBOARD">자유</option>
+                        <option value="NOTICE">공지사항</option>
+                    </select>
+                </div>
+            </div>
+            <th:block th:if="${userRole != 'ADMIN'}">
+                <input type="hidden" th:field="*{fixed}" value="0" />
+                <input type="hidden" th:field="*{category}" value="FREEBOARD" />
+            </th:block>
+
+
+            <p style="color:#4caf50; font-weight: 600; margin-right: 6px;">
+                제목 : <input type="text" id="addTitle" th:field="*{title}"/></p>
+            <hr>
+            <p style="color:#4caf50; font-weight: 600; margin-right: 6px;">
+            내용 : <textarea th:field="*{content}" rows="12"></textarea></p>
+
+            <div class="addPostBtn">
+                <button type="submit" onclick="location.href='/'">등록</button>
+                <button th:if="${userRole == 'USER'}" type="button" onclick="location.href='/post/list'">취소</button>
+                <button th:if="${userRole == 'ADMIN'}" type="button" onclick="location.href='/manager/postM'">취소</button>
+            </div>
+        </form>
+    </div>
+
+</main>
+</body>
+</html>
