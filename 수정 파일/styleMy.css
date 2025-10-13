@@ -88,18 +88,22 @@ nav a {
 }
 
 /* 카드형 섹션 */
-.categories, .course-list {
+.course-list {
     display: flex;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 1rem;
-    padding: 2rem;
+    flex-wrap: wrap;
+    gap: 20px;                /* 카드 간 간격 */
+    justify-content: flex-start;  /* 왼쪽 정렬 */
 }
 
-.category, .course-card {
+/* 강의 카드 */
+.course-card {
+    flex: 0 0 calc(33.333% - 20px);  /* 한 줄에 3개씩 */
+    box-sizing: border-box;
     background: white;
     border-radius: 10px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    overflow: hidden; /* ⭐ 추가: 자식 요소가 모서리를 벗어나지 않도록 */
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
 }
 
 .course-card .course-body {
