@@ -846,21 +846,15 @@ tr:hover {
 
 
 
-
-
-
-
-
-
-
-/* 제목 링크 스타일 */
-.title-link {
-    text-decoration: none;
-    color: black;
-    cursor: pointer;
-}
-.title-link:hover {
-    color: #2b6f2b;
+#myPostTable td a,
+#myPostTable td a:link,
+#myPostTable td a:visited,
+#myPostTable td a:hover,
+#myPostTable td a:active,
+#myPostTable td a:focus {
+    color: #000 !important;
+    text-decoration: none !important;
+    border-bottom: none !important;
 }
 
 
